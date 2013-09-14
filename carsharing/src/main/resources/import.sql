@@ -1,19 +1,10 @@
---
--- JBoss, Home of Professional Open Source
--- Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
--- contributors by the @authors tag. See the copyright.txt in the
--- distribution for a full listing of individual contributors.
---
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
--- http://www.apache.org/licenses/LICENSE-2.0
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
---
-
 -- You can use this file to load seed data into the database using SQL statements
-insert into Member (id, name, email, phone_number) values (0, 'John Smith', 'john.smith@mailinator.com', '2125551212') 
+insert into Member (id, firstname, name, email, phone_number,carsize, city) values (0, 'John', 'Smith', 'john.smith@mailinator.com', '2125551212', 5, 'Großkrotzenburg') ;
+insert into Member (id, firstname, name, email, phone_number,carsize, city) values (1, 'Test1', 'Test2', 'test.test2@mailinator.com', '2125551212', 5, 'Test') ;
+insert into Member (id, firstname, name, email, phone_number,carsize, city) values (2, 'Firstname', 'Lastname', 'firstname.lastname', '2125551212', 5, 'Test2') ;
+INSERT INTO Trainingday (weekday, location, pickUpTimeSource, pickUpTimeTarget , timeFrom, timeTo) VALUES ('Dienstag','Großkrotzenburg','16:50','18:40','17:00','18:30') ;
+INSERT INTO Trainingday (weekday, location, pickUpTimeSource, pickUpTimeTarget , timeFrom, timeTo) VALUES ('Mittwoch','Großkrotzenburg','16:50','18:40','17:00','18:30') ;
+INSERT INTO Training (currentDate, calendarWeek, trainingDay_weekday) VALUES ('2013-09-10', '45', 'Dienstag') ;
+INSERT INTO Training (currentDate, calendarWeek, trainingDay_weekday) VALUES ('2013-09-12', '45', 'Mittwoch') ;
+INSERT INTO Participation (id, drivingBack, drivingForth, participating, player_id, trainingItem_currentDate)VALUES('1', '1', '1', '1', '0', '2013-09-10') ;
+INSERT INTO Participation (id, drivingBack, drivingForth, participating, player_id, trainingItem_currentDate)VALUES('2', '0', '1', '1', '2', '2013-09-12') ;
