@@ -16,45 +16,52 @@
  */
 package de.thorsten.data;
 
+import de.thorsten.model.Training;
+import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
-
-import de.thorsten.model.Participation;
 import java.util.logging.Logger;
 
 @RequestScoped
-public class ParticipationListProducer {
+public class TrainingListProducer {
 
-    @Inject
-    private ParticipationRepository participationRepository;
-    
     @Inject
     private Logger log;
-    
-    private List<Participation> participations;
 
-    // @Named provides access the return value via the EL variable name "participation" in the UI (e.g.
+    @Inject
+    private TrainingRepository trainingRepository;
+
+    private List<Training> trainings;
+
+    private List<String> calWeeks;
+
+    // @Named provides access the return value via the EL variable name "trainings" in the UI (e.g.
     // Facelets or JSP view)
     @Produces
     @Named
-    public List<Participation> getParticipations() {
-        return participations;
+    public List<Training> getTrainings() {
+        return trainings;
     }
 
-    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
-        retrieveAllParticipators();
+    @Produces
+    @Named
+    public List<String> getCalWeeks() {
+        return calWeeks;
     }
 
     @PostConstruct
-    public void retrieveAllParticipators() {
-       log.info("retrieveAllParticipators");
-        //participations = participationRepository.getAll();
-        participations = participationRepository.getAllByName();
+    public void retrieveAllTrainings() {
+        trainings = trainingRepository.findAll();
+
+        calWeeks = new ArrayList<String>();
+        for (Training t : trainings) {
+            calWeeks.add(t.getCalendarWeek());
+        }
+        log.info("CalWeek Anzahl Eintraege" + calWeeks.size());
+
     }
 }

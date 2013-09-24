@@ -159,6 +159,12 @@
             <artifactId>jboss-jsf-api_2.1_spec</artifactId>
             <scope>provided</scope>
         </dependency>
+<!-- RichFaces anstelle der Standard JSF API -->
+        <dependency>
+            <groupId>org.richfaces.ui</groupId>
+            <artifactId>richfaces-components-ui</artifactId>
+            <version>4.3.3.Final</version>
+        </dependency>
 
         <!-- Now we declare any tools needed -->
 

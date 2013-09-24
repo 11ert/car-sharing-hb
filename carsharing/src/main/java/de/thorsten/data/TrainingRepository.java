@@ -16,6 +16,7 @@
  */
 package de.thorsten.data;
 
+import de.thorsten.model.Training;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -24,24 +25,23 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-import de.thorsten.model.TrainingDay;
 
 @ApplicationScoped
-public class TrainingDayRepository {
+public class TrainingRepository {
 
     @Inject
     private EntityManager em;
 
-    public TrainingDay findById(Long id) {
-        return em.find(TrainingDay.class, id);
+    public Training findById(Long id) {
+        return em.find(Training.class, id);
     }
 
 
-    public List<TrainingDay> findAll() {
+    public List<Training> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<TrainingDay> criteria = cb.createQuery(TrainingDay.class);
-        Root<TrainingDay> trainingDay = criteria.from(TrainingDay.class);
-        criteria.select(trainingDay);
+        CriteriaQuery<Training> criteria = cb.createQuery(Training.class);
+        Root<Training> training = criteria.from(Training.class);
+        criteria.select(training);
         return em.createQuery(criteria).getResultList();
     }
     
