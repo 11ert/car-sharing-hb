@@ -37,11 +37,16 @@ public class TrainingRepository {
     }
 
 
+    /**
+     * ToDo: Sortierrung funktioniert nicht !!!
+     * @return 
+     */
     public List<Training> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Training> criteria = cb.createQuery(Training.class);
         Root<Training> training = criteria.from(Training.class);
         criteria.select(training);
+        criteria.orderBy(cb.asc(training.get("currentDate")));
         return em.createQuery(criteria).getResultList();
     }
     

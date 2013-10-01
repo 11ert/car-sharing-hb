@@ -3,18 +3,17 @@
  */
 package de.thorsten.model;
 
-import javax.persistence.OneToOne;
 import java.io.Serializable;
-import java.sql.Date;
+import java.text.DateFormat;
+import java.util.Calendar;
 import java.util.List;
-
+import java.util.Locale;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-
-
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,75 +24,73 @@ public class Training implements Serializable {
     public Training() {
     }
 
-    public Training(String calendarWeek, Date date, List<Member> players, TrainingDay trainingDay) {
-        this.calendarWeek = calendarWeek;
+    public Training(Calendar date, List<Member> players, TrainingDay trainingDay) {
         this.currentDate = date;
         this.trainingDay = trainingDay;
     }
 
-    private String calendarWeek;
-
     @Id
-    private Date currentDate;
-    
+    private Calendar currentDate;
+
     @OneToOne
     private TrainingDay trainingDay;
 
     /**
      * @return the calendarWeek
      */
-    public String getCalendarWeek() {
-        return calendarWeek;
+    public int getCalendarWeek() {
+        return currentDate.get(Calendar.WEEK_OF_YEAR);
+    }
+
+    public String getTrainingDateAsString() {
+        String dateString = null;
+        if (currentDate != null) {
+            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
+            dateString = sdf.format(currentDate.getTime());
+        }
+        return dateString;
     }
 
     /**
-     * @param calendarWeek the calendarWeek to set
+     * @return the date of the training
      */
-    public void setCalendarWeek(String calendarWeek) {
-        this.calendarWeek = calendarWeek;
-    }
-
-    /**
-     * @return the date
-     */
-    public Date getDate() {
+    public Calendar getDate() {
         return getCurrentDate();
     }
 
     /**
-     * @param date the date to set
+     * @param date the date to set of the training
      */
-    public void setDate(Date date) {
+    public void setDate(Calendar date) {
         this.setCurrentDate(date);
     }
 
     /**
-     * @return the trainingDay
+     * @return the trainingDay (Mo. - Fr.)
      */
     public TrainingDay getTrainingDay() {
         return trainingDay;
     }
 
     /**
-     * @param trainingDay the trainingDay to set
+     * @param trainingDay the trainingDay to set (Mo. - Fr.)
      */
     public void setTrainingDay(TrainingDay trainingDay) {
         this.trainingDay = trainingDay;
     }
 
     /**
-     * @return the currentDate
+     * @return the currentDate of the training
      */
-    public Date getCurrentDate() {
+    public Calendar getCurrentDate() {
         return currentDate;
     }
 
     /**
-     * @param currentDate the currentDate to set
+     * @param currentDate the currentDate of the training to set
      */
-    public void setCurrentDate(Date currentDate) {
+    public void setCurrentDate(Calendar currentDate) {
         this.currentDate = currentDate;
     }
-
 
 }
