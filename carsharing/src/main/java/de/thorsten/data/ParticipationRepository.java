@@ -55,7 +55,7 @@ public class ParticipationRepository {
         //criteria.where(cb.equal(participation.get(Training_.currentDate.get(Calendar.WEEK_OF_YEAR), calWeek)));
         
         return em.createQuery(criteria).getResultList();
-    }
+    }   
      
      /**
      * TODO: Noch die Where Clause hinzufügen!!!
