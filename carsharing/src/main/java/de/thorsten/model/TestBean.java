@@ -7,27 +7,29 @@ package de.thorsten.model;
 
 import java.util.Date;
 import javax.inject.Named;
-import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author Thorsten
  */
 @Named(value = "testBean")
-@Dependent
 public class TestBean {
 
-    private Date date;
+    private Date testDate;
     
     /**
      * Creates a new instance of TestBean
      */
     public TestBean() {
-        date = new Date();
+        testDate = new Date();
     }
 
-    public Date getDate() {
-        return date;
+    public Date getTestDate() {
+        return testDate;
+    }
+    
+    public void setTestDate(Date x) {
+        testDate = x;
     }
 
 }

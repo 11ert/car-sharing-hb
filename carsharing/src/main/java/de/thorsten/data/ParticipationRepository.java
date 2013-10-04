@@ -11,8 +11,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 import de.thorsten.model.Participation;
-import de.thorsten.model.Training_;
 import java.util.Calendar;
+import javax.persistence.Query;
 import javax.persistence.criteria.Root;
 
 @ApplicationScoped
@@ -24,7 +24,8 @@ public class ParticipationRepository {
     public Participation findById(Long id) {
         return em.find(Participation.class, id);
     }
-
+    
+   
  
     public List<Participation> getAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -65,9 +66,17 @@ public class ParticipationRepository {
         CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
         Root<Participation> participation = criteria.from(Participation.class);
         criteria.select(participation).orderBy(cb.asc((participation.get("player").get("name")))); 
-   //     criteria.where(cb.equal(participation.get( Training_.currentDate ), curDate) );
+//        criteria.where(cb.equal(participation.get( Training_.currentDate ), curDate) );
         
         return em.createQuery(criteria).getResultList();
     }
 
+     /**
+      * Nur ein Test!!!
+      * @return 
+      */
+     public List<Participation> testQuery() {
+         Query q = em.createQuery ("SELECT x FROM Magazine x");
+         return q.getResultList();
+     }
 }

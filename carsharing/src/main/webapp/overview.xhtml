@@ -22,53 +22,79 @@
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
-    
+
     <ui:define name="content">
         <h1>Handball Jugend Großkrotzenburg</h1>
 
         <div>
-            <p>Testappikation - 10. Deployment hat geklappt</p>
             <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
         </div>
+        <!--
         <h2>Kalenderwoche:</h2>
         <h:selectOneListbox size="1" value="#{calWeeks}">
             <f:selectItems value="#{calWeeks}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
         </h:selectOneListbox>
-
+-->
+        <h2>Trainingskalender:</h2>
+     <h:outputStylesheet>
+        .tdc {
+            background-color: green;
+        }
+         .wdc {
+        font-weight: bold;
+        font-style: italic;
+        }
+    </h:outputStylesheet>
+    <h:form>
+        <rich:calendar mode="ajax" boundaryDatesMode="scroll" dataModel="#{calendarModel}" />
+    </h:form>
+           <h:form>
+            <rich:calendar id="trainingCalendar"
+                           mode="ajax" 
+                           popup="false"
+                           boundaryDatesMode="scroll" 
+                           locale="de/DE"
+                           buttonLabel="Heute"
+                           datePattern="dd.MM.yyyy"
+                           dataModel="#{calendarModel}" 
+                           value="#{testBean.testDate}">
+            </rich:calendar>
+        </h:form>
+        <h2>Trainingszeiten:</h2>
         <h:panelGroup rendered="#{empty participations}">
-                <em>Keine registrierten Trainingszeiten</em>
-            </h:panelGroup>
+            <em>Keine registrierten Trainingszeiten</em>
+        </h:panelGroup>
 
-            <h:dataTable var="_participation" value="#{participations}"
-                         rendered="#{not empty participations}"
-                         styleClass="simpletablestyle">
-                <h:column>
-                    <f:facet name="header">Id</f:facet>
-                        #{_participation.id}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Datum</f:facet>
-                        #{_participation.trainingItem.trainingDateAsString}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Nimmt teil</f:facet>
+        <h:dataTable var="_participation" value="#{participations}"
+                     rendered="#{not empty participations}"
+                     styleClass="simpletablestyle">
+            <h:column>
+                <f:facet name="header">Id</f:facet>
+                    #{_participation.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Datum</f:facet>
+                    #{_participation.trainingItem.trainingDateAsString}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Nimmt teil</f:facet>
 
-                    <h:selectBooleanCheckbox value="#{_participation.participating}" />
-                </h:column>
+                <h:selectBooleanCheckbox value="#{_participation.participating}" />
+            </h:column>
 
-                <h:column>
-                    <f:facet name="header">Fährt hin</f:facet>
-                        #{_participation.drivingForth}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Fährt zurück</f:facet>
-                        #{_participation.drivingBack}
-                </h:column>
-                <h:column>
-                    <f:facet name="header">Spieler</f:facet>
-                    #{_participation.player.name}, #{_participation.player.firstname}
-                </h:column>        
-            </h:dataTable>
+            <h:column>
+                <f:facet name="header">Fährt hin</f:facet>
+                    #{_participation.drivingForth}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Fährt zurück</f:facet>
+                    #{_participation.drivingBack}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Spieler</f:facet>
+                #{_participation.player.name}, #{_participation.player.firstname}
+            </h:column>        
+        </h:dataTable>
 
 
     </ui:define>

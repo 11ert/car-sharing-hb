@@ -37,7 +37,7 @@ public class TrainingDayListProducer {
     // Facelets or JSP view)
 
    
-   @Produces
+    @Produces
     @Named
     public List<TrainingDay> getTrainingDays() {
         return trainingDays;

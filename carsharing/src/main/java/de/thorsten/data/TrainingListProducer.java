@@ -17,6 +17,8 @@
 package de.thorsten.data;
 
 import de.thorsten.model.Training;
+import java.util.Calendar;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
@@ -40,8 +42,9 @@ public class TrainingListProducer {
 
     private SortedSet<Integer> calWeeks;
     
-    private List<Training> trainingsOfWeek;
-
+    private SortedSet<Date> trainingDates;
+    
+    
     // @Named provides access the return value via the EL variable name "trainings" in the UI (e.g.
     // Facelets or JSP view)
     @Produces
@@ -50,21 +53,32 @@ public class TrainingListProducer {
         return trainings;
     }
 
+    
     @Produces
     @Named
     public SortedSet<Integer> getCalWeeks() {
         return calWeeks;
     }
+    
+    @Produces
+    @Named
+    public SortedSet<Date> getTrainingDates() {
+        return trainingDates;
+    }
 
+    
     @PostConstruct
     public void retrieveAllTrainings() {
         trainings = trainingRepository.findAll();
 
         calWeeks = new TreeSet<Integer>();
+        trainingDates = new TreeSet<Date>();
         for (Training t : trainings) {
             calWeeks.add(t.getCalendarWeek());
+            trainingDates.add(t.getCurrentDate().getTime());
         }
         log.info("CalWeek Anzahl Eintraege" + calWeeks.size());
+        log.info("TrainingDates Anzahl Eintraege" + trainingDates.size());
 
     }
 }
