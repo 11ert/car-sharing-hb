@@ -68,10 +68,12 @@
         <h:dataTable var="_participation" value="#{participations}"
                      rendered="#{not empty participations}"
                      styleClass="simpletablestyle">
+            <!--
             <h:column>
                 <f:facet name="header">Id</f:facet>
                     #{_participation.id}
             </h:column>
+            -->
             <h:column>
                 <f:facet name="header">Datum</f:facet>
                     #{_participation.trainingItem.trainingDateAsString}
@@ -84,18 +86,17 @@
 
             <h:column>
                 <f:facet name="header">Fährt hin</f:facet>
-                    #{_participation.drivingForth}
+                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Fährt zurück</f:facet>
-                    #{_participation.drivingBack}
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Spieler</f:facet>
                 #{_participation.player.name}, #{_participation.player.firstname}
             </h:column>        
         </h:dataTable>
-
 
     </ui:define>
 </ui:composition>
