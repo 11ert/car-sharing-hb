@@ -34,21 +34,19 @@
         <h:selectOneListbox size="1" value="#{calWeeks}">
             <f:selectItems value="#{calWeeks}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
         </h:selectOneListbox>
--->
+        -->
         <h2>Trainingskalender:</h2>
-     <h:outputStylesheet>
-        .tdc {
+        <h:outputStylesheet>
+            .tdc {
             background-color: green;
-        }
-         .wdc {
-        font-weight: bold;
-        font-style: italic;
-        }
-    </h:outputStylesheet>
-    <h:form>
-        <rich:calendar mode="ajax" boundaryDatesMode="scroll" dataModel="#{calendarModel}" />
-    </h:form>
-           <h:form>
+            }
+            .wdc {
+            font-weight: bold;
+            font-style: italic;
+            }
+        </h:outputStylesheet>
+
+        <h:form>
             <rich:calendar id="trainingCalendar"
                            mode="ajax" 
                            popup="false"
@@ -57,10 +55,11 @@
                            buttonLabel="Heute"
                            datePattern="dd.MM.yyyy"
                            dataModel="#{calendarModel}" 
-                           value="#{testBean.testDate}">
+                           ondateselect=""
+                           value="#{calendarModel.selectedDate}">
             </rich:calendar>
         </h:form>
-        <h2>Trainingszeiten:</h2>
+        <h2>Training am #{calendarModel.selectedDateAsFormattedString}:</h2>
         <h:panelGroup rendered="#{empty participations}">
             <em>Keine registrierten Trainingszeiten</em>
         </h:panelGroup>
@@ -71,8 +70,8 @@
             <!--
             <h:column>
                 <f:facet name="header">Id</f:facet>
-                    #{_participation.id}
-            </h:column>
+            #{_participation.id}
+    </h:column>
             -->
             <h:column>
                 <f:facet name="header">Datum</f:facet>
@@ -86,11 +85,11 @@
 
             <h:column>
                 <f:facet name="header">Fährt hin</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}" />
+                <h:selectBooleanCheckbox value="#{_participation.drivingForth}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Fährt zurück</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
+                <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
             </h:column>
             <h:column>
                 <f:facet name="header">Spieler</f:facet>

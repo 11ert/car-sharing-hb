@@ -10,11 +10,14 @@ package de.thorsten.model;
  * @author Thorsten
  */
 import de.thorsten.data.TrainingListProducer;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.context.ConversationScoped;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,7 +34,7 @@ import org.richfaces.model.CalendarDataModelItem;
 public class CalendarModel implements CalendarDataModel {
 
     private static final String TRAINING_DAY_CLASS = "tdc";
-    
+
     @Inject
     private TrainingListProducer trainingListProducer;
 
@@ -39,19 +42,25 @@ public class CalendarModel implements CalendarDataModel {
     private Logger log;
 
     private Date selectedDate;
+    
+    public CalendarModel() {
+        selectedDate = new Date();
+    }
 
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
         for (int i = 0; i < datesInCalendar.length; i++) {
+            log.info("Kalenderdatum= " + datesInCalendar[i]);
             CalendarDataModelItemImpl modelItem = new CalendarDataModelItemImpl();
-            modelItem.setEnabled(true);
+            modelItem.setEnabled(false); // default!
             for (Date d : getDatesToBeHighlighted()) {
                 if (d != null) {
                     if (getDatePortion(d).compareTo(
                             getDatePortion(datesInCalendar[i])) == 0) {
-                            log.info("Datümer " + d.toString() + " sind gleich!");
-                            modelItem.setEnabled(false);
-                            modelItem.setStyleClass(TRAINING_DAY_CLASS);                    }
+                        log.info(d + " -> Enabled");
+                        modelItem.setStyleClass(TRAINING_DAY_CLASS);
+                        modelItem.setEnabled(true);
+                    } 
                 }
             }
             modelItems[i] = modelItem;
@@ -68,7 +77,7 @@ public class CalendarModel implements CalendarDataModel {
         int i = 0;
         for (final Iterator it = trainingListProducer.getTrainingDates().iterator(); it.hasNext();) {
             dates[i] = (Date) it.next();
-            log.info(i + ".Trainingdate: " + ((Date)dates[i]).toString());
+            log.info(i + ".Trainingdate: " + ((Date) dates[i]).toString());
             i++;
         };
         return dates;
@@ -93,6 +102,17 @@ public class CalendarModel implements CalendarDataModel {
     public Date getSelectedDate() {
         return selectedDate;
 
+    }
+
+    public String getSelectedDateAsFormattedString() {
+        String dateString;
+        if (selectedDate != null ) {
+            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
+            dateString = sdf.format(selectedDate);
+        } else {
+            dateString = "??";
+        }
+        return dateString;
     }
 
 }
