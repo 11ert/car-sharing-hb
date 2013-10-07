@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.context.ConversationScoped;
+import javax.faces.event.ValueChangeEvent;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,21 +43,16 @@ public class CalendarModel implements CalendarDataModel {
 
     private Date selectedDate;
     
-    public CalendarModel() {
-        selectedDate = new Date();
-    }
 
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
         for (int i = 0; i < datesInCalendar.length; i++) {
-            log.info("Kalenderdatum= " + datesInCalendar[i]);
             CalendarDataModelItemImpl modelItem = new CalendarDataModelItemImpl();
             modelItem.setEnabled(false); // default!
             for (Date d : getDatesToBeHighlighted()) {
                 if (d != null) {
                     if (getDatePortion(d).compareTo(
                             getDatePortion(datesInCalendar[i])) == 0) {
-                        log.info(d + " -> Enabled");
                         modelItem.setStyleClass(TRAINING_DAY_CLASS);
                         modelItem.setEnabled(true);
                     } 
@@ -68,8 +63,11 @@ public class CalendarModel implements CalendarDataModel {
         return modelItems;
     }
 
+    public CalendarModel () {
+        selectedDate = new Date();
+    }
     public Object getToolTip(Date date) {
-        return null;
+        return "Training";
     }
 
     private Date[] getDatesToBeHighlighted() {
@@ -77,7 +75,6 @@ public class CalendarModel implements CalendarDataModel {
         int i = 0;
         for (final Iterator it = trainingListProducer.getTrainingDates().iterator(); it.hasNext();) {
             dates[i] = (Date) it.next();
-            log.info(i + ".Trainingdate: " + ((Date) dates[i]).toString());
             i++;
         };
         return dates;
@@ -96,12 +93,11 @@ public class CalendarModel implements CalendarDataModel {
 
     public void setSelectedDate(Date selectedDate) {
         this.selectedDate = selectedDate;
-
+        log.info("setSelectedDate() called");
     }
 
     public Date getSelectedDate() {
         return selectedDate;
-
     }
 
     public String getSelectedDateAsFormattedString() {
@@ -115,4 +111,12 @@ public class CalendarModel implements CalendarDataModel {
         return dateString;
     }
 
+    public void submit() {
+        log.info("Submit() !!!");
+    }
+    
+    public void onChangedDate(ValueChangeEvent e) {
+        selectedDate = (Date)e.getNewValue();
+        log.info("onChangedDate, newValue " + e.getNewValue().toString());
+    }
 }

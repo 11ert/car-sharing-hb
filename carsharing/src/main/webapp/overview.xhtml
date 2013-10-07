@@ -55,18 +55,21 @@
                            buttonLabel="Heute"
                            datePattern="dd.MM.yyyy"
                            dataModel="#{calendarModel}" 
-                           ondateselect=""
                            value="#{calendarModel.selectedDate}">
+                <a4j:ajax event="change" render="output" />
             </rich:calendar>
-        </h:form>
-        <h2>Training am #{calendarModel.selectedDateAsFormattedString}:</h2>
+        </h:form>     
+        <h:outputText id="output" value="Training am #{calendarModel.selectedDateAsFormattedString}" />
+         
         <h:panelGroup rendered="#{empty participations}">
             <em>Keine registrierten Trainingszeiten</em>
         </h:panelGroup>
 
         <h:dataTable var="_participation" value="#{participations}"
                      rendered="#{not empty participations}"
-                     styleClass="simpletablestyle">
+                     styleClass="simpletablestyle"
+                     id="participationTable">
+            
             <!--
             <h:column>
                 <f:facet name="header">Id</f:facet>

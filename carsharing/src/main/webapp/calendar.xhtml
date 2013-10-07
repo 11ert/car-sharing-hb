@@ -1,26 +1,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:a4j="http://richfaces.org/a4j"
-      xmlns:rich="http://richfaces.org/rich">
-
-    <style type="text/css">
-        .ecol1 { vertical-align: top; padding-right : 25px }
-        .ecol2 { vertical-align: top; border-left: #ACBECE 1px solid; padding-left : 10px }
-        .rich-calendar-tool-btn{
-            font-family: Arial, Verdana;
-        } 
-    </style>
-    <h:form>
-
-        <h:panelGrid id="panel" columns="2" columnClasses="ecol1, ecol2">
-            <a4j:outputPanel id="calendar" layout="block">
-                    <rich:calendar value="#{calendarModel.selectedDate}"
-                        popup="false"
-                        showApplyButton="true" />
-            </a4j:outputPanel>
-        </h:panelGrid>
-    </h:form>   
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="content">
+        <h2>Trainingskalender:</h2>
+        <h:outputStylesheet>
+            .tdc {
+            background-color: green;
+            }
+            .wdc {
+            font-weight: bold;
+            font-style: italic;
+            }
+        </h:outputStylesheet>
+        <h:form>
+        <rich:calendar id="trainingCalendar2"
+                       mode="ajax" 
+                       popup="false"
+                       boundaryDatesMode="scroll" 
+                       locale="de/DE"
+                       buttonLabel="Heute"
+                       datePattern="dd.MM.yyyy"
+                       dataModel="#{calendarModel}" 
+                       value="#{calendarModel.selectedDate}">
+            <a4j:ajax event="change" render="output" />
+        </rich:calendar>
+        </h:form>
+        <h2><h:outputText id="output" value="#{calendarModel.selectedDate}" /> </h2>
+    </ui:define>
 </ui:composition>
+

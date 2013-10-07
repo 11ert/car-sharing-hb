@@ -37,6 +37,8 @@ public class ParticipationListProducer {
     @Inject
     private Logger log;
     
+    
+    
     private List<Participation> participations;
 
     // @Named provides access the return value via the EL variable name "participation" in the UI (e.g.
@@ -46,11 +48,11 @@ public class ParticipationListProducer {
     public List<Participation> getParticipations() {
         return participations;
     }
-
+/*
     public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         retrieveAllParticipators();
     }
-
+*/
     @PostConstruct
     public void retrieveAllParticipators() {
        log.info("retrieveAllParticipators");
