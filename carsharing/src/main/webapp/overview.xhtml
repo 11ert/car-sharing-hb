@@ -55,11 +55,11 @@
                            buttonLabel="Heute"
                            datePattern="dd.MM.yyyy"
                            dataModel="#{calendarModel}" 
-                           value="#{calendarModel.selectedDate}">
-                <a4j:ajax event="change" render="output" />
+                           value="#{participationListProducer.trainingDate}">
+                <a4j:ajax event="change" render="trainingDate" />
             </rich:calendar>
         </h:form>     
-        <h:outputText id="output" value="Training am #{calendarModel.selectedDateAsFormattedString}" />
+        <h:outputText id="trainingDate" value="Training am #{participationListProducer.trainingDate}" />
          
         <h:panelGroup rendered="#{empty participations}">
             <em>Keine registrierten Trainingszeiten</em>

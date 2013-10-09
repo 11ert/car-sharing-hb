@@ -10,6 +10,7 @@ package de.thorsten.model;
  * @author Thorsten
  */
 import de.thorsten.data.TrainingListProducer;
+import de.thorsten.util.DateUtil;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -43,7 +44,11 @@ public class CalendarModel implements CalendarDataModel {
 
     private Date selectedDate;
     
-
+    public String getSelectedDateAsFormattedString() {
+        return DateUtil.getSelectedDateAsFormattedString(selectedDate);
+    }
+            
+            
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
         for (int i = 0; i < datesInCalendar.length; i++) {
@@ -51,8 +56,8 @@ public class CalendarModel implements CalendarDataModel {
             modelItem.setEnabled(false); // default!
             for (Date d : getDatesToBeHighlighted()) {
                 if (d != null) {
-                    if (getDatePortion(d).compareTo(
-                            getDatePortion(datesInCalendar[i])) == 0) {
+                    if (DateUtil.getDatePortion(d).compareTo(
+                            DateUtil.getDatePortion(datesInCalendar[i])) == 0) {
                         modelItem.setStyleClass(TRAINING_DAY_CLASS);
                         modelItem.setEnabled(true);
                     } 
@@ -80,16 +85,6 @@ public class CalendarModel implements CalendarDataModel {
         return dates;
     }
 
-    //This method skips the time part and retuns the date part only
-    private Date getDatePortion(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
 
     public void setSelectedDate(Date selectedDate) {
         this.selectedDate = selectedDate;
@@ -100,17 +95,7 @@ public class CalendarModel implements CalendarDataModel {
         return selectedDate;
     }
 
-    public String getSelectedDateAsFormattedString() {
-        String dateString;
-        if (selectedDate != null ) {
-            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
-            dateString = sdf.format(selectedDate);
-        } else {
-            dateString = "??";
-        }
-        return dateString;
-    }
-
+    
     public void submit() {
         log.info("Submit() !!!");
     }

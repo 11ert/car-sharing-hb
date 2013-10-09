@@ -11,8 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 import de.thorsten.model.Participation;
-import java.util.Calendar;
+import java.util.Date;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.Root;
 
 @ApplicationScoped
@@ -61,14 +63,9 @@ public class ParticipationRepository {
      /**
      * TODO: Noch die Where Clause hinzufügen!!!
      */
-     public List<Participation> getAllByNameAndForSpecificDate(Calendar curDate) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
-        Root<Participation> participation = criteria.from(Participation.class);
-        criteria.select(participation).orderBy(cb.asc((participation.get("player").get("name")))); 
-//        criteria.where(cb.equal(participation.get( Training_.currentDate ), curDate) );
-        
-        return em.createQuery(criteria).getResultList();
+     public List<Participation> getAllByNameAndForSpecificDate(Date curDate) {
+        return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate")
+                  .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
 
      /**

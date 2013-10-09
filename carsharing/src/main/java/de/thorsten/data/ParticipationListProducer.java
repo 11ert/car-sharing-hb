@@ -18,28 +18,29 @@ package de.thorsten.data;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.util.DateUtil;
+import java.util.Date;
 import java.util.logging.Logger;
 
 @RequestScoped
+@Named
 public class ParticipationListProducer {
 
     @Inject
     private ParticipationRepository participationRepository;
-    
+
     @Inject
     private Logger log;
-    
-    
-    
+
     private List<Participation> participations;
+    
+    private Date trainingDate = new Date();
 
     // @Named provides access the return value via the EL variable name "participation" in the UI (e.g.
     // Facelets or JSP view)
@@ -48,15 +49,33 @@ public class ParticipationListProducer {
     public List<Participation> getParticipations() {
         return participations;
     }
-/*
-    public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
+    
+    public void setTrainingDate(Date x) {
+        log.info("setTrainingDAte called " + x.toString());
+        trainingDate = x;
         retrieveAllParticipators();
     }
-*/
+    
+    public Date getTrainingDate() {
+        return trainingDate;
+    }
+    
+    public String getTrainingDateAsFormattedString() {
+        return DateUtil.getSelectedDateAsFormattedString(trainingDate);
+    }
+    
+    /*
+     public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
+     retrieveAllParticipators();
+     }
+     */
+
     @PostConstruct
     public void retrieveAllParticipators() {
-       log.info("retrieveAllParticipators");
+        log.info("trainingDateForSelection" + trainingDate.toString());
+        log.info("retrieveAllParticipators");
         //participations = participationRepository.getAll();
-        participations = participationRepository.getAllByName();
+        //participations = participationRepository.getAllByName();
+        participations = participationRepository.getAllByNameAndForSpecificDate(trainingDate);
     }
 }
