@@ -74,8 +74,9 @@ public class TrainingListProducer {
         calWeeks = new TreeSet<Integer>();
         trainingDates = new TreeSet<Date>();
         for (Training t : trainings) {
-            calWeeks.add(t.getCalendarWeek());
-            trainingDates.add(t.getCurrentDate().getTime());
+            //calWeeks.add(t.getCalendarWeek());
+            //trainingDates.add(t.getCurrentDate().getTime());
+            trainingDates.add(t.getCurrentDate());
         }
         log.info("CalWeek Anzahl Eintraege" + calWeeks.size());
         log.info("TrainingDates Anzahl Eintraege" + trainingDates.size());

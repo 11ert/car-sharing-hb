@@ -39,7 +39,7 @@ public class ParticipationListProducer {
     private Logger log;
 
     private List<Participation> participations;
-    
+
     private Date trainingDate = new Date();
 
     // @Named provides access the return value via the EL variable name "participation" in the UI (e.g.
@@ -47,35 +47,39 @@ public class ParticipationListProducer {
     @Produces
     @Named
     public List<Participation> getParticipations() {
+        log.info("GetParticipations called " + participations.size() + " Elements");
         return participations;
     }
     
     public void setTrainingDate(Date x) {
-        log.info("setTrainingDAte called " + x.toString());
+        log.info("setTrainingDate called " + x.toString());
         trainingDate = x;
         retrieveAllParticipators();
     }
-    
+
     public Date getTrainingDate() {
         return trainingDate;
     }
-    
+
     public String getTrainingDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(trainingDate);
     }
-    
+
     /*
      public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
      retrieveAllParticipators();
      }
      */
-
     @PostConstruct
     public void retrieveAllParticipators() {
-        log.info("trainingDateForSelection" + trainingDate.toString());
-        log.info("retrieveAllParticipators");
-        //participations = participationRepository.getAll();
-        //participations = participationRepository.getAllByName();
-        participations = participationRepository.getAllByNameAndForSpecificDate(trainingDate);
+        log.info("retrieveAllParticipators for "+ trainingDate.toString());
+        participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
+        logRetrievedParticipators();
+    }
+
+    private void logRetrievedParticipators() {
+        for (Participation p : participations) {
+            log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
+        }
     }
 }

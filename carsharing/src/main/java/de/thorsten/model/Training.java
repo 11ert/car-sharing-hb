@@ -6,6 +6,7 @@ package de.thorsten.model;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import javax.persistence.Entity;
@@ -24,13 +25,13 @@ public class Training implements Serializable {
     public Training() {
     }
 
-    public Training(Calendar date, List<Member> players, TrainingDay trainingDay) {
+    public Training(Date date, List<Member> players, TrainingDay trainingDay) {
         this.currentDate = date;
         this.trainingDay = trainingDay;
     }
 
     @Id
-    private Calendar currentDate;
+    private Date currentDate;
 
     @OneToOne
     private TrainingDay trainingDay;
@@ -38,9 +39,10 @@ public class Training implements Serializable {
     /**
      * @return the calendarWeek
      */
+    /*
     public int getCalendarWeek() {
         return currentDate.get(Calendar.WEEK_OF_YEAR);
-    }
+    }*/
 
     public String getTrainingDateAsString() {
         String dateString = null;
@@ -54,14 +56,14 @@ public class Training implements Serializable {
     /**
      * @return the date of the training
      */
-    public Calendar getDate() {
+    public Date getDate() {
         return getCurrentDate();
     }
 
     /**
      * @param date the date to set of the training
      */
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.setCurrentDate(date);
     }
 
@@ -82,14 +84,14 @@ public class Training implements Serializable {
     /**
      * @return the currentDate of the training
      */
-    public Calendar getCurrentDate() {
+    public Date getCurrentDate() {
         return currentDate;
     }
 
     /**
      * @param currentDate the currentDate of the training to set
      */
-    public void setCurrentDate(Calendar currentDate) {
+    public void setCurrentDate(Date currentDate) {
         this.currentDate = currentDate;
     }
 

@@ -29,12 +29,7 @@
         <div>
             <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
         </div>
-        <!--
-        <h2>Kalenderwoche:</h2>
-        <h:selectOneListbox size="1" value="#{calWeeks}">
-            <f:selectItems value="#{calWeeks}" var="c" itemLabel="#{c}" itemValue="#{c}"/>
-        </h:selectOneListbox>
-        -->
+
         <h2>Trainingskalender:</h2>
         <h:outputStylesheet>
             .tdc {
@@ -56,26 +51,24 @@
                            datePattern="dd.MM.yyyy"
                            dataModel="#{calendarModel}" 
                            value="#{participationListProducer.trainingDate}">
-                <a4j:ajax event="change" render="trainingDate" />
+                <a4j:ajax event="change" render="trainingDateOutput testOutput participationTable" />
             </rich:calendar>
         </h:form>     
-        <h:outputText id="trainingDate" value="Training am #{participationListProducer.trainingDate}" />
-         
+        <h:outputText id="trainingDateOutput" value="Training am #{participationListProducer.trainingDate}" />
+
+        <h:outputText id="testOutput" value="Anzahl gefundene Elemente: #{participations.size()}"/>
+
+        <!-- Always displayed : -->
+        
         <h:panelGroup rendered="#{empty participations}">
             <em>Keine registrierten Trainingszeiten</em>
         </h:panelGroup>
 
+        <!-- rendered="#{not empty participations}" => Effect: even when table is not empty the wholetable is not displayed! -->
         <h:dataTable var="_participation" value="#{participations}"
-                     rendered="#{not empty participations}"
                      styleClass="simpletablestyle"
                      id="participationTable">
-            
-            <!--
-            <h:column>
-                <f:facet name="header">Id</f:facet>
-            #{_participation.id}
-    </h:column>
-            -->
+
             <h:column>
                 <f:facet name="header">Datum</f:facet>
                     #{_participation.trainingItem.trainingDateAsString}

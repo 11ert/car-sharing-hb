@@ -12,22 +12,22 @@ import java.util.List;
 
 import de.thorsten.model.Participation;
 import java.util.Date;
-import javax.persistence.Query;
+import java.util.logging.Logger;
 import javax.persistence.TemporalType;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.Root;
 
 @ApplicationScoped
 public class ParticipationRepository {
 
     @Inject
+    private Logger log;
+    
+    @Inject
     private EntityManager em;
 
     public Participation findById(Long id) {
         return em.find(Participation.class, id);
     }
-    
-   
  
     public List<Participation> getAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -37,7 +37,7 @@ public class ParticipationRepository {
         return em.createQuery(criteria).getResultList();
     }
     
-    public List<Participation> getAllByName() {
+    public List<Participation> getAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
         Root<Participation> participation = criteria.from(Participation.class);
@@ -45,35 +45,10 @@ public class ParticipationRepository {
         return em.createQuery(criteria).getResultList();
     }
 
-    /**
-     * TODO: Noch die Where Clause hinzufügen!!!
-     * @param calWeek
-     * @return 
-     */
-     public List<Participation> getAllByNameAndForCalendarWeek(int calWeek) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
-        Root<Participation> participation = criteria.from(Participation.class);
-        criteria.select(participation).orderBy(cb.asc((participation.get("player").get("name")))); 
-        //criteria.where(cb.equal(participation.get(Training_.currentDate.get(Calendar.WEEK_OF_YEAR), calWeek)));
-        
-        return em.createQuery(criteria).getResultList();
-    }   
      
-     /**
-     * TODO: Noch die Where Clause hinzufügen!!!
-     */
-     public List<Participation> getAllByNameAndForSpecificDate(Date curDate) {
+     public List<Participation> getAllForSpecificDateOrderedByName(Date curDate) {
+        log.info("Getting all training participations for = " +  curDate + "...");
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate")
                   .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
-
-     /**
-      * Nur ein Test!!!
-      * @return 
-      */
-     public List<Participation> testQuery() {
-         Query q = em.createQuery ("SELECT x FROM Magazine x");
-         return q.getResultList();
-     }
 }
