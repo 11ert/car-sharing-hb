@@ -41,57 +41,95 @@
             }
         </h:outputStylesheet>
 
-        <h:form>
+        <h:form >
             <rich:calendar id="trainingCalendar"
                            mode="ajax" 
                            popup="false"
                            boundaryDatesMode="scroll" 
                            locale="de/DE"
                            buttonLabel="Heute"
-                           datePattern="dd.MM.yyyy"
+                           datePattern="dd.MM.yyyy"  
                            dataModel="#{calendarModel}" 
                            value="#{participationListProducer.trainingDate}">
-                <a4j:ajax event="change" render="trainingDateOutput testOutput participationTable" />
+                <a4j:ajax event="change" render="trainingDate_output participationTable participationAttributes_output popup" />
+
             </rich:calendar>
         </h:form>     
-        <h:outputText id="trainingDateOutput" value="Training am #{participationListProducer.trainingDate}" />
+        <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
 
-        <h:outputText id="testOutput" value="Anzahl gefundene Elemente: #{participations.size()}"/>
+        <!-- Following message gets always displayed (even if participations.size() > 0): -->
+        <!--
+                <h:panelGroup rendered="#{empty participations}">
+                    <em>Keine registrierten Trainingszeiten</em>
+                </h:panelGroup>
+        -->
+<!-- By adding 'rendered="#{participations.size()}"' in h:dataTable => Effect: even when table is not empty the wholetable is not displayed! -->
+<!--                      rendered="#{not empty participations}" -->
+        <h:form>
+            <rich:dataTable var="_participation" value="#{participations}"
+                         styleClass="simpletablestyle"
+                         iterationStatusVar="it"
+                         id="participationTable">
+                <rich:column>
+                    <f:facet name="header">ID</f:facet>
+                    #{_participation}
+                </rich:column> 
 
-        <!-- Always displayed : -->
-        
-        <h:panelGroup rendered="#{empty participations}">
-            <em>Keine registrierten Trainingszeiten</em>
-        </h:panelGroup>
 
-        <!-- rendered="#{not empty participations}" => Effect: even when table is not empty the wholetable is not displayed! -->
-        <h:dataTable var="_participation" value="#{participations}"
-                     styleClass="simpletablestyle"
-                     id="participationTable">
+                <rich:column>
+                    <f:facet name="header">Spieler</f:facet>
+                    #{_participation.player.name}, #{_participation.player.firstname}
+                </rich:column> 
+                <rich:column>
+                    <f:facet name="header">Nimmt teil</f:facet>
+                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">Fährt hin</f:facet>
+                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true"/>
+                </rich:column>
+                <rich:column>
+                    <f:facet name="header">Fährt zurück</f:facet>
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true"/>
+                </rich:column>
+                <rich:column>
+                    <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
+                         onclick="#{rich:component('editPane')}.show()">
+                         <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
+                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
+                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
+                     </a4j:commandLink>
+                </rich:column>
+            </rich:dataTable>
+            
+            
+            <h:panelGrid id="participationAttributes_output" >
+                <h:outputText value="Noch #{numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
+                              rendered="#{numberOfSeatsForthRequired > 0}"/>
 
-            <h:column>
-                <f:facet name="header">Datum</f:facet>
-                    #{_participation.trainingItem.trainingDateAsString}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Nimmt teil</f:facet>
+                <h:outputText value="Noch #{numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
+                              rendered="#{numberOfSeatsBackRequired > 0}"/>
+                <h:outputText value="#{numberOfParticipators} Teilnehmer bei diesem Training"/>
+            </h:panelGrid>
 
-                <h:selectBooleanCheckbox value="#{_participation.participating}" />
-            </h:column>
+        <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
+            <h:panelGrid columns="3" id="editGrid">
+                <h:outputText value="Id" />
+                <h:outputText value="#{participationController.currentParticipationIndex}" />
+                <h:panelGroup />
+                <h:outputText value="Teilnahme" />
+                <h:outputText value="#{participationController.editedParticipation.participating}" />
+                <h:panelGroup />
+                <h:outputText value="Spieler" />
+                <h:outputText value="#{participationController.editedParticipation.player.firstname}" />
+            </h:panelGrid>
 
-            <h:column>
-                <f:facet name="header">Fährt hin</f:facet>
-                <h:selectBooleanCheckbox value="#{_participation.drivingForth}" />
-            </h:column>
-            <h:column>
-                <f:facet name="header">Fährt zurück</f:facet>
-                <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
-            </h:column>
-            <h:column>
-                <f:facet name="header">Spieler</f:facet>
-                #{_participation.player.name}, #{_participation.player.firstname}
-            </h:column>        
-        </h:dataTable>
+            <a4j:commandButton value="Store" action="#{carsBean.store}" render="table" execute="editPane"
+                oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}" />
+            <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide(); return false;" />
+        </rich:popupPanel>
 
+        </h:form>
     </ui:define>
+
 </ui:composition>

@@ -48,7 +48,7 @@ public class ParticipationRepository {
      
      public List<Participation> getAllForSpecificDateOrderedByName(Date curDate) {
         log.info("Getting all training participations for = " +  curDate + "...");
-        return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate")
+        return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate order by p.player.name")
                   .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
 }

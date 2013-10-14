@@ -5,13 +5,17 @@
 package de.thorsten.model;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
+import javax.inject.Inject;
+import javax.inject.Named;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 /**
  *
@@ -19,7 +23,12 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Participation implements Serializable {
+
     private static long serialVersionUID = 1L;
+
+    @Transient
+    @Inject
+    private Logger log;
 
     /**
      * @return the serialVersionUID
@@ -40,14 +49,14 @@ public class Participation implements Serializable {
 
     @OneToOne
     private Member player;
-    
+
     @OneToOne
     private Training trainingItem;
-    
+
     private boolean participating;
-    
+
     private boolean drivingBack;
-            
+
     private boolean drivingForth;
 
     public Participation() {
@@ -55,8 +64,7 @@ public class Participation implements Serializable {
         this.drivingBack = Boolean.FALSE;
         this.participating = Boolean.FALSE;
     }
-            
-       
+
     public Long getId() {
         return id;
     }
@@ -107,14 +115,14 @@ public class Participation implements Serializable {
     /**
      * @return the trainingItem
      */
-    public Training  getTrainingItem() {
+    public Training getTrainingItem() {
         return trainingItem;
     }
 
     /**
      * @param training the trainingItem to set
      */
-    public void setTraining(Training  trainingItem) {
+    public void setTraining(Training trainingItem) {
         this.trainingItem = trainingItem;
     }
 
@@ -159,5 +167,16 @@ public class Participation implements Serializable {
     public void setDrivingForth(boolean drivingForth) {
         this.drivingForth = drivingForth;
     }
-    
+
+    // Funktioniert nicht!
+    @Named
+    public void useDrivingForthChanged(ValueChangeEvent ev) {
+        log.info("!!!!!!ValueChangeListener aufgerufen!!!!!");
+        Boolean useChangedDrivingForth = (Boolean) ev.getNewValue();
+        if (useChangedDrivingForth != null) {
+            this.drivingForth = useChangedDrivingForth;
+        }
+        FacesContext.getCurrentInstance().renderResponse();
+    }
+
 }
