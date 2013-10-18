@@ -37,9 +37,7 @@ public class ParticipationController implements Serializable {
     
     
     public void updateParticipation() {
-        log.info("Updated Participation!");
-        log.info("Driving Back jetzt: " + drivingBack);
-        log.info("Driving Forth jetzt: " +  drivingForth);
+        log.info("updateParticipation! Not Implemented yet");
     }
   
     /**

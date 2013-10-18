@@ -18,22 +18,39 @@
             }
         </h:outputStylesheet>
         <h:form>
-        <rich:calendar id="trainingCalendar2"
-                       mode="ajax" 
-                       popup="false"
-                       boundaryDatesMode="scroll" 
-                       locale="de/DE"
-                       buttonLabel="Heute"
-                       datePattern="dd.MM.yyyy"
-                       dataModel="#{calendarModel}" 
-                       value="#{calendarModel.selectedDate}">
-            <a4j:ajax event="change" render="output" />
-        </rich:calendar>
+            <rich:calendar id="trainingCal"
+                           mode="ajax" 
+                           popup="false"
+                           boundaryDatesMode="scroll" 
+                           locale="de/DE"
+                           buttonLabel="Heute"
+                           datePattern="dd.MM.yyyy"
+                           dataModel="#{calendarModel}" 
+                           value="#{participationListProducer.trainingDate}">
+                <a4j:ajax event="change" render="output participationTable" />
+            </rich:calendar>
         </h:form>
         <h2><h:outputText id="output" value="#{calendarModel.selectedDate}" /> </h2>
+
+        <h:panelGroup rendered="#{empty participationListProducer.participations}">  
+            <em>No items available</em>  
+        </h:panelGroup>  
+  
+        <h:dataTable var="_participation" value="#{participationListProducer.participations}"  
+                     styleClass="simpletablestyle"  
+                     rendered="#{not empty participationListProducer.participations}" 
+                     id="participationTable">  
+              
+            <h:column>  
+                <f:facet name="header">Datum</f:facet>  
+                    #{_participation.trainingItem.trainingDateAsString}  
+            </h:column>  
         
-        
-        
+            <h:column>  
+                <f:facet name="header">Spieler</f:facet>  
+                #{_participation.player.name}, #{_participation.player.firstname}  
+            </h:column>          
+        </h:dataTable>  
     </ui:define>
 </ui:composition>
 
