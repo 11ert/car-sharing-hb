@@ -24,9 +24,19 @@
             font-weight: bold;
             font-style: italic;
             }
+            .even-row {
+            background-color: #FCFFFE;
+            }
+            .odd-row {
+            background-color: #ECF3FE;
+            }
+            .active-row {
+            background-color: #FFEBDA !important;
+            cursor: pointer;
+            }
         </h:outputStylesheet>
 
-        <h:form>
+        <h:form id="calendar_form">
             <rich:calendar id="trainingCalendar"
                            mode="ajax" 
                            popup="false"
@@ -37,26 +47,25 @@
                            dataModel="#{calendarModel}" 
                            value="#{participationListProducer.trainingDate}"
                            valueChangeListener="#{participationListProducer.trainingDateChanged}">
-                <a4j:ajax event="change" render="trainingDate_output participationTable participationAttributes_output" />
+                <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
             </rich:calendar>
         </h:form>     
         <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
 
-        <h:panelGroup id="empty_table_message" rendered="#{empty participationListProducer.participations}">  
-            <em>No items available</em>  
-        </h:panelGroup> 
-        <h:form>
+        <h:form id="table_form">
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
-                            styleClass="simpletablestyle"
                             iterationStatusVar="it"
-                            id="participationTable">
+                            id="participation_table"
+                            rowClasses="odd-row, even-row"
+                            styleClass="stable"
+                            >
                 <rich:column>
                     <f:facet name="header">Spieler</f:facet>
                     #{_participation.player.name}, #{_participation.player.firstname}
                 </rich:column> 
                 <rich:column>
                     <f:facet name="header">Nimmt teil</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true"/>
+                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" />
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt hin</f:facet>
@@ -64,15 +73,20 @@
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt zurück</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true"/>
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" />
                 </rich:column>
                 <rich:column>
+                    <!--
                     <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
                                      onclick="#{rich:component('editPane')}.show()">
 
                         <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
+                    </a4j:commandLink>
+                    -->
+                    <a4j:commandLink styleClass="no-decor" action="#{participationController.updateParticipation(_participation)}"  >
+                        <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                     </a4j:commandLink>
                 </rich:column>
             </rich:dataTable>
@@ -89,13 +103,17 @@
                     <h:outputText value="#{participationController.editedParticipation.player.firstname}" />
                 </h:panelGrid>
 
-                <a4j:commandButton value="Store" action="#{participationController.updateParticipation()}" render="participationTable" execute="editPane"
+                <a4j:commandButton value="Store" action="#{participationController.updateParticipation()}" render="participation_table" execute="editPane"
                                    oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}" />
                 <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide();
                                              return false;" />
             </rich:popupPanel>
 
         </h:form>
+        <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />
+        <rich:jQuery selector=".stable tr:even" query="addClass('even-row')" />
+        <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+        <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
 
         <h:panelGrid id="participationAttributes_output" >
             <h:outputText value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
@@ -105,7 +123,6 @@
                           rendered="#{participationListProducer.numberOfSeatsBackRequired > 0}"/>
             <h:outputText value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>
         </h:panelGrid>
-
 
     </ui:define>
 

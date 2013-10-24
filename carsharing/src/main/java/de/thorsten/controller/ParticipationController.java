@@ -40,6 +40,9 @@ public class ParticipationController implements Serializable {
         log.info("updateParticipation! Not Implemented yet");
     }
   
+    public void updateParticipation(Participation newParticipation) {
+        log.info("updateParticipation(participation)! Not Implemented yet");
+    }
     /**
      * @return the drivesBack
      */
@@ -79,6 +82,7 @@ public class ParticipationController implements Serializable {
      * @param currentParticipation the currentParticipation to set
      */
     public void setCurrentParticipation(Participation currentParticipation) {
+        log.info("setCurrentParticipaton()" + currentParticipation);
         this.currentParticipation = currentParticipation;
     }
 
