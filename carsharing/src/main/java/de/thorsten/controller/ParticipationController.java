@@ -3,46 +3,48 @@
  */
 package de.thorsten.controller;
 
-import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import de.thorsten.model.Participation;
+import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
 import java.util.logging.Logger;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ValueChangeEvent;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
 // EL name
 // Read more about the @Model stereotype in this FAQ:
 // http://sfwk.org/Documentation/WhatIsThePurposeOfTheModelAnnotation
-
 @ManagedBean(name = "participationController")
 @ViewScoped
 public class ParticipationController implements Serializable {
 
+    private static final long serialVersionUID = -3832235132261771583L;
+
     @Inject
     private Logger log;
-   
+
     private boolean drivingBack;
-    
+
     private boolean drivingForth;
-    
+
     private int currentParticipationIndex;
-    
+
     private Participation currentParticipation;
 
     private Participation editedParticipation;
     
-    
-    public void updateParticipation() {
-        log.info("updateParticipation! Not Implemented yet");
-    }
-  
-    public void updateParticipation(Participation newParticipation) {
-        log.info("updateParticipation(participation)! Not Implemented yet");
-    }
+    @Inject
+    private FacesContext facesContext;
+
+    @Inject
+    private ParticipationService participationService;
+
+
     /**
      * @return the drivesBack
      */
@@ -116,5 +118,38 @@ public class ParticipationController implements Serializable {
         log.info("setEditedParticipation " + changedParticipation);
         this.editedParticipation = changedParticipation;
     }
+
+    public void updateParticipation() {
+        log.info("updateParticipation called");
+        try {
+            participationService.update(editedParticipation);
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated!", "Registration successful");
+            facesContext.addMessage(null, m);
+        } catch (Exception e) {
+            String errorMessage = getRootErrorMessage(e);
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
+            facesContext.addMessage(null, m);
+        }
+    }
+
+    private String getRootErrorMessage(Exception e) {
+        // Default to general error message that registration failed.
+        String errorMessage = "Registration failed. See server log for more information";
+        if (e == null) {
+            // This shouldn't happen, but return the default messages
+            return errorMessage;
+        }
+
+        // Start with the exception and recurse to find the root cause
+        Throwable t = e;
+        while (t != null) {
+            // Get the message from the Throwable class instance
+            errorMessage = t.getLocalizedMessage();
+            t = t.getCause();
+        }
+        // This is the root cause message
+        return errorMessage;
+    }
+
 
 }

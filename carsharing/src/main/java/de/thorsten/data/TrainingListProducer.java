@@ -17,10 +17,8 @@
 package de.thorsten.data;
 
 import de.thorsten.model.Training;
-import java.util.Calendar;
 import java.util.Date;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -28,6 +26,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.logging.Logger;
+import javax.enterprise.context.RequestScoped;
 
 @RequestScoped
 public class TrainingListProducer {

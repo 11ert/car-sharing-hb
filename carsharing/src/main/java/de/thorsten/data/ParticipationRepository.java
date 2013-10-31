@@ -51,4 +51,10 @@ public class ParticipationRepository {
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate order by p.player.name")
                   .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
+     
+     public List<Participation> getAllForDateGreaterEqualOrderedByDateAndName(Date curDate) {
+        log.info("Getting all training participations for = " +  curDate + "...");
+        return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate >= :curDate order by p.trainingItem.currentDate, p.player.name")
+                  .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
+    }
 }

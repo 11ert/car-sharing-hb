@@ -42,7 +42,7 @@ public class ParticipationListProducer {
 
     private List<Participation> participations;
 
-    private Date trainingDate = new Date();
+    private Date trainingDate;
 
     private int numberOfParticipators;
 
@@ -122,9 +122,16 @@ public class ParticipationListProducer {
      */
     @PostConstruct
     public void retrieveAllParticipators() {
-        log.info("retrieveAllParticipators for " + trainingDate.toString());
-        participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
-        calculateParticipationAttributes();
+        if (trainingDate == null) {
+            trainingDate = new Date();
+            log.info("retrieveAllParticipators for trainingDate >= " + trainingDate.toString());
+            //participations = participationRepository.getAllForDateGreaterEqualOrderedByDateAndName(trainingDate);
+            participations = participationRepository.getAll();
+        } else {
+            log.info("retrieveAllParticipators for " + trainingDate.toString());
+            participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
+            calculateParticipationAttributes();
+        }
     }
 
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {

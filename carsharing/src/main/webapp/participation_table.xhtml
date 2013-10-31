@@ -9,13 +9,6 @@
                 xmlns:rich="http://richfaces.org/rich">
 
     <ui:define name="content">
-        <h1>Handball Jugend Großkrotzenburg</h1>
-
-        <div>
-            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
-        </div>
-
-        <h2>Trainingskalender:</h2>
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -35,22 +28,6 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-
-        <h:form id="calendar_form">
-            <rich:calendar id="trainingCalendar"
-                           mode="ajax" 
-                           popup="false"
-                           boundaryDatesMode="scroll" 
-                           locale="de/DE"
-                           buttonLabel="Heute"
-                           datePattern="dd.MM.yyyy"  
-                           dataModel="#{calendarModel}" 
-                           value="#{participationListProducer.trainingDate}"
-                           valueChangeListener="#{participationListProducer.trainingDateChanged}">
-                <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
-            </rich:calendar>
-        </h:form>     
-        <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
 
         <h:form id="table_form">
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
@@ -83,30 +60,27 @@
                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
                     </a4j:commandLink>
-                    <!--
-                    <a4j:commandLink styleClass="no-decor" action="#{participationController.updateParticipation}"  >
-                        <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
-                    </a4j:commandLink>
-                    -->
-
                 </rich:column>
             </rich:dataTable>
 
             <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
                 <h:panelGrid columns="3" id="editGrid">
-                    <h:outputText value="Id" />
-                    <h:outputText value="#{participationController.currentParticipationIndex}" />
-                    <h:panelGroup />
-                    <h:outputText value="Teilnahme" />
-                    <h:outputText value="#{participationController.editedParticipation.participating}" />
-                    <h:panelGroup />
                     <h:outputText value="Spieler" />
                     <h:outputText value="#{participationController.editedParticipation.player.firstname}" />
+                    <h:panelGroup />
+                    <h:outputText value="Nimmt teil" />
+                    <h:selectBooleanCheckbox value="#{participationController.editedParticipation.participating}" />
+                    <h:panelGroup />
+                    <h:outputText value="Fährt hin" />
+                    <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingForth}" />
+                    <h:panelGroup />
+                    <h:outputText value="Fährt zurück" />
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
                 </h:panelGrid>
 
-                <a4j:commandButton value="Store" action="#{participationController.updateParticipation}" render="participation_table" execute="editPane"
+                <a4j:commandButton value="Speichern" action="#{participationController.updateParticipation}" render="participation_table" execute="editPane"
                                    oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}" />
-                <a4j:commandButton value="Cancel" onclick="#{rich:component('editPane')}.hide();
+                <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
                                              return false;" />
             </rich:popupPanel>
 
