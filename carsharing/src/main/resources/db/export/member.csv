@@ -1,0 +1,10 @@
+id,carsize,city,email,firstname,name,phone_number
+0,5,Groﬂkrotzenburg,john.smith@mailinator.com,John,Smith,2125551212
+1,5,Test,test.test2@mailinator.com,Test1,Test2,2125551212
+2,5,Test2,firstname.lastname,Firstname,Lastname,2125551212
+3,3,HalloStadt,hallo@hallo.de,Hallo,hallo,06186201653
+4,4,Groﬂkrotzenburg,johann@hallo.de,Johann,Adam,06186
+5,4,Groﬂkrotzenburg,moritz@hallo.de,Moritz,Elfert,NULL
+6,3,Groﬂkrotzenburg,julius@hallo.de,Julius,Eltner,NULL
+7,0,Groﬂkrotzenburg,silas@hallo.de,Silas,N,NULL
+8,3,Groﬂkrotzenburg,simon@hallo.de,Simon,Schleiden,NULL
