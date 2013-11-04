@@ -9,11 +9,11 @@ import de.thorsten.model.Participation;
 import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 
 // The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
 // EL name
@@ -120,7 +120,7 @@ public class ParticipationController implements Serializable {
     }
 
     public void updateParticipation() {
-        log.info("updateParticipation called");
+        log.info("updateParticipation called for participation: " + editedParticipation);
         try {
             participationService.update(editedParticipation);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated!", "Registration successful");
@@ -151,5 +151,6 @@ public class ParticipationController implements Serializable {
         return errorMessage;
     }
 
+    
 
 }

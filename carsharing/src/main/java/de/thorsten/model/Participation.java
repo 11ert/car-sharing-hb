@@ -5,6 +5,7 @@
 package de.thorsten.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -59,6 +60,8 @@ public class Participation implements Serializable {
 
     private boolean drivingForth;
 
+    private Date lastChanged;
+    
     public Participation() {
         this.drivingForth = Boolean.FALSE;
         this.drivingBack = Boolean.FALSE;
@@ -177,6 +180,20 @@ public class Participation implements Serializable {
             this.drivingForth = useChangedDrivingForth;
         }
         FacesContext.getCurrentInstance().renderResponse();
+    }
+
+    /**
+     * @return the lastChanged
+     */
+    public Date getLastChanged() {
+        return lastChanged;
+    }
+
+    /**
+     * @param lastChanged the lastChanged to set
+     */
+    public void setLastChanged(Date lastChanged) {
+        this.lastChanged = lastChanged;
     }
 
 }

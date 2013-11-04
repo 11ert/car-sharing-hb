@@ -5,14 +5,7 @@
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:rich="http://richfaces.org/rich">
     
-        <h:panelGroup rendered="#{empty testBean.header}">  
-            <em>No items available</em>  
-        </h:panelGroup>  
-    
-        <rich:dataTable rendered="#{not empty testBean.header}" value="#{testBean.header}" var="head">
-            <rich:column >
-                #{head}
-            </rich:column>
-        </rich:dataTable>
-    
+    <h:form>
+        <h:commandButton value ="test" action="#{participationController.updateParticipation()}" />    
+    </h:form>
 </ui:composition>

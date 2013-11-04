@@ -23,16 +23,18 @@ import java.util.List;
 
 import de.thorsten.model.Participation;
 import de.thorsten.util.DateUtil;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
 @RequestScoped
 @Named
-public class ParticipationListProducer {
+public class ParticipationListProducer implements Serializable {
 
     @Inject
     private ParticipationRepository participationRepository;
@@ -122,16 +124,23 @@ public class ParticipationListProducer {
      */
     @PostConstruct
     public void retrieveAllParticipators() {
-        if (trainingDate == null) {
-            trainingDate = new Date();
-            log.info("retrieveAllParticipators for trainingDate >= " + trainingDate.toString());
-            //participations = participationRepository.getAllForDateGreaterEqualOrderedByDateAndName(trainingDate);
-            participations = participationRepository.getAll();
-        } else {
-            log.info("retrieveAllParticipators for " + trainingDate.toString());
-            participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
-            calculateParticipationAttributes();
-        }
+        log.info("initializeSession called");
+        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        /*
+         if (trainingDate == null) {
+         trainingDate = new Date();
+         log.info("retrieveAllParticipators for trainingDate >= " + trainingDate.toString());
+         //participations = participationRepository.getAllForDateGreaterEqualOrderedByDateAndName(trainingDate);
+         participations = participationRepository.getAll();
+         } else {
+         log.info("retrieveAllParticipators for " + trainingDate.toString());
+         participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
+         calculateParticipationAttributes();
+         }*/
+
+        participations = participationRepository.getAll();
+        calculateParticipationAttributes();
+
     }
 
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {

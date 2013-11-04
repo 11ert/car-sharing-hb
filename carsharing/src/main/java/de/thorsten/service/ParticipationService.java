@@ -18,6 +18,7 @@ package de.thorsten.service;
 
 import de.thorsten.model.Participation;
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -40,9 +41,10 @@ public class ParticipationService implements Serializable {
 
     public void update(Participation participation) throws Exception {
         log.info("Updating " + participation);
-        em.persist(participation);
-        
+
+        participation.setLastChanged(new Date());
+        em.merge(participation);
         participationEventSrc.fire(participation);
-        em.flush(); // TE
+ //       em.flush(); // TE
     }
 }

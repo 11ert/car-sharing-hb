@@ -30,6 +30,7 @@
         </h:outputStylesheet>
 
         <h:form id="table_form">
+
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                             iterationStatusVar="it"
                             id="participation_table"
@@ -75,20 +76,17 @@
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingForth}" />
                     <h:panelGroup />
                     <h:outputText value="Fährt zurück" />
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" />
+                    <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingBack}" />
                 </h:panelGrid>
 
-                <a4j:commandButton value="Speichern" action="#{participationController.updateParticipation}" render="participation_table" execute="editPane"
-                                   oncomplete="if (#{facesContext.maximumSeverity==null}) {#{rich:component('editPane')}.hide();}" />
-                <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                             return false;" />
+                <a4j:commandButton value="Speichern" 
+                                   action="#{participationController.updateParticipation()}" 
+                                   render="participation_table participationAttributes_output" 
+                                   execute="editPane"
+                                   oncomplete="#{rich:component('editPane')}.hide();" />
+                <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide(); return false;" />
             </rich:popupPanel>
-
-
         </h:form>
-
-
-
         <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />
         <rich:jQuery selector=".stable tr:even" query="addClass('even-row')" />
         <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
@@ -102,7 +100,5 @@
                           rendered="#{participationListProducer.numberOfSeatsBackRequired > 0}"/>
             <h:outputText value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>
         </h:panelGrid>
-
     </ui:define>
-
 </ui:composition>
