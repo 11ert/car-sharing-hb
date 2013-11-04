@@ -109,14 +109,11 @@ public class ParticipationListProducer implements Serializable {
     public void retrieveAllParticipators() {
         log.info("retrieveAllParticipators");
         FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        /*
-         if (trainingDate == null) {
-         trainingDate = new Date();
-         log.info("retrieveAllParticipators for trainingDate >= " + trainingDate.toString());
-         //participations = participationRepository.getAllForDateGreaterEqualOrderedByDateAndName(trainingDate);
-         participations = participationRepository.getAll();
-         } else {
-         */
+        participations = participationRepository.getAll();
+        calculateParticipationAttributes();
+    }
+    
+    public void retrieveAllParticipatorsForSpecificDate() {
         if (trainingDate != null) {
             log.info("retrieveAllParticipators for " + trainingDate.toString());
             participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
@@ -127,11 +124,19 @@ public class ParticipationListProducer implements Serializable {
             log.info("trainingDate is null");
         }
     }
-/*
+    
+
+    /**
+     * unbedingt notwendig, damit Änderungen aktualisiert werden
+     * ohne dem führt ein re-rendering nicht zu einer Aktualisierung der View
+     * Warum auch immer...
+     * 
+     * @param participation 
+     */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         retrieveAllParticipators();
     }
-*/
+
     private void calculateParticipationAttributes() {
         numberOfParticipators = 0;
         for (Participation p : participations) {

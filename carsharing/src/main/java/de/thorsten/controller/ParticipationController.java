@@ -9,7 +9,7 @@ import de.thorsten.model.Participation;
 import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -34,16 +34,15 @@ public class ParticipationController implements Serializable {
 
     private int currentParticipationIndex;
 
-    private Participation currentParticipation;
+   private Participation currentParticipation;
 
     private Participation editedParticipation;
-    
+
     @Inject
     private FacesContext facesContext;
 
     @Inject
     private ParticipationService participationService;
-
 
     /**
      * @return the drivesBack
@@ -80,6 +79,15 @@ public class ParticipationController implements Serializable {
         return currentParticipation;
     }
 
+    /*
+    neu - nur zum testen, ob einfacher als via Property Action Listener
+    */
+    public void editParticipation(Participation editParticipation) {
+        log.info("Edit Participation called mit " + editParticipation);
+        this.editedParticipation = editParticipation;
+    }
+    
+    
     /**
      * @param currentParticipation the currentParticipation to set
      */
@@ -150,7 +158,5 @@ public class ParticipationController implements Serializable {
         // This is the root cause message
         return errorMessage;
     }
-
-    
 
 }

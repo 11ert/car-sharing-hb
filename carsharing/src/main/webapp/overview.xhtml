@@ -76,12 +76,14 @@
                     <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" />
                 </rich:column>
                 <rich:column>
-                    <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
+                    <a4j:commandLink styleClass="no-decor" 
+                                     render="editGrid" execute="@this"
                                      onclick="#{rich:component('editPane')}.show()">
 
                         <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
+                        
                     </a4j:commandLink>
 
                 </rich:column>
