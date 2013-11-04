@@ -31,8 +31,16 @@
 
 
         <h:form id="table_form">
-
-            <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
+<!-- funktioniert noch nicht wie erwartet
+            <a4j:commandButton id="showAllButton"
+                               value="Alles anzeigen" 
+                               action="#{participationListProducer.retrieveAllParticipators()}" 
+                               execute="showAllButton participation_table edit_pane"
+                               render="participation_table participationAttributes_output"
+                               />
+            
+            -->
+                <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                             iterationStatusVar="it"
                             id="participation_table"
                             rowClasses="odd-row, even-row"
@@ -48,11 +56,13 @@
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt hin</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true"/>
+                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true"
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt zurück</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" />
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
               <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
