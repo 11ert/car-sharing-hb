@@ -1,19 +1,3 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package de.thorsten.data;
 
 import javax.annotation.PostConstruct;
@@ -91,7 +75,6 @@ public class ParticipationListProducer implements Serializable {
     }
 
     public List<Participation> getParticipations() {
-        log.info("GetParticipations called " + participations.size() + " Elements");
         return participations;
     }
 
@@ -124,7 +107,7 @@ public class ParticipationListProducer implements Serializable {
      */
     @PostConstruct
     public void retrieveAllParticipators() {
-        log.info("initializeSession called");
+        log.info("retrieveAllParticipators");
         FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         /*
          if (trainingDate == null) {
@@ -133,20 +116,22 @@ public class ParticipationListProducer implements Serializable {
          //participations = participationRepository.getAllForDateGreaterEqualOrderedByDateAndName(trainingDate);
          participations = participationRepository.getAll();
          } else {
-         log.info("retrieveAllParticipators for " + trainingDate.toString());
-         participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
-         calculateParticipationAttributes();
-         }*/
+         */
+        if (trainingDate != null) {
+            log.info("retrieveAllParticipators for " + trainingDate.toString());
+            participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
+            calculateParticipationAttributes();
 
-        participations = participationRepository.getAll();
-        calculateParticipationAttributes();
-
+            //participations = participationRepository.getAll();
+        } else {
+            log.info("trainingDate is null");
+        }
     }
-
+/*
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         retrieveAllParticipators();
     }
-
+*/
     private void calculateParticipationAttributes() {
         numberOfParticipators = 0;
         for (Participation p : participations) {

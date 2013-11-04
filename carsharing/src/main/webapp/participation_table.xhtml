@@ -28,7 +28,11 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-
+        
+        <h:panelGroup rendered="#{empty participations}">              
+            <em>Keine Einträge vorhanden</em>           
+        </h:panelGroup>  
+        
         <h:form id="table_form">
 
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
@@ -36,6 +40,7 @@
                             id="participation_table"
                             rowClasses="odd-row, even-row"
                             styleClass="stable"
+                            rendered="#{not empty participations}" 
                             >
                 <rich:column>
                     <f:facet name="header">Spieler</f:facet>
@@ -92,7 +97,9 @@
         <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
         <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
 
-        <h:panelGrid id="participationAttributes_output" >
+        <h:panelGrid id="participationAttributes_output" 
+                     rendered="#{not empty participations}"
+                     >
             <h:outputText value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                           rendered="#{participationListProducer.numberOfSeatsForthRequired > 0}"/>
 

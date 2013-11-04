@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package de.thorsten.model;
 
 /**
@@ -11,11 +7,8 @@ package de.thorsten.model;
  */
 import de.thorsten.data.TrainingListProducer;
 import de.thorsten.util.DateUtil;
-import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.event.ValueChangeEvent;
@@ -26,10 +19,7 @@ import javax.inject.Named;
 import org.richfaces.model.CalendarDataModel;
 import org.richfaces.model.CalendarDataModelItem;
 
-/**
- * @author Ilya Shaikovsky
- *
- */
+
 @ApplicationScoped
 @Named("calendarModel")
 public class CalendarModel implements CalendarDataModel {
@@ -95,13 +85,10 @@ public class CalendarModel implements CalendarDataModel {
         return selectedDate;
     }
 
-    
-    public void submit() {
-        log.info("Submit() !!!");
-    }
-    
+ /*
     public void onChangedDate(ValueChangeEvent e) {
         selectedDate = (Date)e.getNewValue();
         log.info("onChangedDate, newValue " + e.getNewValue().toString());
     }
+    */
 }
