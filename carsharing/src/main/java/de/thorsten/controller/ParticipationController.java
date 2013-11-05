@@ -9,7 +9,6 @@ import de.thorsten.model.Participation;
 import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
 import java.util.logging.Logger;
-import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;

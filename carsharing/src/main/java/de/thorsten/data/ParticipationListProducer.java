@@ -1,6 +1,5 @@
 package de.thorsten.data;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
@@ -10,13 +9,16 @@ import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.SessionScoped;
+
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-@RequestScoped
+
+// nur zum testen
+@SessionScoped
 @Named
 public class ParticipationListProducer implements Serializable {
 
@@ -88,7 +90,7 @@ public class ParticipationListProducer implements Serializable {
         if (event.getNewValue() != null) {
             log.info("New TrainingDate = " + event.getNewValue());
             trainingDate = (Date) event.getNewValue();
-            retrieveAllParticipators();
+            retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
         }
     }
@@ -105,7 +107,7 @@ public class ParticipationListProducer implements Serializable {
      * @PostConstruct wird nach Dependency Injection aufgerufen zur
      * Initialisierung Es darf nur eine solch annotierte Methode geben!
      */
-    @PostConstruct
+    //@PostConstruct
     public void retrieveAllParticipators() {
         log.info("retrieveAllParticipators");
         FacesContext.getCurrentInstance().getExternalContext().getSession(true);

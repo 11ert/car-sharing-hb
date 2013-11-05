@@ -49,11 +49,10 @@
                            valueChangeListener="#{participationListProducer.trainingDateChanged}">
                 <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
             </rich:calendar>
-            
-
-            
-            <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
-
+           
+            <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" >
+                Training am #{participationListProducer.trainingDateAsFormattedString}
+            </h:outputText>
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                             iterationStatusVar="it"
                             id="participation_table"

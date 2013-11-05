@@ -28,19 +28,16 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-
-
-        <h:form id="table_form">
-<!-- funktioniert noch nicht wie erwartet
+        <h:form>
             <a4j:commandButton id="showAllButton"
                                value="Alles anzeigen" 
                                action="#{participationListProducer.retrieveAllParticipators()}" 
-                               execute="showAllButton participation_table edit_pane"
                                render="participation_table participationAttributes_output"
                                />
-            
-            -->
-                <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
+        </h:form>
+
+        <h:form id="table_form">
+           <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                             iterationStatusVar="it"
                             id="participation_table"
                             rowClasses="odd-row, even-row"
@@ -52,7 +49,7 @@
                 <rich:column>
                     <f:facet name="header">Nimmt teil</f:facet>
                     <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" 
-                                      onclick="return false"/>
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt hin</f:facet>
@@ -65,14 +62,14 @@
                                              onclick="return false"/>
                 </rich:column>
                 <rich:column>
-              <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
+                    <a4j:commandLink styleClass="no-decor" render="editGrid" execute="@this"
                                      onclick="#{rich:component('editPane')}.show()">
 
                         <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
                     </a4j:commandLink>
-                    </rich:column>
+                </rich:column>
             </rich:dataTable>
 
             <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
