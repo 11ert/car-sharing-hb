@@ -136,7 +136,8 @@ public class ParticipationListProducer implements Serializable {
      * @param participation 
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
-        retrieveAllParticipators();
+        //retrieveAllParticipators();
+        retrieveAllParticipatorsForSpecificDate();
     }
 
     private void calculateParticipationAttributes() {
