@@ -115,13 +115,12 @@ public class ParticipationListProducer implements Serializable {
         calculateParticipationAttributes();
     }
     
+    // todo: Nicht intuitiv - besser mit  Injection
     public void retrieveAllParticipatorsForSpecificDate() {
         if (trainingDate != null) {
             log.info("retrieveAllParticipators for " + trainingDate.toString());
             participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
             calculateParticipationAttributes();
-
-            //participations = participationRepository.getAll();
         } else {
             log.info("trainingDate is null");
         }

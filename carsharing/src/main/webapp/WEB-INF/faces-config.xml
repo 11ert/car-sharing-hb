@@ -26,5 +26,7 @@
 
     <!-- Write your navigation rules here. You are encouraged to use CDI 
         for creating @Named managed beans. -->
-
+    <application>
+        <message-bundle>bundle</message-bundle>
+    </application>
 </faces-config>

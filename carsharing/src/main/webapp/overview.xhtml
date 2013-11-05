@@ -12,10 +12,10 @@
         <h1>Handball Jugend Großkrotzenburg</h1>
 
         <div>
-            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
+            <h3>Dies ist ein Portal um Fahrgemeinschaften bilden</h3>
         </div>
 
-        <h2>Trainingskalender:</h2>
+        <h2>Trainingskalender für die männliche D-Jugend:</h2>
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -39,20 +39,19 @@
         <h:form id="calendar_form">
             <rich:calendar id="trainingCalendar"
                            mode="ajax" 
+                           locale="de"
+                           buttonLabel="Heute"
                            popup="false"
                            boundaryDatesMode="scroll" 
-                           locale="de/DE"
-                           buttonLabel="Heute"
                            datePattern="dd.MM.yyyy"  
                            dataModel="#{calendarModel}" 
                            value="#{participationListProducer.trainingDate}"
                            valueChangeListener="#{participationListProducer.trainingDateChanged}">
                 <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
             </rich:calendar>
-           
-            <h:outputText id="trainingDate_output" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" >
-                Training am #{participationListProducer.trainingDateAsFormattedString}
-            </h:outputText>
+            <p></p>
+            <h:outputText  id="trainingDate_output" style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
+            <p></p>
             <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                             iterationStatusVar="it"
                             id="participation_table"
@@ -64,15 +63,18 @@
                 </rich:column> 
                 <rich:column>
                     <f:facet name="header">Nimmt teil</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" />
+                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" 
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt hin</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true"/>
+                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true" 
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
                     <f:facet name="header">Fährt zurück</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" />
+                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
+                                             onclick="return false"/>
                 </rich:column>
                 <rich:column>
                     <a4j:commandLink styleClass="no-decor" 
@@ -82,7 +84,7 @@
                         <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                         <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                         <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
-                        
+
                     </a4j:commandLink>
 
                 </rich:column>
@@ -90,16 +92,16 @@
 
             <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
                 <h:panelGrid columns="3" id="editGrid">
-                    <h:outputText value="Spieler" />
+                    <h:outputText value="Spieler" style="font-size: small;font-weight: bold;"/>
                     <h:outputText value="#{participationController.editedParticipation.player.firstname}" />
                     <h:panelGroup />
-                    <h:outputText value="Nimmt teil" />
+                    <h:outputText value="Nimmt teil" style="font-size: small;font-weight: bold;"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.participating}" />
                     <h:panelGroup />
-                    <h:outputText value="Fährt hin" />
+                    <h:outputText value="Fährt hin" style="font-size: small;font-weight: bold;"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingForth}" />
                     <h:panelGroup />
-                    <h:outputText value="Fährt zurück" />
+                    <h:outputText value="Fährt zurück" style="font-size: small;font-weight: bold;"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingBack}" />
                 </h:panelGrid>
 
