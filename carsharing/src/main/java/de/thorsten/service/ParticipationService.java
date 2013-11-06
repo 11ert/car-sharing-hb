@@ -31,4 +31,6 @@ public class ParticipationService implements Serializable {
         participationEventSrc.fire(participation);
  //       em.flush(); // TE
     }
+    
+    
 }

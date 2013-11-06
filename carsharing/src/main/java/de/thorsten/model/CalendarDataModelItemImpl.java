@@ -1,21 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.thorsten.model;
+
+import org.richfaces.model.CalendarDataModelItem;
 
 /**
  *
  * @author Thorsten
- */
-import org.richfaces.model.CalendarDataModelItem;
-
-
-/**
- * @author Nick Belaevski - mailto:nbelaevski@exadel.com
- * created 04.07.2007
- *
  */
 public class CalendarDataModelItemImpl implements CalendarDataModelItem {
 

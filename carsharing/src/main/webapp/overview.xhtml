@@ -37,59 +37,75 @@
         </h:outputStylesheet>
 
         <h:form id="calendar_form">
-            <rich:calendar id="trainingCalendar"
-                           mode="ajax" 
-                           locale="de"
-                           buttonLabel="Heute"
-                           popup="false"
-                           boundaryDatesMode="scroll" 
-                           datePattern="dd.MM.yyyy"  
-                           dataModel="#{calendarModel}" 
-                           value="#{participationListProducer.trainingDate}"
-                           valueChangeListener="#{participationListProducer.trainingDateChanged}">
-                <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
-            </rich:calendar>
-            <p></p>
-            <h:outputText  id="trainingDate_output" style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
-            <p></p>
-            <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
-                            iterationStatusVar="it"
-                            id="participation_table"
-                            rowClasses="odd-row, even-row"
-                            styleClass="stable">
-                <rich:column>
-                    <f:facet name="header">Spieler</f:facet>
-                    #{_participation.player.name}, #{_participation.player.firstname}
-                </rich:column> 
-                <rich:column>
-                    <f:facet name="header">Nimmt teil</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" 
-                                             onclick="return false"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">Fährt hin</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true" 
-                                             onclick="return false"/>
-                </rich:column>
-                <rich:column>
-                    <f:facet name="header">Fährt zurück</f:facet>
-                    <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
-                                             onclick="return false"/>
-                </rich:column>
-                <rich:column>
-                    <a4j:commandLink styleClass="no-decor" 
-                                     render="editGrid" execute="@this"
-                                     onclick="#{rich:component('editPane')}.show()">
+            <rich:panel styleClass="stable" header="Traingsdatum">
+                <rich:calendar id="trainingCalendar"
+                               mode="ajax" 
+                               locale="de"
+                               buttonLabel="Heute"
+                               popup="false"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               dataModel="#{calendarModel}" 
+                               value="#{participationListProducer.trainingDate}"
+                               valueChangeListener="#{participationListProducer.trainingDateChanged}">
+                    <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
+                </rich:calendar>
+            </rich:panel>
+            <rich:collapsiblePanel id="trainingDate_output" styleClass="stable" header="Trainingsdaten" expanded="false">
+                <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
+                <h:outputText style="font-size: small;font-weight: bold;" value="Hinfahrt"/> 
+                <ul>
+                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Abfahrt 16:50 Uhr"/></li>
+                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Treffpunkt Geschwister Scholl Schule"/></li>
+                </ul>
+                <h:outputText style="font-size: small;font-weight: bold;" value="Rückfahrt"/> 
+                <ul>
+                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Abfahrt 19:10 Uhr"/></li>
+                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Treffpunkt Lindenauhalle"/></li>
+                </ul>
+            </rich:collapsiblePanel>
 
-                        <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
-                        <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
-                        <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
+            <rich:panel styleClass="stable" header="Teilnahme am Training">
 
-                    </a4j:commandLink>
+                <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
+                                iterationStatusVar="it"
+                                id="participation_table"
+                                rowClasses="odd-row, even-row"
+                                styleClass="stable"
+                                >
+                    <rich:column>
+                        <f:facet name="header">Spieler</f:facet>
+                        #{_participation.player.name}, #{_participation.player.firstname}
+                    </rich:column> 
+                    <rich:column>
+                        <f:facet name="header">Nimmt teil</f:facet>
+                        <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" 
+                                                 onclick="return false"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Fährt hin</f:facet>
+                        <h:selectBooleanCheckbox value="#{_participation.drivingForth}"  readonly="true" 
+                                                 onclick="return false"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Fährt zurück</f:facet>
+                        <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
+                                                 onclick="return false"/>
+                    </rich:column>
+                    <rich:column>
+                        <a4j:commandLink styleClass="no-decor" 
+                                         render="editGrid" execute="@this"
+                                         onclick="#{rich:component('editPane')}.show()">
 
-                </rich:column>
-            </rich:dataTable>
+                            <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
+                            <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
+                            <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
 
+                        </a4j:commandLink>
+
+                    </rich:column>
+                </rich:dataTable>
+            </rich:panel>
             <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
                 <h:panelGrid columns="3" id="editGrid">
                     <h:outputText value="Spieler" style="font-size: small;font-weight: bold;"/>
@@ -124,9 +140,15 @@
         <h:panelGrid id="participationAttributes_output" >
             <h:outputText value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                           rendered="#{participationListProducer.numberOfSeatsForthRequired > 0}"/>
+            <h:outputText value="Genügend Plätze auf der Hinfahrt vorhanden!" 
+                          rendered="#{participationListProducer.numberOfSeatsForthRequired lt 0}"/>
+
+            <h:outputText value="Genügend Plätze auf der Rückfahrt vorhanden!"
+                          rendered="#{participationListProducer.numberOfSeatsBackRequired lt 0}"/>
 
             <h:outputText value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
                           rendered="#{participationListProducer.numberOfSeatsBackRequired > 0}"/>
+
             <h:outputText value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>
         </h:panelGrid>
 

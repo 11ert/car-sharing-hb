@@ -85,10 +85,5 @@ public class CalendarModel implements CalendarDataModel {
         return selectedDate;
     }
 
- /*
-    public void onChangedDate(ValueChangeEvent e) {
-        selectedDate = (Date)e.getNewValue();
-        log.info("onChangedDate, newValue " + e.getNewValue().toString());
-    }
-    */
+
 }
