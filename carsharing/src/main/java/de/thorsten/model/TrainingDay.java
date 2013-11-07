@@ -24,8 +24,7 @@ public class TrainingDay implements Serializable {
 
     @Id
     @NotNull
-    @NotEmpty
-    private String weekday;
+    private int weekday;
 
     @NotNull
     @NotEmpty
@@ -49,14 +48,14 @@ public class TrainingDay implements Serializable {
     /**
      * @return the weekday
      */
-    public String getWeekday() {
+    public int getWeekday() {
         return weekday;
     }
 
     /**
      * @param weekday the weekday to set
      */
-    public void setWeekday(String weekday) {
+    public void setWeekday(int weekday) {
         this.weekday = weekday;
     }
 

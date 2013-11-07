@@ -25,6 +25,7 @@ import javax.persistence.criteria.Root;
 import java.util.List;
 
 import de.thorsten.model.TrainingDay;
+import javax.persistence.Query;
 
 @ApplicationScoped
 public class TrainingDayRepository {
@@ -43,6 +44,13 @@ public class TrainingDayRepository {
         Root<TrainingDay> trainingDay = criteria.from(TrainingDay.class);
         criteria.select(trainingDay);
         return em.createQuery(criteria).getResultList();
+    }
+    
+    public List<TrainingDay> findByWeekday(int weekday) {
+        Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE t.weekday = :weekday");
+        q.setParameter("weekday", weekday);
+        return q.getResultList();
+  
     }
     
 }

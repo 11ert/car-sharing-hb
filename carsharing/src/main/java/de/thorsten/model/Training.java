@@ -52,20 +52,7 @@ public class Training implements Serializable {
         }
         return dateString;
     }
-
-    /**
-     * @return the date of the training
-     */
-    public Date getDate() {
-        return getCurrentDate();
-    }
-
-    /**
-     * @param date the date to set of the training
-     */
-    public void setDate(Date date) {
-        this.setCurrentDate(date);
-    }
+   
 
     /**
      * @return the trainingDay (Mo. - Fr.)

@@ -9,5 +9,25 @@
                 xmlns:rich="http://richfaces.org/rich">
 
     <ui:define name="content">
-        <
+        <h:form id="training_creation_date_calendar">
+            <rich:panel styleClass="stable" header="Nächstes Traingsdatum">
+                <rich:calendar id="trainingCalendar"
+                               mode="ajax" 
+                               buttonLabel="Heute"
+                               popup="false"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               value="#{trainingController.nextTrainingDate}"
+                               valueChangeListener="#{participationListProducer.trainingDateChanged}">
 
+                    <a4j:ajax event="change" render="next_trainingdate_out" />
+                </rich:calendar>
+            </rich:panel>
+            <rich:panel id="next_trainingdate_out">
+                <h:outputText value="Next Training = #{trainingController.nextTrainingDate}"/>
+                <p></p>
+                <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}"/>
+            </rich:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -6,6 +6,7 @@
 
 package de.thorsten.service;
 
+import java.util.Date;
 import javax.ejb.Stateless;
 
 /**
@@ -18,5 +19,7 @@ public class TrainingService {
     public void createTraining() {
         ;
     }
+    
+    private Date nextTrainingDate;
         
 }
