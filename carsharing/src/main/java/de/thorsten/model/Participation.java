@@ -66,6 +66,7 @@ public class Participation implements Serializable {
         this.drivingForth = Boolean.FALSE;
         this.drivingBack = Boolean.FALSE;
         this.participating = Boolean.FALSE;
+        this.lastChanged = new Date();
     }
 
     public Long getId() {

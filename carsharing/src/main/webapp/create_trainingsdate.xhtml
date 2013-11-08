@@ -28,6 +28,23 @@
                 <p></p>
                 <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}"/>
             </rich:panel>
+
+        <rich:dataTable var="_member" value="#{trainingController.initialMembers}"
+                        iterationStatusVar="it"
+                        id="member_table"
+                        rowClasses="odd-row, even-row"
+                        styleClass="stable">
+            <rich:column>
+                <f:facet name="header">Spieler</f:facet>
+                #{_member.name}, #{_member.firstname}
+            </rich:column> 
+            <rich:column>
+                <a4j:commandLink styleClass="no-decor" 
+                                 render="member_table" execute="@this">
+                    <h:graphicImage value="/resources/icons/delete.gif" alt="delete" />
+                </a4j:commandLink>
+            </rich:column>
+        </rich:dataTable>
         </h:form>
     </ui:define>
 </ui:composition>

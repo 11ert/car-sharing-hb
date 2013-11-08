@@ -1,13 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.thorsten.service;
 
-import java.util.Date;
+import de.thorsten.model.Training;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
 
 /**
  *
@@ -16,10 +13,16 @@ import javax.ejb.Stateless;
 @Stateless
 public class TrainingService {
 
-    public void createTraining() {
-        ;
+    @Inject
+    private Logger log;
+
+    @Inject
+    private EntityManager em;
+
+    public void update(Training training) throws Exception {
+        log.info("Updating " + training);
+
+        em.merge(training);
     }
-    
-    private Date nextTrainingDate;
         
 }
