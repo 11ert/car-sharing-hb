@@ -141,6 +141,9 @@ public class ParticipationListProducer implements Serializable {
 
     private void calculateParticipationAttributes() {
         numberOfParticipators = 0;
+        numberOfSeatsBackAvailable = 0;
+        numberOfSeatsForthRequired = 0;
+        
         for (Participation p : participations) {
             log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
             if (p.isParticipating()) {
