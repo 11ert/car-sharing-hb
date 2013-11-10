@@ -12,7 +12,7 @@
         <h1>Handball Jugend Großkrotzenburg</h1>
 
         <div>
-            <h3>Dies ist ein Portal um Fahrgemeinschaften bilden</h3>
+            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
         </div>
 
         <h2>Trainingskalender für die männliche D-Jugend:</h2>
@@ -37,34 +37,32 @@
         </h:outputStylesheet>
 
         <h:form id="calendar_form">
-            <rich:panel styleClass="stable" header="Traingsdatum">
-                <rich:calendar id="trainingCalendar"
-                               mode="ajax" 
-                               locale="de"
-                               buttonLabel="Heute"
-                               popup="false"
-                               boundaryDatesMode="scroll" 
-                               datePattern="dd.MM.yyyy"  
-                               dataModel="#{calendarModel}" 
-                               value="#{participationListProducer.trainingDate}"
-                               valueChangeListener="#{participationListProducer.trainingDateChanged}">
-                    <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
-                </rich:calendar>
-            </rich:panel>
-            <rich:collapsiblePanel id="trainingDate_output" styleClass="stable" header="Trainingsdaten" expanded="false">
-                <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
-                <h:outputText style="font-size: small;font-weight: bold;" value="Hinfahrt"/> 
-                <ul>
-                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Abfahrt 16:50 Uhr"/></li>
-                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Treffpunkt Geschwister Scholl Schule"/></li>
-                </ul>
-                <h:outputText style="font-size: small;font-weight: bold;" value="Rückfahrt"/> 
-                <ul>
-                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Abfahrt 19:10 Uhr"/></li>
-                    <li><h:outputText style="font-size: small;font-weight: normal;" value="Treffpunkt Lindenauhalle"/></li>
-                </ul>
-            </rich:collapsiblePanel>
+            <h:panelGrid columns="2" >
+                <rich:panel styleClass="stable" header="Traingsdatum">
+                    <rich:calendar id="trainingCalendar"
+                                   mode="ajax" 
+                                   locale="de"
+                                   buttonLabel="Heute"
+                                   popup="false"
+                                   boundaryDatesMode="scroll" 
+                                   datePattern="dd.MM.yyyy"  
+                                   dataModel="#{calendarModel}" 
+                                   value="#{participationListProducer.trainingDate}"
+                                   valueChangeListener="#{participationListProducer.trainingDateChanged}">
+                        <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
+                    </rich:calendar>
+                </rich:panel>
 
+                <rich:panel id="trainingDate_output" styleClass="stable" >
+                    <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
+                    <h:outputText style="font-size: small;font-weight: bold;" value="Hinfahrt"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt 16:50 Uhr"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Geschwister Scholl Schule"/><p></p>
+                    <h:outputText style="font-size: small;font-weight: bold;" value="Rückfahrt"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt 19:10 Uhr"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Lindenauhalle"/><br/>
+                </rich:panel>
+            </h:panelGrid>
             <rich:panel styleClass="stable" header="Teilnahme am Training">
 
                 <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
@@ -93,6 +91,7 @@
                                                  onclick="return false"/>
                     </rich:column>
                     <rich:column>
+                        <f:facet name="header">Ändern</f:facet>
                         <a4j:commandLink styleClass="no-decor" 
                                          render="editGrid" execute="@this"
                                          onclick="#{rich:component('editPane')}.show()">
@@ -126,7 +125,8 @@
                                    render="participation_table participationAttributes_output" 
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
-                <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide(); return false;" />
+                <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
+                                                         return false;" />
             </rich:popupPanel>
 
 
