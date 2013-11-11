@@ -200,14 +200,14 @@ public class ParticipationListProducer implements Serializable {
         trainings = trainingRepository.findAllGeDate(new Date());
         if (trainings == null) {
             log.info("updateSelectedTraining() - Training null");
-        }
-        if (trainings.size() == 0) {
+        } else if (trainings.size() == 0) {
             log.info("updateSelectedTraining() - Training null");
+        } else {
+            selectedTraining = trainings.get(0);
+            trainingDate = selectedTraining.getCurrentDate();
+            retrieveAllParticipatorsForSpecificDate();
+            calculateParticipationAttributes();
         }
-        selectedTraining = trainings.get(0);
-        trainingDate = selectedTraining.getCurrentDate();
-        retrieveAllParticipatorsForSpecificDate();
-        calculateParticipationAttributes();
     }
 
 }

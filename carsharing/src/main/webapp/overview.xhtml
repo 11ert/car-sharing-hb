@@ -59,7 +59,7 @@
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output" styleClass="stable">
-                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
+                    <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
                     <h:outputText style="font-size: smaller;font-weight: bold;" value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><p></p>
@@ -68,11 +68,10 @@
                     <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
                 </rich:panel>
             </h:panelGrid>
-            <rich:panel styleClass="stable" header="Teilnahme am Training">
+            <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.trainingDateAsFormattedString}">
 
                 <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
                                 iterationStatusVar="it"
-                                id="participation_table"
                                 rowClasses="odd-row, even-row"
                                 styleClass="stable"
                                 >
