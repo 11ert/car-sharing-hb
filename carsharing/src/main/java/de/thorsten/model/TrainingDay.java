@@ -44,6 +44,10 @@ public class TrainingDay implements Serializable {
     
     @NotNull
     private String location;
+    
+    private String pickUpLocationSource;
+
+    private String pickUpLocationTarget;
 
     /**
      * @return the weekday
@@ -127,6 +131,34 @@ public class TrainingDay implements Serializable {
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    /**
+     * @return the pickUpLocationSource
+     */
+    public String getPickUpLocationSource() {
+        return pickUpLocationSource;
+    }
+
+    /**
+     * @param pickUpLocationSource the pickUpLocationSource to set
+     */
+    public void setPickUpLocationSource(String pickUpLocationSource) {
+        this.pickUpLocationSource = pickUpLocationSource;
+    }
+
+    /**
+     * @return the pickUpLocationTarget
+     */
+    public String getPickUpLocationTarget() {
+        return pickUpLocationTarget;
+    }
+
+    /**
+     * @param pickUpLocationTarget the pickUpLocationTarget to set
+     */
+    public void setPickUpLocationTarget(String pickUpLocationTarget) {
+        this.pickUpLocationTarget = pickUpLocationTarget;
     }
 
 }

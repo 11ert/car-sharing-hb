@@ -1,6 +1,7 @@
 package de.thorsten.data;
 
 import de.thorsten.model.Training;
+import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -8,7 +9,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 @ApplicationScoped
 public class TrainingRepository {
@@ -20,10 +22,10 @@ public class TrainingRepository {
         return em.find(Training.class, id);
     }
 
-
     /**
      * ToDo: Sortierung funktioniert nicht !!!
-     * @return 
+     *
+     * @return
      */
     public List<Training> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -33,5 +35,12 @@ public class TrainingRepository {
         criteria.orderBy(cb.asc(training.get("currentDate")));
         return em.createQuery(criteria).getResultList();
     }
-    
+
+    public List<Training> findByDate(Date currentDate) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.currentDate = :currentDate");
+        q.setParameter("currentDate", currentDate, TemporalType.DATE);
+        return q.getResultList();
+        
+    }
+
 }

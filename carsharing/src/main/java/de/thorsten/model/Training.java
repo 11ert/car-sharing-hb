@@ -30,6 +30,7 @@ public class Training implements Serializable {
         this.trainingDay = trainingDay;
     }
 
+   
     @Id
     private Date currentDate;
 

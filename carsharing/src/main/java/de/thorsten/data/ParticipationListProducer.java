@@ -5,6 +5,7 @@ import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.Training;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
@@ -24,6 +25,8 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     private ParticipationRepository participationRepository;
+    
+    @Inject TrainingRepository trainingRepository;
 
     @Inject
     private Logger log;
@@ -31,6 +34,8 @@ public class ParticipationListProducer implements Serializable {
     private List<Participation> participations;
 
     private Date trainingDate;
+    
+    private Training selectedTraining;
 
     private int numberOfParticipators;
 
@@ -45,6 +50,7 @@ public class ParticipationListProducer implements Serializable {
     private int numberOfSeatsBackRequired;
 
     private int numberOfSeatsForthRequired;
+    
 
     public int getNumberOfParticipators() {
         return numberOfParticipators;
@@ -92,6 +98,7 @@ public class ParticipationListProducer implements Serializable {
             trainingDate = (Date) event.getNewValue();
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
+            updateSelectedTraining(trainingDate);
         }
     }
 
@@ -128,9 +135,6 @@ public class ParticipationListProducer implements Serializable {
     
 
     /**
-     * unbedingt notwendig, damit Änderungen aktualisiert werden
-     * ohne dem führt ein re-rendering nicht zu einer Aktualisierung der View
-     * Warum auch immer...
      * 
      * @param participation 
      */
@@ -163,5 +167,32 @@ public class ParticipationListProducer implements Serializable {
         log.info("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
         log.info("Calculated NumberOfParticipators = " + numberOfParticipators);
 
+    }
+
+
+    /**
+     * @return the selectedTraining
+     */
+    public Training getSelectedTraining() {
+        return selectedTraining;
+    }
+
+    /**
+     * @param selectedTraining the selectedTraining to set
+     */
+    public void setSelectedTraining(Training selectedTraining) {
+        this.selectedTraining = selectedTraining;
+    }
+    
+    private void updateSelectedTraining(Date selectedTrainingDate) {
+        List<Training> trainings;
+        trainings = trainingRepository.findByDate(selectedTrainingDate);
+        if (trainings == null) {
+            log.info("updateSelectedTraining() - Training null");
+        }
+        if (trainings.size() == 0) {
+            log.info("updateSelectedTraining() - Training null");
+        }
+        selectedTraining = trainings.get(0);
     }
 }

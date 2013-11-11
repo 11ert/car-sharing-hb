@@ -54,13 +54,13 @@
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output" styleClass="stable" >
-                    <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
-                    <h:outputText style="font-size: small;font-weight: bold;" value="Hinfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt 16:50 Uhr"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Geschwister Scholl Schule"/><p></p>
-                    <h:outputText style="font-size: small;font-weight: bold;" value="Rückfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt 19:10 Uhr"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Lindenauhalle"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
+                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Hinfahrt"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><p></p>
+                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Rückfahrt"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
                 </rich:panel>
             </h:panelGrid>
             <rich:panel styleClass="stable" header="Teilnahme am Training">
