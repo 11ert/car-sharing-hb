@@ -40,7 +40,12 @@ public class TrainingRepository {
         Query q = em.createQuery("SELECT t FROM Training t WHERE t.currentDate = :currentDate");
         q.setParameter("currentDate", currentDate, TemporalType.DATE);
         return q.getResultList();
-        
+    }
+    
+    public List<Training> findAllGeDate(Date currentDate) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.currentDate >= :currentDate");
+        q.setParameter("currentDate", currentDate, TemporalType.DATE);
+        return q.getResultList();
     }
 
 }

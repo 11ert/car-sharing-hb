@@ -58,7 +58,7 @@
                     
                 </rich:panel>
 
-                <rich:panel id="trainingDate_output" styleClass="stable" >
+                <rich:panel id="trainingDate_output" styleClass="stable">
                     <h:outputText style="font-size: smaller;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
                     <h:outputText style="font-size: smaller;font-weight: bold;" value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
@@ -92,7 +92,7 @@
                     </rich:column>
                     <rich:column>
                         <f:facet name="header">Fährt zurück</f:facet>
-                        <h:selectBooleanCheckbox avalue="#{_participation.drivingBack}" readonly="true" 
+                        <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
                                                  onclick="return false"/>
                     </rich:column>
                     <rich:column>

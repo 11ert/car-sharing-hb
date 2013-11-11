@@ -10,13 +10,13 @@ import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-
 
 // nur zum testen
 @SessionScoped
@@ -25,8 +25,9 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     private ParticipationRepository participationRepository;
-    
-    @Inject TrainingRepository trainingRepository;
+
+    @Inject
+    TrainingRepository trainingRepository;
 
     @Inject
     private Logger log;
@@ -34,7 +35,7 @@ public class ParticipationListProducer implements Serializable {
     private List<Participation> participations;
 
     private Date trainingDate;
-    
+
     private Training selectedTraining;
 
     private int numberOfParticipators;
@@ -50,7 +51,6 @@ public class ParticipationListProducer implements Serializable {
     private int numberOfSeatsBackRequired;
 
     private int numberOfSeatsForthRequired;
-    
 
     public int getNumberOfParticipators() {
         return numberOfParticipators;
@@ -121,7 +121,7 @@ public class ParticipationListProducer implements Serializable {
         participations = participationRepository.getAll();
         calculateParticipationAttributes();
     }
-    
+
     // todo: Nicht intuitiv - besser mit  Injection
     public void retrieveAllParticipatorsForSpecificDate() {
         if (trainingDate != null) {
@@ -132,11 +132,10 @@ public class ParticipationListProducer implements Serializable {
             log.info("trainingDate is null");
         }
     }
-    
 
     /**
-     * 
-     * @param participation 
+     *
+     * @param participation
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         //retrieveAllParticipators();
@@ -147,7 +146,7 @@ public class ParticipationListProducer implements Serializable {
         numberOfParticipators = 0;
         numberOfSeatsBackAvailable = 0;
         numberOfSeatsForthRequired = 0;
-        
+
         for (Participation p : participations) {
             log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
             if (p.isParticipating()) {
@@ -169,7 +168,6 @@ public class ParticipationListProducer implements Serializable {
 
     }
 
-
     /**
      * @return the selectedTraining
      */
@@ -183,7 +181,7 @@ public class ParticipationListProducer implements Serializable {
     public void setSelectedTraining(Training selectedTraining) {
         this.selectedTraining = selectedTraining;
     }
-    
+
     private void updateSelectedTraining(Date selectedTrainingDate) {
         List<Training> trainings;
         trainings = trainingRepository.findByDate(selectedTrainingDate);
@@ -195,4 +193,21 @@ public class ParticipationListProducer implements Serializable {
         }
         selectedTraining = trainings.get(0);
     }
+
+    @PostConstruct
+    public void initializeSelectedTraining() {
+        List<Training> trainings;
+        trainings = trainingRepository.findAllGeDate(new Date());
+        if (trainings == null) {
+            log.info("updateSelectedTraining() - Training null");
+        }
+        if (trainings.size() == 0) {
+            log.info("updateSelectedTraining() - Training null");
+        }
+        selectedTraining = trainings.get(0);
+        trainingDate = selectedTraining.getCurrentDate();
+        retrieveAllParticipatorsForSpecificDate();
+        calculateParticipationAttributes();
+    }
+
 }
