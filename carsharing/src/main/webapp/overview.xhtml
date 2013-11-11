@@ -51,6 +51,11 @@
                                    valueChangeListener="#{participationListProducer.trainingDateChanged}">
                         <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
                     </rich:calendar>
+                    
+<!--                    <rich:tooltip id="tt1" styleClass="tooltip" layout="block" >                 
+                        <span style="white-space: nowrap"> This tool-tip content was <strong>pre-rendered</strong> to the page.<br />                     The tool-tip is also following mouse around.</span>             
+                    </rich:tooltip>-->
+                    
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output" styleClass="stable" >
@@ -87,7 +92,7 @@
                     </rich:column>
                     <rich:column>
                         <f:facet name="header">Fährt zurück</f:facet>
-                        <h:selectBooleanCheckbox value="#{_participation.drivingBack}" readonly="true" 
+                        <h:selectBooleanCheckbox avalue="#{_participation.drivingBack}" readonly="true" 
                                                  onclick="return false"/>
                     </rich:column>
                     <rich:column>
