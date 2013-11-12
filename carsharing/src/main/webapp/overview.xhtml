@@ -59,20 +59,20 @@
 
                 <rich:panel id="trainingDate_output">
                     <!-- Generell -->
-                    <h:outputText style="font-size: smaller;font-weight: bold;" 
+                    <h:outputText style="font-size: small;font-weight: bold;"
                                   value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
                     <p/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>                
                     <p></p>
                     <!-- Hinfahrt -->
                     <h:outputText style="font-size: smaller;font-weight: bold;"
                                   value="Hinfahrt"/><br/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><br/>
                     <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
@@ -84,9 +84,9 @@
                     <!-- Rueckfahrt -->
                     <h:outputText style="font-size: smaller;font-weight: bold;" 
                                   value="Rückfahrt"/><br/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
-                    <h:outputText styleClass="smallerFont" 
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
                     <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
                                   value="Genügend Plätze auf der Rückfahrt vorhanden!"
@@ -105,7 +105,7 @@
                                 >
                     <rich:column>
                         <f:facet name="header">Spieler</f:facet>
-                        #{_participation.player.name}, #{_participation.player.firstname}
+                        #{_participation.player.firstname}, #{_participation.player.name}
                     </rich:column> 
                     <rich:column>
                         <f:facet name="header">Nimmt teil</f:facet>
@@ -148,22 +148,21 @@
             <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
             <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
 
-            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="200" >
+            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="200" height="200" >
                 <h:panelGrid columns="3" id="editGrid">
-                    <h:outputText value="Spieler" style="font-size: small;font-weight: bold;"/>
-                    <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}" style="font-size: small;font-weight: normal;"/>
+                    <h:outputText value="Spieler"/>
+                    <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}"/>
                     <h:panelGroup />
-                    <br/>
-                    <h:outputText value="Nimmt teil" style="font-size: small;font-weight: bold;"/>
+                    <h:outputText value="Nimmt teil"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.participating}" />
                     <h:panelGroup />
-                    <h:outputText value="Nimmt nicht teil" style="font-size: small;font-weight: bold;"/>
+                    <h:outputText style="color: red;" value="Nimmt nicht teil"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.notParticipating}" />
                     <h:panelGroup />
-                    <h:outputText value="Fährt hin" style="font-size: small;font-weight: bold;"/>
+                    <h:outputText value="Fährt hin"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingForth}" />
                     <h:panelGroup />
-                    <h:outputText value="Fährt zurück" style="font-size: small;font-weight: bold;"/>
+                    <h:outputText value="Fährt zurück"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingBack}" />
                 </h:panelGrid>
 
