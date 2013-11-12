@@ -55,6 +55,8 @@ public class Participation implements Serializable {
     private Training trainingItem;
 
     private boolean participating;
+    
+    private boolean notParticipating;
 
     private boolean drivingBack;
 
@@ -66,6 +68,7 @@ public class Participation implements Serializable {
         this.drivingForth = Boolean.FALSE;
         this.drivingBack = Boolean.FALSE;
         this.participating = Boolean.FALSE;
+        this.notParticipating = Boolean.FALSE;
         this.lastChanged = new Date();
     }
 
@@ -195,6 +198,20 @@ public class Participation implements Serializable {
      */
     public void setLastChanged(Date lastChanged) {
         this.lastChanged = lastChanged;
+    }
+
+    /**
+     * @return the notParticipating
+     */
+    public boolean isNotParticipating() {
+        return notParticipating;
+    }
+
+    /**
+     * @param notParticipating the notParticipating to set
+     */
+    public void setNotParticipating(boolean notParticipating) {
+        this.notParticipating = notParticipating;
     }
 
 }

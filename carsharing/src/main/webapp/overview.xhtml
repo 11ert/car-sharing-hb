@@ -15,7 +15,7 @@
             <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
         </div>
 
-        <h2>Trainingskalender für die männliche D-Jugend:</h2>
+        <h2>Trainingskalender für die D-Jugend:</h2>
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -49,23 +49,51 @@
                                    dataModel="#{calendarModel}" 
                                    value="#{participationListProducer.trainingDate}"
                                    valueChangeListener="#{participationListProducer.trainingDateChanged}">
-                        <a4j:ajax event="change" render="trainingDate_output participation_table participationAttributes_output" />
+                        <a4j:ajax event="change" render="trainingDate_output participation_table" />
                     </rich:calendar>
-                    
-<!--                    <rich:tooltip id="tt1" styleClass="tooltip" layout="block" >                 
-                        <span style="white-space: nowrap"> This tool-tip content was <strong>pre-rendered</strong> to the page.<br />                     The tool-tip is also following mouse around.</span>             
-                    </rich:tooltip>-->
-                    
+
+                    <!--                    <rich:tooltip id="tt1" styleClass="tooltip" layout="block" >                 
+                                            <span style="white-space: nowrap"> This tool-tip content was <strong>pre-rendered</strong> to the page.<br />                     The tool-tip is also following mouse around.</span>             
+                                        </rich:tooltip>-->
                 </rich:panel>
 
-                <rich:panel id="trainingDate_output" styleClass="stable">
-                    <h:outputText style="font-size: small;font-weight: bold;" value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><p></p>
-                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Hinfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><p></p>
-                    <h:outputText style="font-size: smaller;font-weight: bold;" value="Rückfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
+                <rich:panel id="trainingDate_output">
+                    <!-- Generell -->
+                    <h:outputText style="font-size: smaller;font-weight: bold;" 
+                                  value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
+                    <p/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="D Jugend PreAgBerg"/><br/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>                
+                    <p></p>
+                    <!-- Hinfahrt -->
+                    <h:outputText style="font-size: smaller;font-weight: bold;"
+                                  value="Hinfahrt"/><br/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><br/>
+                    <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
+                                  value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
+                                  rendered="#{participationListProducer.numberOfSeatsForthRequired > 0}"/>
+                    <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
+                                  value="Genügend Plätze auf der Hinfahrt vorhanden!" 
+                                  rendered="#{participationListProducer.numberOfSeatsForthRequired le 0}"/><br/>
+                    <p></p>
+                    <!-- Rueckfahrt -->
+                    <h:outputText style="font-size: smaller;font-weight: bold;" 
+                                  value="Rückfahrt"/><br/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
+                    <h:outputText styleClass="smallerFont" 
+                                  value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
+                    <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
+                                  value="Genügend Plätze auf der Rückfahrt vorhanden!"
+                                  rendered="#{participationListProducer.numberOfSeatsBackRequired le 0}"/>
+                    <h:outputText style="color:red; font-size: smaller;font-weight: normal;" 
+                                  value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
+                                  rendered="#{participationListProducer.numberOfSeatsBackRequired > 0}"/>
                 </rich:panel>
             </h:panelGrid>
             <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.trainingDateAsFormattedString}">
@@ -83,6 +111,11 @@
                         <f:facet name="header">Nimmt teil</f:facet>
                         <h:selectBooleanCheckbox value="#{_participation.participating}" readonly="true" 
                                                  onclick="return false"/>
+                    </rich:column>
+                    <rich:column>
+                        <f:facet name="header">Nimmt <i>nicht</i> teil</f:facet>
+                        <h:selectBooleanCheckbox value="#{_participation.notParticipating}" readonly="true" 
+                                                 onclick="return false" style="alignment-baseline: central"/>
                     </rich:column>
                     <rich:column>
                         <f:facet name="header">Fährt hin</f:facet>
@@ -109,13 +142,23 @@
                     </rich:column>
                 </rich:dataTable>
             </rich:panel>
-            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="170">
+
+            <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />
+            <rich:jQuery selector=".stable tr:even" query="addClass('even-row')" />
+            <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+            <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
+
+            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="400" height="200" >
                 <h:panelGrid columns="3" id="editGrid">
                     <h:outputText value="Spieler" style="font-size: small;font-weight: bold;"/>
-                    <h:outputText value="#{participationController.editedParticipation.player.firstname}" />
+                    <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}" style="font-size: small;font-weight: normal;"/>
                     <h:panelGroup />
+                    <br/>
                     <h:outputText value="Nimmt teil" style="font-size: small;font-weight: bold;"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.participating}" />
+                    <h:panelGroup />
+                    <h:outputText value="Nimmt nicht teil" style="font-size: small;font-weight: bold;"/>
+                    <h:selectBooleanCheckbox value="#{participationController.editedParticipation.notParticipating}" />
                     <h:panelGroup />
                     <h:outputText value="Fährt hin" style="font-size: small;font-weight: bold;"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingForth}" />
@@ -126,36 +169,13 @@
 
                 <a4j:commandButton value="Speichern" 
                                    action="#{participationController.updateParticipation()}" 
-                                   render="participation_table participationAttributes_output" 
+                                   render="participation_table trainingDate_output" 
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                                         return false;" />
+                                        return false;" />
             </rich:popupPanel>
-
-
         </h:form>
-
-        <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />
-        <rich:jQuery selector=".stable tr:even" query="addClass('even-row')" />
-        <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
-        <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
-
-        <h:panelGrid id="participationAttributes_output" >
-            <h:outputText value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
-                          rendered="#{participationListProducer.numberOfSeatsForthRequired > 0}"/>
-            <h:outputText value="Genügend Plätze auf der Hinfahrt vorhanden!" 
-                          rendered="#{participationListProducer.numberOfSeatsForthRequired lt 0}"/>
-
-            <h:outputText value="Genügend Plätze auf der Rückfahrt vorhanden!"
-                          rendered="#{participationListProducer.numberOfSeatsBackRequired lt 0}"/>
-
-            <h:outputText value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
-                          rendered="#{participationListProducer.numberOfSeatsBackRequired > 0}"/>
-
-            <h:outputText value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>
-        </h:panelGrid>
-
     </ui:define>
 
 </ui:composition>

@@ -16,11 +16,20 @@ INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (13,4,'Gr
 INSERT INTO `trainingday` (`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (3,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','18:00','19:55','17:00','18:30');
 INSERT INTO `trainingday` (`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (4,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','17:00','19:10','17:00','18:30');
 
---INSERT INTO `training` VALUES ('2013-11-12',3);
---INSERT INTO `participation` VALUES (1,0,0,'2013-11-12',1,1,'2013-11-12');
---INSERT INTO `training` VALUES ('2013-11-19',3);
---INSERT INTO `participation` VALUES (1,0,0,'2013-11-12',1,1,'2013-11-19');
+INSERT INTO `training` VALUES ('2013-11-12',3);
+INSERT INTO `participation` VALUES (1,0,0,'2013-11-12',1,1,'2013-11-12');
+INSERT INTO `training` VALUES ('2013-11-19',3);
+INSERT INTO `participation` VALUES (1,0,0,'2013-11-12',1,1,'2013-11-19');
 
+-- INSERT INTO `participation` (`id`,`drivingBack`,`drivingForth`,`lastChanged`,`notParticipating`,`participating`,`player_id`,`trainingItem_currentDate`)
+-- VALUES (<{id: }>,
+-- <{drivingBack: }>,
+-- <{drivingForth: }>,
+-- <{lastChanged: }>,
+-- <{notParticipating: }>,
+-- <{participating: }>,
+-- <{player_id: }>,
+-- <{trainingItem_currentDate: }>);
 
 -- INSERT INTO `training` VALUES ('2013-11-13',3);
 -- INSERT INTO `training` VALUES ('2013-10-15',3);

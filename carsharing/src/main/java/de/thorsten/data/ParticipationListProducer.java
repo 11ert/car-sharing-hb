@@ -23,6 +23,7 @@ import javax.faces.event.ValueChangeEvent;
 @Named
 public class ParticipationListProducer implements Serializable {
 
+    
     @Inject
     private ParticipationRepository participationRepository;
 
@@ -40,10 +41,6 @@ public class ParticipationListProducer implements Serializable {
 
     private int numberOfParticipators;
 
-    private int numberOfDriversBack;
-
-    private int numberOfDriversForth;
-
     private int numberOfSeatsForthAvailable;
 
     private int numberOfSeatsBackAvailable;
@@ -56,16 +53,8 @@ public class ParticipationListProducer implements Serializable {
         return numberOfParticipators;
     }
 
-    public int getNumberOfDriversBack() {
-        return numberOfDriversBack;
-    }
-
-    public int getNumberOfDriversForth() {
-        return numberOfDriversForth;
-    }
-
     public int getNumberOfSeatsBackRequired() {
-        log.info("return numberOfSeatsBackRequired" + numberOfSeatsBackRequired);
+        log.info("return numberOfSeatsBackRequired=" + numberOfSeatsBackRequired);
         return numberOfSeatsBackRequired;
     }
 
@@ -153,10 +142,10 @@ public class ParticipationListProducer implements Serializable {
                 numberOfParticipators++;
             }
             if (p.isDrivingBack()) {
-                numberOfSeatsBackAvailable = numberOfDriversBack + p.getPlayer().getCarsize();
+                numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
             if (p.isDrivingForth()) {
-                numberOfSeatsForthAvailable = numberOfDriversForth + p.getPlayer().getCarsize();
+                numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
             }
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
