@@ -148,7 +148,7 @@
             <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
             <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
 
-            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="200" height="200" >
+            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="200" height="220" >
                 <h:panelGrid columns="3" id="editGrid">
                     <h:outputText value="Spieler"/>
                     <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}"/>
