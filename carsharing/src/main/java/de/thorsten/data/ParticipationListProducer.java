@@ -134,23 +134,29 @@ public class ParticipationListProducer implements Serializable {
     private void calculateParticipationAttributes() {
         numberOfParticipators = 0;
         numberOfSeatsBackAvailable = 0;
+        numberOfSeatsBackRequired = 0;
         numberOfSeatsForthRequired = 0;
-
+        numberOfSeatsForthAvailable = 0;
+        
         for (Participation p : participations) {
             log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
             if (p.isParticipating()) {
                 numberOfParticipators++;
             }
             if (p.isDrivingBack()) {
+                log.info(p.getPlayer() + " fährt zurück, hat " +  p.getPlayer().getCarsize() + " Plätze");
                 numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
             if (p.isDrivingForth()) {
+                log.info(p.getPlayer() + " fährt hin, hat " +  p.getPlayer().getCarsize() + " Plätze");
                 numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
             }
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
         numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable;
 
+        log.info("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
+        log.info("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
         log.info("Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
         log.info("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
         log.info("Calculated NumberOfParticipators = " + numberOfParticipators);

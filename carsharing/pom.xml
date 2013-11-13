@@ -5,7 +5,7 @@
 
     <groupId>de.thorsten</groupId>
     <artifactId>carsharing</artifactId>
-    <version>0.0.9-SNAPSHOT</version>
+    <version>0.9.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>CarSharing</name>
     <description>Eine Applikation zum Verwalten von Mitfahrgelegenheiten</description>
