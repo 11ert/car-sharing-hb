@@ -41,6 +41,7 @@
                 <rich:panel styleClass="stable" header="Traingsdatum">
                     <rich:calendar id="trainingCalendar"
                                    mode="ajax" 
+                                   showFooter="false"
                                    locale="de"
                                    buttonLabel="Heute"
                                    popup="false"
@@ -49,7 +50,9 @@
                                    dataModel="#{calendarModel}" 
                                    value="#{participationListProducer.trainingDate}"
                                    valueChangeListener="#{participationListProducer.trainingDateChanged}">
+
                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
+                       
                     </rich:calendar>
 
                 </rich:panel>
@@ -166,7 +169,7 @@
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                        return false;" />
+                                                         return false;" />
             </rich:popupPanel>
         </h:form>
     </ui:define>
