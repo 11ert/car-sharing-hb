@@ -52,13 +52,9 @@
                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
                     </rich:calendar>
 
-                    <!--                    <rich:tooltip id="tt1" styleClass="tooltip" layout="block" >                 
-                                            <span style="white-space: nowrap"> This tool-tip content was <strong>pre-rendered</strong> to the page.<br />                     The tool-tip is also following mouse around.</span>             
-                                        </rich:tooltip>-->
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output">
-                    <!-- Generell -->
                     <h:outputText style="font-size: small;font-weight: bold;"
                                   value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
                     <p/>
@@ -67,7 +63,6 @@
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>                
                     <p></p>
-                    <!-- Hinfahrt -->
                     <h:outputText style="font-size: smaller;font-weight: bold;"
                                   value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
@@ -81,7 +76,6 @@
                                   value="Genügend Plätze auf der Hinfahrt vorhanden!" 
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired le 0}"/><br/>
                     <p></p>
-                    <!-- Rueckfahrt -->
                     <h:outputText style="font-size: smaller;font-weight: bold;" 
                                   value="Rückfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
