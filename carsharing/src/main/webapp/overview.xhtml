@@ -59,7 +59,9 @@
 
                 <rich:panel id="trainingDate_output">
                     <h:outputText style="font-size: small;font-weight: bold;"
-                                  value="Training am #{participationListProducer.trainingDateAsFormattedString}:" />
+                                  value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><br/>
+                    <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                  value="#{participationListProducer.selectedTraining.trainingDay.timeFrom} bis #{participationListProducer.selectedTraining.trainingDay.timeTo} Uhr"/><br/>
                     <p/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
