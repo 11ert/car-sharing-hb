@@ -23,11 +23,14 @@ public class ParticipationService implements Serializable {
     @Inject
     private Event<Participation> participationEventSrc;
 
+    // todo - nicht player und participation gleichzeitig in dieser methode
+    // speichern!
     public void update(Participation participation) throws Exception {
         log.info("Updating " + participation);
-
+        log.info("..updated carsize..=>" + participation.getPlayer().getCarsize());
         participation.setLastChanged(new Date());
         em.merge(participation);
+        em.merge(participation.getPlayer());
         participationEventSrc.fire(participation);
  //       em.flush(); // TE
     }

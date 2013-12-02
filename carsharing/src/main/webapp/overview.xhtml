@@ -152,6 +152,8 @@
                     <h:outputText value="Spieler"/>
                     <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}"/>
                     <h:panelGroup />
+                    <h:outputText value="Plätze im Auto"/> <rich:inputNumberSpinner value="#{participationController.editedParticipation.player.carsize}" step="1" inputSize="2" minValue="0" maxValue="10"/>
+                    <h:panelGroup />
                     <h:outputText value="Nimmt teil"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.participating}" />
                     <h:panelGroup />
