@@ -78,7 +78,6 @@ public class ParticipationController implements Serializable {
     neu - nur zum testen, ob einfacher als via Property Action Listener
     */
     public void editParticipation(Participation editParticipation) {
-        log.info("Edit Participation called mit " + editParticipation);
         this.editedParticipation = editParticipation;
     }
     
@@ -87,7 +86,6 @@ public class ParticipationController implements Serializable {
      * @param currentParticipation the currentParticipation to set
      */
     public void setCurrentParticipation(Participation currentParticipation) {
-        log.info("setCurrentParticipaton()" + currentParticipation);
         this.currentParticipation = currentParticipation;
     }
 
@@ -95,7 +93,6 @@ public class ParticipationController implements Serializable {
      * @return the currentParticipationIndex
      */
     public int getCurrentParticipationIndex() {
-        log.info("getCurrentParticipationIndex called mit " + currentParticipationIndex);
         return currentParticipationIndex;
     }
 
@@ -103,7 +100,6 @@ public class ParticipationController implements Serializable {
      * @param currentParticipationIndex the currentParticipationIndex to set
      */
     public void setCurrentParticipationIndex(int currentParticipationIndex) {
-        log.info("setCurrentParticipationIndex called mit " + currentParticipationIndex);
         this.currentParticipationIndex = currentParticipationIndex;
     }
 
@@ -118,7 +114,6 @@ public class ParticipationController implements Serializable {
      * @param editedParticipation the editedParticipation to set
      */
     public void setEditedParticipation(Participation changedParticipation) {
-        log.info("setEditedParticipation " + changedParticipation);
         this.editedParticipation = changedParticipation;
     }
 

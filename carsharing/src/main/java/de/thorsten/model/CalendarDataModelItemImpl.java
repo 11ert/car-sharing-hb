@@ -13,7 +13,6 @@ public class CalendarDataModelItemImpl implements CalendarDataModelItem {
     private Object toolTip;
     private int day;
     private boolean enabled = true;
-    
             
     public int getDay() {
         return day;

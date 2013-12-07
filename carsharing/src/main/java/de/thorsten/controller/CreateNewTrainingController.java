@@ -71,7 +71,6 @@ public class CreateNewTrainingController implements Serializable {
      * @param nextTrainingDate the nextTrainingDate to set
      */
     public void setNextTrainingDate(Date nextTrainingDate) {
-        log.info("!!!!!!!!!!! setNextTrainingDate() " + nextTrainingDate);
         this.nextTrainingDate = nextTrainingDate;
     }
 
@@ -80,7 +79,6 @@ public class CreateNewTrainingController implements Serializable {
         Calendar cal = Calendar.getInstance();
         cal.setTime(nextTrainingDate);
         int weekday = cal.get(Calendar.DAY_OF_WEEK);
-        log.info("looking for trainingDay " + weekday);
         List trDayList = trainingDayRepository.findByWeekday(weekday);
 
         if (trDayList == null) {
@@ -120,10 +118,8 @@ public class CreateNewTrainingController implements Serializable {
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
-        log.info("trainingDateChanged called !");
 
         if (event.getNewValue() != null) {
-            log.info("Next TrainingDate = " + event.getNewValue());
             nextTrainingDate = (Date) event.getNewValue();
         }
     }

@@ -10,29 +10,26 @@ import de.thorsten.util.DateUtil;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
-import javax.faces.event.ValueChangeEvent;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.richfaces.model.CalendarDataModel;
 import org.richfaces.model.CalendarDataModelItem;
 
 
-@ApplicationScoped
-@Named("calendarModel")
 public class CalendarModel implements CalendarDataModel {
 
-    private static final String TRAINING_DAY_CLASS = "tdc";
+    protected static final String TRAINING_DAY_CLASS = "tdc";
 
     @Inject
     private TrainingListProducer trainingListProducer;
 
     @Inject
-    private Logger log;
+    protected Logger log;
 
     private Date selectedDate;
+    
+    private boolean defaultModeEditable = false;
     
     public String getSelectedDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(selectedDate);
@@ -43,7 +40,7 @@ public class CalendarModel implements CalendarDataModel {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
         for (int i = 0; i < datesInCalendar.length; i++) {
             CalendarDataModelItemImpl modelItem = new CalendarDataModelItemImpl();
-            modelItem.setEnabled(false); // default!
+            modelItem.setEnabled(isDefaultModeEditable()); // default!
             for (Date d : getDatesToBeHighlighted()) {
                 if (d != null) {
                     if (DateUtil.getDatePortion(d).compareTo(
@@ -65,7 +62,7 @@ public class CalendarModel implements CalendarDataModel {
         return "Training";
     }
 
-    private Date[] getDatesToBeHighlighted() {
+    protected Date[] getDatesToBeHighlighted() {
         Date[] dates = new Date[trainingListProducer.getTrainingDates().size()];
         int i = 0;
         for (final Iterator it = trainingListProducer.getTrainingDates().iterator(); it.hasNext();) {
@@ -83,6 +80,20 @@ public class CalendarModel implements CalendarDataModel {
 
     public Date getSelectedDate() {
         return selectedDate;
+    }
+
+    /**
+     * @return the defaultModeEditable
+     */
+    public boolean isDefaultModeEditable() {
+        return defaultModeEditable;
+    }
+
+    /**
+     * @param defaultModeEditable the defaultModeEditable to set
+     */
+    public void setDefaultModeEditable(boolean defaultModeEditable) {
+        this.defaultModeEditable = defaultModeEditable;
     }
 
 
