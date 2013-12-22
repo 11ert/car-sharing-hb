@@ -1,6 +1,3 @@
-/*
- * noch nicht benötigt - erst wenn Teilnahme aus UI erstellt wird.
- */
 package de.thorsten.controller;
 
 import javax.inject.Inject;
@@ -10,12 +7,12 @@ import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
-@ManagedBean(name = "participationController")
-@ViewScoped
+@Named
+@ViewAccessScoped
 public class ParticipationController implements Serializable {
 
     private static final long serialVersionUID = -3832235132261771583L;

@@ -5,7 +5,7 @@
 
     <groupId>de.thorsten</groupId>
     <artifactId>carsharing</artifactId>
-    <version>0.9.2-SNAPSHOT</version>
+    <version>0.9.3-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>CarSharing</name>
     <description>Eine Applikation zum Verwalten von Mitfahrgelegenheiten</description>
@@ -49,8 +49,21 @@
         
         <!-- RichFaces -->
         <org.richfaces.bom.version>4.3.4.Final</org.richfaces.bom.version>  
+        
+        <!-- Apache DeltaSpike -->
+        <deltaspike.version>0.5</deltaspike.version>
+
     </properties>
 
+    <!-- Nur wg. ViewAccessScope, da noch nicht in v0.5 verfügbar -->
+    <repositories>
+        <repository>
+            <id>os890</id>
+            <name>Gerhard personal repository</name>
+            <url>http://os890-m2-repository.googlecode.com/svn/tags/os890/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -86,8 +99,7 @@
                 <type>pom</type>  
             </dependency> 
           
-       
-            
+
         </dependencies>
     </dependencyManagement>
 
@@ -218,6 +230,43 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.25</version>
             <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Apache DeltaSpike Core -->
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.core</groupId>
+            <artifactId>deltaspike-core-impl</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- Apache DeltaSpike JSF -->
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-jsf-module-api</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.deltaspike.modules</groupId>
+            <artifactId>deltaspike-jsf-module-impl</artifactId>
+            <version>${deltaspike.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- nur wg. ViewAccessScope, da nicht nicht in v0.5 enthalten -->
+        <dependency>
+            <groupId>org.os890.cdi.ext.scope.modules</groupId>
+            <artifactId>os890-cdi-ext-jsf2-module-impl</artifactId>
+            <version>1.0.5_0.4_01</version>
             <scope>compile</scope>
         </dependency>
 

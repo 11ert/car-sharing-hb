@@ -36,6 +36,8 @@
             }
         </h:outputStylesheet>
 
+        <f:event listener="#{participationListProducer.initializeSelectedTraining()}" type="preRenderView" />
+
         <h:form id="calendar_form">
             <h:panelGrid columns="2" >
                 <rich:panel styleClass="stable" header="Traingsdatum">
@@ -52,8 +54,13 @@
                                    valueChangeListener="#{participationListProducer.trainingDateChanged}">
 
                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
-                       
+
                     </rich:calendar>
+                    <br/>
+                    <h:outputText style="height: 200px" value="Training" styleClass="tdc" />
+                    <p/>
+
+
 
                 </rich:panel>
 
@@ -61,7 +68,7 @@
                     <h:outputText style="font-size: small;font-weight: bold;"
                                   value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.selectedTraining.trainingDay.timeFrom} bis #{participationListProducer.selectedTraining.trainingDay.timeTo} Uhr"/><br/>
+                                  value="#{participationListProducer.selectedTraining.trainingDay.timeFrom} bis #{participationListProducer.selectedTraining.trainingDay.timeTo} Uhr in #{participationListProducer.selectedTraining.trainingDay.location}"/><br/>
                     <p/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
@@ -173,7 +180,7 @@
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                                         return false;" />
+                                        return false;" />
             </rich:popupPanel>
         </h:form>
     </ui:define>

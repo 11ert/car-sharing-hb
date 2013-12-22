@@ -16,18 +16,18 @@ import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
+import javax.inject.Named;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
 /**
  *
  * @author Thorsten
  */
-@ManagedBean(name = "trainingController")
-@ViewScoped
+@Named("trainingController")
+@ViewAccessScoped
 public class CreateNewTrainingController implements Serializable {
 
     @Inject

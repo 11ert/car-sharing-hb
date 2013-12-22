@@ -11,8 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.Team;
 import java.util.Date;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.criteria.Root;
 
@@ -21,14 +23,14 @@ public class ParticipationRepository {
 
     @Inject
     private Logger log;
-    
+
     @Inject
     private EntityManager em;
 
     public Participation findById(Long id) {
         return em.find(Participation.class, id);
     }
- 
+
     public List<Participation> getAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
@@ -36,25 +38,38 @@ public class ParticipationRepository {
         criteria.select(participation);
         return em.createQuery(criteria).getResultList();
     }
-    
+
     public List<Participation> getAllOrderedByName() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Participation> criteria = cb.createQuery(Participation.class);
         Root<Participation> participation = criteria.from(Participation.class);
-        criteria.select(participation).orderBy(cb.asc((participation.get("player").get("name")))); 
+        criteria.select(participation).orderBy(cb.asc((participation.get("player").get("name"))));
         return em.createQuery(criteria).getResultList();
     }
 
-     
-     public List<Participation> getAllForSpecificDateOrderedByName(Date curDate) {
-        log.info("Getting all training participations for = " +  curDate + "...");
+    public List<Participation> getAllForSpecificDateOrderedByName(Date curDate) {
+        log.info("Getting all training participations for = " + curDate + "...");
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate order by p.player.firstname, p.player.name")
-                  .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
+                .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
-     
-     public List<Participation> getAllForDateGreaterEqualOrderedByDateAndName(Date curDate) {
-        log.info("Getting all training participations for = " +  curDate + "...");
+
+    public List<Participation> getAllForDateGreaterEqualOrderedByDateAndName(Date curDate) {
+        log.info("Getting all training participations for = " + curDate + "...");
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate >= :curDate order by p.trainingItem.currentDate, p.player.firstname, p.player.name")
-                  .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
+                .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
+    }
+
+    // todo - neu, diese methode aufrufen!!!
+    public List<Participation> getAllForSpecificDateAndTeamOrderedByName(Date curDate, String team) {
+        log.info("Getting all training participations for = " + curDate + " and Team " + team);
+        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.currentDate = :curDate order by p.player.firstname, p.player.name");
+        q.setParameter("curDate", curDate, TemporalType.DATE);
+        q.setParameter("team", team);
+        return q.getResultList();
+    }
+
+    public List<Team> getAllTeams() {
+        Query q = em.createQuery("SELECT t FROM Team t order by t.name");
+        return q.getResultList();
     }
 }

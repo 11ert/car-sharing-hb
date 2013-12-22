@@ -5,25 +5,27 @@ import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
-// nur zum testen
-@SessionScoped
+// Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+
+
+@ViewAccessScoped
 @Named
 public class ParticipationListProducer implements Serializable {
 
-    
     @Inject
     private ParticipationRepository participationRepository;
 
@@ -34,6 +36,10 @@ public class ParticipationListProducer implements Serializable {
     private Logger log;
 
     private List<Participation> participations;
+
+    private List<Team> teams;
+
+    private Team selectedTeam;
 
     private Date trainingDate;
 
@@ -76,7 +82,6 @@ public class ParticipationListProducer implements Serializable {
     }
 
     public void setTrainingDate(Date x) {
-        log.info("setTrainingDate called " + x.toString());
         trainingDate = x;
     }
 
@@ -89,6 +94,15 @@ public class ParticipationListProducer implements Serializable {
             calculateParticipationAttributes();
             updateSelectedTraining(trainingDate);
         }
+    }
+
+    public void teamChanged(ValueChangeEvent event) {
+        log.info("teamChanged called()");
+        if (event.getNewValue() != null) {
+            log.info("Selected Team = " + event.getNewValue()+ "--" + event.getNewValue().getClass().getName());
+            selectedTeam = (Team) event.getNewValue();
+        }
+
     }
 
     public Date getTrainingDate() {
@@ -105,7 +119,6 @@ public class ParticipationListProducer implements Serializable {
      */
     //@PostConstruct
     public void retrieveAllParticipators() {
-        log.info("retrieveAllParticipators");
         FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         participations = participationRepository.getAll();
         calculateParticipationAttributes();
@@ -137,18 +150,18 @@ public class ParticipationListProducer implements Serializable {
         numberOfSeatsBackRequired = 0;
         numberOfSeatsForthRequired = 0;
         numberOfSeatsForthAvailable = 0;
-        
+
         for (Participation p : participations) {
             log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
             if (p.isParticipating()) {
                 numberOfParticipators++;
             }
             if (p.isDrivingBack()) {
-                log.info(p.getPlayer() + " fährt zurück, hat " +  p.getPlayer().getCarsize() + " Plätze");
+                log.info(p.getPlayer() + " fährt zurück, hat " + p.getPlayer().getCarsize() + " Plätze");
                 numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
             if (p.isDrivingForth()) {
-                log.info(p.getPlayer() + " fährt hin, hat " +  p.getPlayer().getCarsize() + " Plätze");
+                log.info(p.getPlayer() + " fährt hin, hat " + p.getPlayer().getCarsize() + " Plätze");
                 numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
             }
         }
@@ -191,8 +204,10 @@ public class ParticipationListProducer implements Serializable {
 
     @PostConstruct
     public void initializeSelectedTraining() {
+        log.info("initializeSelectedTraing()");
         List<Training> trainings;
         trainings = trainingRepository.findAllGeDate(new Date());
+        teams = participationRepository.getAllTeams();
         if (trainings == null) {
             log.info("updateSelectedTraining() - Training null");
         } else if (trainings.size() == 0) {
@@ -203,6 +218,34 @@ public class ParticipationListProducer implements Serializable {
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
         }
+    }
+
+    /**
+     * @return the teams
+     */
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    /**
+     * @param teams the teams to set
+     */
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
+    }
+
+    /**
+     * @return the selectedTeam
+     */
+    public Team getSelectedTeam() {
+        return selectedTeam;
+    }
+
+    /**
+     * @param selectedTeam the selectedTeam to set
+     */
+    public void setSelectedTeam(Team selectedTeam) {
+        this.selectedTeam = selectedTeam;
     }
 
 }

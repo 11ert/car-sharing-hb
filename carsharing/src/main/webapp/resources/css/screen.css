@@ -24,7 +24,7 @@ box-shadow: 3px 3px 15px #d5d5d5;
 }
 #content {
     float: left;
-/*    width: 500px; */
+    /*    width: 500px; */
     width: 550px;
     margin: 20px;
 }
@@ -89,7 +89,7 @@ span.invalid {
 form {
     padding: 1em;
     font: 80%/1 sans-serif;
-/*    width: 375px; */
+    /*    width: 375px; */
     width: 450px;
     border: 0px solid #D5D5D5;
 }
@@ -215,4 +215,22 @@ text-align:left;
 {
     font-size: smaller;
     font-weight: normal;
+}
+
+.tdc {
+    background-color: green;
+}
+.wdc {
+    font-weight: bold;
+    font-style: italic;
+}
+.even-row {
+    background-color: #FCFFFE;
+}
+.odd-row {
+    background-color: #ECF3FE;
+}
+.active-row {
+    background-color: #FFEBDA !important;
+    cursor: pointer;
 }

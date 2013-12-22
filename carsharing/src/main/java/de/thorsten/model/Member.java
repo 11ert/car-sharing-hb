@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -50,8 +51,8 @@ public class Member implements Serializable {
     @Size(min = 0, max = 25)
     private String city;
 
-    @Column(name = "team")
-    private String team; 
+    @OneToOne
+    private Team team; 
     
     public Long getId() {
         return id;
@@ -131,14 +132,14 @@ public class Member implements Serializable {
     /**
      * @return the team
      */
-    public String getTeam() {
+    public Team getTeam() {
         return team;
     }
 
     /**
      * @param team the team to set
      */
-    public void setTeam(String team) {
+    public void setTeam(Team team) {
         this.team = team;
     }
 }
