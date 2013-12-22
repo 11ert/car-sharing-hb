@@ -60,12 +60,10 @@ public class ParticipationListProducer implements Serializable {
     }
 
     public int getNumberOfSeatsBackRequired() {
-        log.info("return numberOfSeatsBackRequired=" + numberOfSeatsBackRequired);
         return numberOfSeatsBackRequired;
     }
 
     public int getNumberOfSeatsForthRequired() {
-        log.info("return numberOfSeatsForthRequired=" + numberOfSeatsForthRequired);
         return numberOfSeatsForthRequired;
     }
 
@@ -86,9 +84,7 @@ public class ParticipationListProducer implements Serializable {
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
-        log.info("trainingDateChanged called !");
         if (event.getNewValue() != null) {
-            log.info("New TrainingDate = " + event.getNewValue());
             trainingDate = (Date) event.getNewValue();
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
@@ -127,7 +123,6 @@ public class ParticipationListProducer implements Serializable {
     // todo: Nicht intuitiv - besser mit  Injection
     public void retrieveAllParticipatorsForSpecificDate() {
         if (trainingDate != null) {
-            log.info("retrieveAllParticipators for " + trainingDate.toString());
             participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
             calculateParticipationAttributes();
         } else {
@@ -152,17 +147,14 @@ public class ParticipationListProducer implements Serializable {
         numberOfSeatsForthAvailable = 0;
 
         for (Participation p : participations) {
-            log.info(" Just read -> " + p.getId() + "; " + p.getTrainingItem().getCurrentDate());
             if (p.isParticipating()) {
                 numberOfParticipators++;
             }
             if (p.isDrivingBack()) {
-                log.info(p.getPlayer() + " fährt zurück, hat " + p.getPlayer().getCarsize() + " Plätze");
                 numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
             if (p.isDrivingForth()) {
-                log.info(p.getPlayer() + " fährt hin, hat " + p.getPlayer().getCarsize() + " Plätze");
-                numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
+                numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
@@ -193,13 +185,11 @@ public class ParticipationListProducer implements Serializable {
     private void updateSelectedTraining(Date selectedTrainingDate) {
         List<Training> trainings;
         trainings = trainingRepository.findByDate(selectedTrainingDate);
-        if (trainings == null) {
-            log.info("updateSelectedTraining() - Training null");
+        if (trainings != null) {
+            if (trainings.size() != 0) {
+              selectedTraining = trainings.get(0);
+            }
         }
-        if (trainings.size() == 0) {
-            log.info("updateSelectedTraining() - Training null");
-        }
-        selectedTraining = trainings.get(0);
     }
 
     @PostConstruct

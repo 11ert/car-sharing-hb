@@ -216,21 +216,3 @@ text-align:left;
     font-size: smaller;
     font-weight: normal;
 }
-
-.tdc {
-    background-color: green;
-}
-.wdc {
-    font-weight: bold;
-    font-style: italic;
-}
-.even-row {
-    background-color: #FCFFFE;
-}
-.odd-row {
-    background-color: #ECF3FE;
-}
-.active-row {
-    background-color: #FFEBDA !important;
-    cursor: pointer;
-}

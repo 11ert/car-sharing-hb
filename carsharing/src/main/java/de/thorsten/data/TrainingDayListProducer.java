@@ -18,14 +18,15 @@ package de.thorsten.data;
 
 import de.thorsten.model.TrainingDay;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
 
 
-@RequestScoped
+//@RequestScoped
+@ApplicationScoped
 public class TrainingDayListProducer {
 
     @Inject

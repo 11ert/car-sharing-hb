@@ -61,8 +61,5 @@ public class TrainingListProducer {
             //trainingDates.add(t.getCurrentDate().getTime());
             trainingDates.add(t.getCurrentDate());
         }
-        log.info("CalWeek Anzahl Eintraege" + calWeeks.size());
-        log.info("TrainingDates Anzahl Eintraege" + trainingDates.size());
-
     }
 }

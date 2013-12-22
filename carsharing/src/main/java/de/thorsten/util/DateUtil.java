@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+
 /**
  *
  * @author Thorsten
@@ -25,6 +26,12 @@ public final class DateUtil {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
+    }
+    
+    public static int getWeekday(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public static String getSelectedDateAsFormattedString(Date date) {
