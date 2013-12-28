@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
+import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 
@@ -75,6 +76,8 @@ public class ParticipationListProducer implements Serializable {
         return numberOfSeatsForthRequired;
     }
 
+    @Named
+    @Produces
     public List<Participation> getParticipations() {
         return participations;
     }
@@ -171,6 +174,8 @@ public class ParticipationListProducer implements Serializable {
     /**
      * @return the selectedTraining
      */
+    @Named
+    @Produces
     public Training getSelectedTraining() {
         return selectedTraining;
     }

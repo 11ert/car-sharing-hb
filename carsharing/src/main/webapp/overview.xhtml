@@ -35,8 +35,8 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-
-        <f:event listener="#{participationListProducer.initializeSelectedTraining()}" type="preRenderView" />
+        <!-- funktioniert nicht (mehr) ? -->
+        <!--        <f:event listener="#{participationListProducer.initializeSelectedTraining()}" type="preRenderView" />-->
 
         <h:form id="calendar_form">
             <h:panelGrid columns="2" >
@@ -59,17 +59,13 @@
                     <br/>
                     <h:outputText style="height: 200px" value="Training" styleClass="tdc" />
                     <p/>
-
-
-                    
-
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output">
                     <h:outputText style="font-size: small;font-weight: bold;"
                                   value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.selectedTraining.trainingDay.timeFrom} bis #{participationListProducer.selectedTraining.trainingDay.timeTo} Uhr in #{participationListProducer.selectedTraining.trainingDay.location}"/><br/>
+                                  value="#{selectedTraining.trainingDay.timeFrom} bis #{selectedTraining.trainingDay.timeTo} Uhr in #{selectedTraining.trainingDay.location}"/><br/>
                     <p/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
@@ -79,9 +75,9 @@
                     <h:outputText style="font-size: smaller;font-weight: bold;"
                                   value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
+                                  value="Abfahrt: #{selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationSource}"/><br/>
+                                  value="#{selectedTraining.trainingDay.pickUpLocationSource}"/><br/>
                     <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
@@ -92,9 +88,9 @@
                     <h:outputText style="font-size: smaller;font-weight: bold;" 
                                   value="Rückfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{participationListProducer.selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
+                                  value="Abfahrt: #{selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
+                                  value="#{selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
                     <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
                                   value="Genügend Plätze auf der Rückfahrt vorhanden!"
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>
@@ -105,7 +101,7 @@
             </h:panelGrid>
             <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.trainingDateAsFormattedString}">
 
-                <rich:dataTable var="_participation" value="#{participationListProducer.participations}"
+                <rich:dataTable var="_participation" value="#{participations}"
                                 iterationStatusVar="it"
                                 rowClasses="odd-row, even-row"
                                 styleClass="stable"
@@ -181,7 +177,7 @@
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                        return false;" />
+                                                         return false;" />
             </rich:popupPanel>
         </h:form>
     </ui:define>

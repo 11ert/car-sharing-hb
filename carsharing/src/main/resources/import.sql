@@ -13,8 +13,8 @@ INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (10,1,'Gr
 INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (11,1,'Grosskrotzenburg','Marie-Ann','W.');
 INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (12,4,'Grosskrotzenburg','Peter','S.');
 INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (13,4,'Grosskrotzenburg','Jon','G.');
-INSERT INTO `trainingday` (`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (3,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','18:00','19:55','17:00','18:30');
-INSERT INTO `trainingday` (`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (4,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','17:00','19:10','17:00','18:30');
+INSERT INTO `trainingday` (`id`,`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (1,3,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','18:00','19:55','17:00','18:30');
+INSERT INTO `trainingday` (`id`,`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (2,4,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','17:00','19:10','17:00','18:30');
 
 
 

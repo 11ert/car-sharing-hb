@@ -13,41 +13,16 @@ import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.hibernate.validator.constraints.NotEmpty;
 
 @SuppressWarnings("serial")
 @Entity
 @XmlRootElement
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "weekday"))
-public class TrainingDay implements Serializable {
+public class TrainingDay extends SportsEvent implements Serializable {
 
 
-    @Id
     @NotNull
     private int weekday;
-
-    @NotNull
-    @NotEmpty
-    private String timeFrom;
-
-    @NotNull
-    @NotEmpty
-    private String timeTo;
-
-    @NotNull
-    @NotEmpty
-    private String pickUpTimeSource;
-    
-    @NotNull
-    @NotEmpty
-    private String pickUpTimeTarget;
-    
-    @NotNull
-    private String location;
-    
-    private String pickUpLocationSource;
-
-    private String pickUpLocationTarget;
 
     /**
      * @return the weekday
@@ -61,104 +36,6 @@ public class TrainingDay implements Serializable {
      */
     public void setWeekday(int weekday) {
         this.weekday = weekday;
-    }
-
-    /**
-     * @return the timeFrom
-     */
-    public String getTimeFrom() {
-        return timeFrom;
-    }
-
-    /**
-     * @param timeFrom the timeFrom to set
-     */
-    public void setTimeFrom(String timeFrom) {
-        this.timeFrom = timeFrom;
-    }
-
-    /**
-     * @return the timeTo
-     */
-    public String getTimeTo() {
-        return timeTo;
-    }
-
-    /**
-     * @param timeTo the timeTo to set
-     */
-    public void setTimeTo(String timeTo) {
-        this.timeTo = timeTo;
-    }
-
-    /**
-     * @return the pickUpTimeSource
-     */
-    public String getPickUpTimeSource() {
-        return pickUpTimeSource;
-    }
-
-    /**
-     * @param pickUpTimeSource the pickUpTimeSource to set
-     */
-    public void setPickUpTimeSource(String pickUpTimeSource) {
-        this.pickUpTimeSource = pickUpTimeSource;
-    }
-
-    /**
-     * @return the pickUpTimeTarget
-     */
-    public String getPickUpTimeTarget() {
-        return pickUpTimeTarget;
-    }
-
-    /**
-     * @param pickUpTimeTarget the pickUpTimeTarget to set
-     */
-    public void setPickUpTimeTarget(String pickUpTimeTarget) {
-        this.pickUpTimeTarget = pickUpTimeTarget;
-    }
-
-    /**
-     * @return the location
-     */
-    public String getLocation() {
-        return location;
-    }
-
-    /**
-     * @param location the location to set
-     */
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    /**
-     * @return the pickUpLocationSource
-     */
-    public String getPickUpLocationSource() {
-        return pickUpLocationSource;
-    }
-
-    /**
-     * @param pickUpLocationSource the pickUpLocationSource to set
-     */
-    public void setPickUpLocationSource(String pickUpLocationSource) {
-        this.pickUpLocationSource = pickUpLocationSource;
-    }
-
-    /**
-     * @return the pickUpLocationTarget
-     */
-    public String getPickUpLocationTarget() {
-        return pickUpLocationTarget;
-    }
-
-    /**
-     * @param pickUpLocationTarget the pickUpLocationTarget to set
-     */
-    public void setPickUpLocationTarget(String pickUpLocationTarget) {
-        this.pickUpLocationTarget = pickUpLocationTarget;
     }
 
 }
