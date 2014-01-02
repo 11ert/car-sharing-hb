@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.CreateGameTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.CreateGameLabel_eventDate}" for="eventDate" />
+                    <h:inputText id="eventDate" value="#{gameController.selected.eventDate}" title="#{bundle.CreateGameTitle_eventDate}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_opponent}" for="opponent" />
+                    <h:inputText id="opponent" value="#{gameController.selected.opponent}" title="#{bundle.CreateGameTitle_opponent}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_timeFrom}" for="timeFrom" />
+                    <h:inputText id="timeFrom" value="#{gameController.selected.timeFrom}" title="#{bundle.CreateGameTitle_timeFrom}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_timeTo}" for="timeTo" />
+                    <h:inputText id="timeTo" value="#{gameController.selected.timeTo}" title="#{bundle.CreateGameTitle_timeTo}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_pickUpTimeSource}" for="pickUpTimeSource" />
+                    <h:inputText id="pickUpTimeSource" value="#{gameController.selected.pickUpTimeSource}" title="#{bundle.CreateGameTitle_pickUpTimeSource}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_pickUpTimeTarget}" for="pickUpTimeTarget" />
+                    <h:inputText id="pickUpTimeTarget" value="#{gameController.selected.pickUpTimeTarget}" title="#{bundle.CreateGameTitle_pickUpTimeTarget}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_location}" for="location" />
+                    <h:inputText id="location" value="#{gameController.selected.location}" title="#{bundle.CreateGameTitle_location}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_pickUpLocationSource}" for="pickUpLocationSource" />
+                    <h:inputText id="pickUpLocationSource" value="#{gameController.selected.pickUpLocationSource}" title="#{bundle.CreateGameTitle_pickUpLocationSource}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_pickUpLocationTarget}" for="pickUpLocationTarget" />
+                    <h:inputText id="pickUpLocationTarget" value="#{gameController.selected.pickUpLocationTarget}" title="#{bundle.CreateGameTitle_pickUpLocationTarget}" />
+                    <h:outputLabel value="#{bundle.CreateGameLabel_id}" for="id" />
+                    <h:inputText id="id" value="#{gameController.selected.id}" title="#{bundle.CreateGameTitle_id}" />
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{gameController.create}" value="#{bundle.CreateGameSaveLink}" />
+                <br />
+                <br />
+                <h:commandLink action="#{gameController.prepareList}" value="#{bundle.CreateGameShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:link outcome="/index" value="#{bundle.CreateGameIndexLink}"/>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

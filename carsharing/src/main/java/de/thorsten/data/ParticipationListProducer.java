@@ -5,7 +5,6 @@ import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
-import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
@@ -37,10 +36,6 @@ public class ParticipationListProducer implements Serializable {
     private Logger log;
 
     private List<Participation> participations;
-
-    private List<Team> teams;
-
-    private Team selectedTeam;
 
     private Date trainingDate;
 
@@ -95,14 +90,6 @@ public class ParticipationListProducer implements Serializable {
         }
     }
 
-    public void teamChanged(ValueChangeEvent event) {
-        log.info("teamChanged called()");
-        if (event.getNewValue() != null) {
-            log.info("Selected Team = " + event.getNewValue()+ "--" + event.getNewValue().getClass().getName());
-            selectedTeam = (Team) event.getNewValue();
-        }
-
-    }
 
     public Date getTrainingDate() {
         return trainingDate;
@@ -202,7 +189,6 @@ public class ParticipationListProducer implements Serializable {
         log.info("initializeSelectedTraing()");
         List<Training> trainings;
         trainings = trainingRepository.findAllGeDate(new Date());
-        teams = participationRepository.getAllTeams();
         if (trainings == null) {
             log.info("updateSelectedTraining() - Training null");
         } else if (trainings.size() == 0) {
@@ -214,33 +200,4 @@ public class ParticipationListProducer implements Serializable {
             calculateParticipationAttributes();
         }
     }
-
-    /**
-     * @return the teams
-     */
-    public List<Team> getTeams() {
-        return teams;
-    }
-
-    /**
-     * @param teams the teams to set
-     */
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
-    }
-
-    /**
-     * @return the selectedTeam
-     */
-    public Team getSelectedTeam() {
-        return selectedTeam;
-    }
-
-    /**
-     * @param selectedTeam the selectedTeam to set
-     */
-    public void setSelectedTeam(Team selectedTeam) {
-        this.selectedTeam = selectedTeam;
-    }
-
 }

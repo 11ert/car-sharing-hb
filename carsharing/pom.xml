@@ -5,7 +5,7 @@
 
     <groupId>de.thorsten</groupId>
     <artifactId>carsharing</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>CarSharing</name>
     <description>Eine Applikation zum Verwalten von Mitfahrgelegenheiten</description>
@@ -171,6 +171,12 @@
             <scope>provided</scope>
         </dependency>
         
+        <!-- Transaction API -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.transaction</groupId>
+            <artifactId>jboss-transaction-api_1.2_spec</artifactId>
+            <version>1.0.0.Final</version>
+        </dependency>     
                
         <!-- RichFaces -->
             

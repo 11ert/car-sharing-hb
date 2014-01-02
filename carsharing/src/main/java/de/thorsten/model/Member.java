@@ -5,8 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ import org.hibernate.validator.constraints.Email;
 public class Member implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue( strategy = GenerationType.SEQUENCE )
     private Long id;
 
     @NotNull
@@ -51,8 +51,8 @@ public class Member implements Serializable {
     @Size(min = 0, max = 25)
     private String city;
 
-    @OneToOne
-    private Team team; 
+    
+    private String team; 
     
     public Long getId() {
         return id;
@@ -132,14 +132,14 @@ public class Member implements Serializable {
     /**
      * @return the team
      */
-    public Team getTeam() {
+    public String getTeam() {
         return team;
     }
 
     /**
      * @param team the team to set
      */
-    public void setTeam(Team team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 }

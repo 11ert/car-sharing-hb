@@ -118,18 +118,18 @@ public class ParticipationController implements Serializable {
         log.info("updateParticipation called for participation: " + editedParticipation);
         try {
             participationService.update(editedParticipation);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Updated!", "Registration successful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, editedParticipation.getPlayer().getFirstname() + " aktualisiert!", "Update of Participationdetails successful");
             facesContext.addMessage(null, m);
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Update of Participationdetails unsuccessful");
             facesContext.addMessage(null, m);
         }
     }
 
     private String getRootErrorMessage(Exception e) {
         // Default to general error message that registration failed.
-        String errorMessage = "Registration failed. See server log for more information";
+        String errorMessage = "Update of Participationdetails failed. See server log for more information";
         if (e == null) {
             // This shouldn't happen, but return the default messages
             return errorMessage;

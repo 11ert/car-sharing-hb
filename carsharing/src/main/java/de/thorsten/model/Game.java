@@ -25,6 +25,8 @@ public class Game extends SportsEvent {
     
     private String opponent;
     
+    private String mapURL;
+    
     public Date getEventDate() {
         return eventDate;
     }
@@ -45,5 +47,19 @@ public class Game extends SportsEvent {
      */
     public void setOpponent(String opponent) {
         this.opponent = opponent;
+    }
+
+    /**
+     * @return the mapURL
+     */
+    public String getMapURL() {
+        return mapURL;
+    }
+
+    /**
+     * @param mapURL the mapURL to set
+     */
+    public void setMapURL(String mapURL) {
+        this.mapURL = mapURL;
     }
 }

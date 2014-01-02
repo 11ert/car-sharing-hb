@@ -28,5 +28,9 @@
         for creating @Named managed beans. -->
     <application>
         <message-bundle>bundle</message-bundle>
+        <resource-bundle>
+            <base-name>/Bundle</base-name>
+            <var>bundle</var>
+        </resource-bundle>
     </application>
 </faces-config>

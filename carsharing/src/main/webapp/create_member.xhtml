@@ -43,7 +43,7 @@
                 <h:outputLabel for="team" value="Team:" />
                 <h:inputText id="team"
                     value="#{newMember.team}" />
-                <h:message for="carsize" errorClass="invalid" />
+                <h:message for="team" errorClass="invalid" />
 
             </h:panelGrid>
 
@@ -93,6 +93,10 @@
             <h:column>
                 <f:facet name="header">Anzahl Sitzplätze</f:facet>
                 #{_member.carsize}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Team</f:facet>
+                #{_member.team}
             </h:column>
             <h:column>
                 <f:facet name="header">REST URL</f:facet>
