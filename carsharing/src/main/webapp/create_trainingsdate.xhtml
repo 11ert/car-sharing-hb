@@ -36,6 +36,7 @@
                 <rich:calendar id="trainingCalendar"
                                mode="ajax" 
                                buttonLabel="Heute"
+                               locale="de"
                                popup="false"
                                boundaryDatesMode="scroll" 
                                datePattern="dd.MM.yyyy"  
@@ -50,6 +51,7 @@
                 <h:outputText value="Nächstes Training = #{trainingController.nextTrainingDate}"/>
                 <p></p>
                 <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar"/>
+                <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:panel>
 
             <rich:dataTable var="_member" value="#{trainingController.initialMembers}"

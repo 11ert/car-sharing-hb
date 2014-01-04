@@ -175,11 +175,13 @@ public class ParticipationListProducer implements Serializable {
     }
 
     private void updateSelectedTraining(Date selectedTrainingDate) {
+        log.info("updateSelectedTraining()");
         List<Training> trainings;
         trainings = trainingRepository.findByDate(selectedTrainingDate);
         if (trainings != null) {
             if (trainings.size() != 0) {
               selectedTraining = trainings.get(0);
+              log.info("found selected Training " + selectedTraining.getTrainingDateAsString());
             }
         }
     }
