@@ -58,8 +58,8 @@ public class TrainingListProducer {
         trainingDates = new TreeSet<Date>();
         for (Training t : trainings) {
             //calWeeks.add(t.getCalendarWeek());
-            //trainingDates.add(t.getCurrentDate().getTime());
-            trainingDates.add(t.getCurrentDate());
+            //trainingDates.add(t.getEventDate().getTime());
+            trainingDates.add(t.getEventDate());
         }
     }
 }

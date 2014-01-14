@@ -197,7 +197,7 @@ public class ParticipationListProducer implements Serializable {
             log.info("updateSelectedTraining() - Training null");
         } else {
             selectedTraining = trainings.get(0);
-            trainingDate = selectedTraining.getCurrentDate();
+            trainingDate = selectedTraining.getEventDate();
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
         }

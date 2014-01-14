@@ -11,6 +11,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,8 +52,8 @@ public class Participation implements Serializable {
     @OneToOne
     private Member player;
 
-    @OneToOne
-    private Training trainingItem;
+    @OneToOne(cascade = CascadeType.ALL)
+    private SportsEvent trainingItem;
 
     private boolean participating;
     
@@ -122,14 +123,14 @@ public class Participation implements Serializable {
     /**
      * @return the trainingItem
      */
-    public Training getTrainingItem() {
+    public SportsEvent getTrainingItem() {
         return trainingItem;
     }
 
     /**
      * @param training the trainingItem to set
      */
-    public void setTraining(Training trainingItem) {
+    public void setTraining(SportsEvent trainingItem) {
         this.trainingItem = trainingItem;
     }
 

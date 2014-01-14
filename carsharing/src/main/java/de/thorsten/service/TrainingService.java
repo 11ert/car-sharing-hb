@@ -21,7 +21,7 @@ public class TrainingService {
 
     public void update(Training training) throws Exception {
         log.info("Updating " + training);
-
+        
         em.merge(training);
     }
         

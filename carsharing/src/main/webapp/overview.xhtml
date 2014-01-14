@@ -9,13 +9,17 @@
                 xmlns:rich="http://richfaces.org/rich">
 
     <ui:define name="content">
+        <!--
         <h1>Handball Jugend Großkrotzenburg</h1>
+        -->
 
         <div>
-            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3>
+<!--            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
+-->
         </div>
 
-        <h2>Trainingskalender für die D-Jugend:</h2>
+<!--        <h2>Trainingskalender für die D-Jugend:</h2>-->
+
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -66,7 +70,7 @@
                     <h:outputText style="font-size: small;font-weight: bold;"
                                   value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.trainingDay.timeFrom} bis #{selectedTraining.trainingDay.timeTo} Uhr in #{selectedTraining.trainingDay.location}"/><br/>
+                                  value="#{selectedTraining.timeFrom} bis #{selectedTraining.timeTo} Uhr in #{selectedTraining.location}"/><br/>
                     <p/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
@@ -76,9 +80,9 @@
                     <h:outputText style="font-size: smaller;font-weight: bold;"
                                   value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedTraining.trainingDay.pickUpTimeSource}"/><br/>
+                                  value="Abfahrt: #{selectedTraining.pickUpTimeSource}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.trainingDay.pickUpLocationSource}"/><br/>
+                                  value="#{selectedTraining.pickUpLocationSource}"/><br/>
                     <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
@@ -89,9 +93,9 @@
                     <h:outputText style="font-size: smaller;font-weight: bold;" 
                                   value="Rückfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedTraining.trainingDay.pickUpTimeTarget}"/><br/>
+                                  value="Abfahrt: #{selectedTraining.pickUpTimeTarget}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.trainingDay.pickUpLocationTarget}"/><br/>
+                                  value="#{selectedTraining.pickUpLocationTarget}"/><br/>
                     <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
                                   value="Genügend Plätze auf der Rückfahrt vorhanden!"
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>

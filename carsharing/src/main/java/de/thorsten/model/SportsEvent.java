@@ -5,10 +5,13 @@
  */
 package de.thorsten.model;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -17,34 +20,40 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author Thorsten
  */
 @Entity
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-public abstract class SportsEvent {
+@Inheritance
+//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventDate"))
+//@DiscriminatorColumn(name="SportsEvent_Type", discriminatorType=DiscriminatorType.CHAR)
+public class SportsEvent implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     protected long id;
-    
+
     @NotNull
     @NotEmpty
     protected String timeFrom;
-    
+
     @NotNull
     @NotEmpty
     protected String timeTo;
-    
+
     @NotNull
     @NotEmpty
     protected String pickUpTimeSource;
-    
+
     @NotNull
     @NotEmpty
     protected String pickUpTimeTarget;
-    
+
     @NotNull
     protected String location;
-    
+
     protected String pickUpLocationSource;
-    
+
     protected String pickUpLocationTarget;
+
+    @NotNull
+    protected Date eventDate;
 
     /**
      * @return the timeFrom
@@ -157,5 +166,24 @@ public abstract class SportsEvent {
     public void setId(long id) {
         this.id = id;
     }
-    
+
+    /**
+     * @return the eventDate of the training
+     */
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    /**
+     * @param eventDate the eventDate of the training to set
+     */
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    @Override
+    public String toString() {
+        return "SportsEvent{" + "id=" + id + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo + ", pickUpTimeSource=" + pickUpTimeSource + ", pickUpTimeTarget=" + pickUpTimeTarget + ", location=" + location + ", pickUpLocationSource=" + pickUpLocationSource + ", pickUpLocationTarget=" + pickUpLocationTarget + ", eventDate=" + eventDate + '}';
+    }
+
 }

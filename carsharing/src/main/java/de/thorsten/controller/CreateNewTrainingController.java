@@ -88,13 +88,21 @@ public class CreateNewTrainingController implements Serializable {
             this.createErrorMessage("Kein gültiges Trainingsdatum (Wochentag?)");
         }
         Training newTraining = new Training();
-        newTraining.setCurrentDate(nextTrainingDate);
+        newTraining.setEventDate(nextTrainingDate);
         newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
+        newTraining.initializeTrainingWithTrainingDayTemplateData();
+                    // TODO
+            // Training mit Template Daten initialisieren !!! (vorher in TrainingDay)
+            // Entity TrainingDay mit Templatedaten erweitern !!!
+
         log.info("Neuer Trainingseintrag " + newTraining.getTrainingDateAsString()
-                + ", " + newTraining.getTrainingDay().getLocation()
-                + ", " + newTraining.getTrainingDay().getTimeFrom()
-                + " - " + newTraining.getTrainingDay().getTimeTo());
+                + ", "
+                + ", " + newTraining.getLocation()
+                + ", " + newTraining.getTimeFrom()
+                + " - " + newTraining.getTimeTo());
         try {
+            
+            
             trainingService.update(newTraining);
             for (final Iterator it = initialMembers.iterator(); it.hasNext();) {
                 Participation newParticipation = new Participation();

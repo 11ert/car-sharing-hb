@@ -5,51 +5,50 @@ package de.thorsten.model;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @SuppressWarnings("serial")
 @Entity
-@XmlRootElement
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "currentdate"))
-public class Training implements Serializable {
+//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventdate"))
+//@DiscriminatorValue("T")
+public class Training extends SportsEvent implements Serializable {
+
 
     public Training() {
     }
 
     public Training(Date date, List<Member> players, TrainingDay trainingDay) {
-        this.currentDate = date;
+        this.eventDate = date;
         this.trainingDay = trainingDay;
     }
 
-   
-    @Id
-    private Date currentDate;
-
     @OneToOne
     private TrainingDay trainingDay;
+
+    @Override
+    public String toString() {
+        return super.toString() + "Training{" + "trainingDay=" + trainingDay + '}';
+    }
 
     /**
      * @return the calendarWeek
      */
     /*
     public int getCalendarWeek() {
-        return currentDate.get(Calendar.WEEK_OF_YEAR);
+        return eventDate.get(Calendar.WEEK_OF_YEAR);
     }*/
 
     public String getTrainingDateAsString() {
         String dateString = null;
-        if (currentDate != null) {
+        if (eventDate != null) {
             DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
-            dateString = sdf.format(currentDate.getTime());
+            dateString = sdf.format(eventDate.getTime());
         }
         return dateString;
     }
@@ -69,18 +68,15 @@ public class Training implements Serializable {
         this.trainingDay = trainingDay;
     }
 
-    /**
-     * @return the currentDate of the training
-     */
-    public Date getCurrentDate() {
-        return currentDate;
+    public void initializeTrainingWithTrainingDayTemplateData() {
+        this.location = trainingDay.getLocationTemplate();
+        this.pickUpLocationSource = trainingDay.getPickUpLocationSourceTemplate();
+        this.pickUpLocationTarget = trainingDay.getPickUpLocationTargetTemplate();
+        this.pickUpTimeSource = trainingDay.getPickUpTimeSourceTemplate();
+        this.pickUpTimeTarget = trainingDay.getPickUpTimeTargetTemplate();
+        this.timeFrom = trainingDay.getTimeFromTemplate();
+        this.timeTo = trainingDay.getTimeToTemplate();
+        
     }
-
-    /**
-     * @param currentDate the currentDate of the training to set
-     */
-    public void setCurrentDate(Date currentDate) {
-        this.currentDate = currentDate;
-    }
-
+    
 }

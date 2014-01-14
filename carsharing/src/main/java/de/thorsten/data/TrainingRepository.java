@@ -32,19 +32,19 @@ public class TrainingRepository {
         CriteriaQuery<Training> criteria = cb.createQuery(Training.class);
         Root<Training> training = criteria.from(Training.class);
         criteria.select(training);
-        criteria.orderBy(cb.asc(training.get("currentDate")));
+        criteria.orderBy(cb.asc(training.get("eventDate")));
         return em.createQuery(criteria).getResultList();
     }
 
-    public List<Training> findByDate(Date currentDate) {
-        Query q = em.createQuery("SELECT t FROM Training t WHERE t.currentDate = :currentDate");
-        q.setParameter("currentDate", currentDate, TemporalType.DATE);
+    public List<Training> findByDate(Date eventDate) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.eventDate = :eventDate");
+        q.setParameter("eventDate", eventDate, TemporalType.DATE);
         return q.getResultList();
     }
     
-    public List<Training> findAllGeDate(Date currentDate) {
-        Query q = em.createQuery("SELECT t FROM Training t WHERE t.currentDate >= :currentDate");
-        q.setParameter("currentDate", currentDate, TemporalType.DATE);
+    public List<Training> findAllGeDate(Date eventDate) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.eventDate >= :eventDate");
+        q.setParameter("eventDate", eventDate, TemporalType.DATE);
         return q.getResultList();
     }
 

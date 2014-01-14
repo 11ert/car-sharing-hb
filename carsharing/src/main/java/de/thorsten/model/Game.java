@@ -5,11 +5,10 @@
  */
 package de.thorsten.model;
 
-import java.util.Date;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -17,24 +16,15 @@ import javax.validation.constraints.NotNull;
  */
 @SuppressWarnings("serial")
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventDate"))
+//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventDate"))
+//@DiscriminatorValue("G")
 public class Game extends SportsEvent {
-    
-    @NotNull
-    private Date eventDate;
     
     private String opponent;
     
     private String mapURL;
     
-    public Date getEventDate() {
-        return eventDate;
-    }
-    
-    public void setEventDate(Date eventDate) {
-        this.eventDate = eventDate;
-    }
-
+ 
     /**
      * @return the opponent
      */

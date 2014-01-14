@@ -8,9 +8,8 @@
         <properties>
             <!-- Properties for Hibernate -->
             <!-- kein create-drop sonst wird das Schema jedes Mal wieder gelöscht und neu gebaut -->
-            <!-- <property name="hibernate.hbm2ddl.auto" value="create" /> -->
+            <property name="hibernate.hbm2ddl.auto" value="create-drop" />
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
 </persistence>
