@@ -16,6 +16,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -52,7 +53,7 @@ public class Participation implements Serializable {
     @OneToOne
     private Member player;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private SportsEvent trainingItem;
 
     private boolean participating;
@@ -103,9 +104,10 @@ public class Participation implements Serializable {
 
     @Override
     public String toString() {
-        return "de.thorsten.model.Participation[ id=" + getId() + " ]";
+        return "Participation{" + "id=" + id + ", player=" + player + ", trainingItem=" + trainingItem + ", participating=" + participating + ", notParticipating=" + notParticipating + ", drivingBack=" + drivingBack + ", drivingForth=" + drivingForth + ", lastChanged=" + lastChanged + '}';
     }
 
+   
     /**
      * @return the player
      */

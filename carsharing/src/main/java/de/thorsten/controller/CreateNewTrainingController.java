@@ -91,37 +91,40 @@ public class CreateNewTrainingController implements Serializable {
         newTraining.setEventDate(nextTrainingDate);
         newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
         newTraining.initializeTrainingWithTrainingDayTemplateData();
-                    // TODO
-            // Training mit Template Daten initialisieren !!! (vorher in TrainingDay)
-            // Entity TrainingDay mit Templatedaten erweitern !!!
 
         log.info("Neuer Trainingseintrag " + newTraining.getTrainingDateAsString()
                 + ", "
                 + ", " + newTraining.getLocation()
                 + ", " + newTraining.getTimeFrom()
                 + " - " + newTraining.getTimeTo());
+        
+        FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Fehler!", "Neues Training konnte nicht gespeichert werden !");
+        FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+                "Erfolgreich!", "Neues Training gespeichert!");
+
         try {
-            
-            
-            trainingService.update(newTraining);
+
+            Training tr = trainingService.update(newTraining);
             for (final Iterator it = initialMembers.iterator(); it.hasNext();) {
                 Participation newParticipation = new Participation();
                 newParticipation.setPlayer((Member) it.next());
-                newParticipation.setTraining(newTraining);
+                newParticipation.setTraining(tr);
                 try {
                     participationService.update(newParticipation);
                 } catch (Exception e) {
+                    facesContext.addMessage(null, errorMsg);
                     log.info("Participation could not be stored");
                     e.printStackTrace();
                 }
             };
         } catch (Exception e) {
+            facesContext.addMessage(null, errorMsg);
             log.info("Training konnte nicht persistiert werden");
             e.printStackTrace();
         }
 
-        FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Erfolgreich!", "Neues Training gespeichert!");
-        facesContext.addMessage(null, m);
+        facesContext.addMessage(null, successMsg);
 
     }
 

@@ -41,8 +41,7 @@
                                boundaryDatesMode="scroll" 
                                datePattern="dd.MM.yyyy"  
                                dataModel="#{trainingCalendar}" 
-                               value="#{trainingController.nextTrainingDate}"
-                               valueChangeListener="#{participationListProducer.trainingDateChanged}">
+                               value="#{trainingController.nextTrainingDate}">
 
                     <a4j:ajax event="change" render="next_trainingdate_out" />
                 </rich:calendar>

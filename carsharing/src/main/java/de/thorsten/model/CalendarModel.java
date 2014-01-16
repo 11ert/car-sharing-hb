@@ -1,21 +1,21 @@
-
 package de.thorsten.model;
 
 /**
  *
  * @author Thorsten
  */
+import de.thorsten.data.GameListProducer;
 import de.thorsten.data.TrainingListProducer;
 import de.thorsten.util.DateUtil;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.SortedSet;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
 import org.richfaces.model.CalendarDataModel;
 import org.richfaces.model.CalendarDataModelItem;
-
 
 public class CalendarModel implements CalendarDataModel {
 
@@ -25,17 +25,19 @@ public class CalendarModel implements CalendarDataModel {
     private TrainingListProducer trainingListProducer;
 
     @Inject
+    private GameListProducer gameListProducer;
+
+    @Inject
     protected Logger log;
 
     private Date selectedDate;
-    
+
     private boolean defaultModeEditable = false;
-    
+
     public String getSelectedDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(selectedDate);
     }
-            
-            
+
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
         for (int i = 0; i < datesInCalendar.length; i++) {
@@ -47,7 +49,7 @@ public class CalendarModel implements CalendarDataModel {
                             DateUtil.getDatePortion(datesInCalendar[i])) == 0) {
                         modelItem.setStyleClass(TRAINING_DAY_CLASS);
                         modelItem.setEnabled(true);
-                    } 
+                    }
                 }
             }
             modelItems[i] = modelItem;
@@ -55,23 +57,28 @@ public class CalendarModel implements CalendarDataModel {
         return modelItems;
     }
 
-    public CalendarModel () {
+    public CalendarModel() {
         selectedDate = new Date();
     }
+
     public Object getToolTip(Date date) {
         return "Training";
     }
 
     protected Date[] getDatesToBeHighlighted() {
-        Date[] dates = new Date[trainingListProducer.getTrainingDates().size()];
+        
+        SortedSet<Date> sportEventDates = trainingListProducer.getTrainingDates();
+        sportEventDates.addAll(gameListProducer.getGameDates());
+        
+        Date[] dates = new Date[sportEventDates.size()];
+        
         int i = 0;
-        for (final Iterator it = trainingListProducer.getTrainingDates().iterator(); it.hasNext();) {
+        for (final Iterator it = sportEventDates.iterator(); it.hasNext();) {
             dates[i] = (Date) it.next();
             i++;
         };
         return dates;
     }
-
 
     public void setSelectedDate(Date selectedDate) {
         this.selectedDate = selectedDate;
@@ -95,6 +102,5 @@ public class CalendarModel implements CalendarDataModel {
     public void setDefaultModeEditable(boolean defaultModeEditable) {
         this.defaultModeEditable = defaultModeEditable;
     }
-
 
 }

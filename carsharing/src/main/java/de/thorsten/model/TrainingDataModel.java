@@ -22,8 +22,8 @@ import org.richfaces.model.CalendarDataModelItem;
 @Named("trainingCalendar")
 public class TrainingDataModel extends CalendarModel {
 
-        private static final String POTENTIAL_TRAINING_DAY_CLASS = "ptdc";
-    
+    private static final String POTENTIAL_TRAINING_DAY_CLASS = "ptdc";
+
     @Inject
     private TrainingDayListProducer trainingDayListProducer;
 
@@ -36,7 +36,7 @@ public class TrainingDataModel extends CalendarModel {
         for (int i = 0; i < datesInCalendar.length; i++) {
             CalendarDataModelItemImpl modelItem = new CalendarDataModelItemImpl();
             modelItem.setEnabled(isDefaultModeEditable()); // default!
-            
+
             // Grau, wenn es sich um einen potentiellen Trainingstag handelt
             for (Integer t : this.getTrainingDays()) {
                 if (t != null) {
@@ -46,7 +46,7 @@ public class TrainingDataModel extends CalendarModel {
                     }
                 }
             }
-            
+
             // Grün, wenn ein Trainingstag aktiviert ist
             for (Date d : super.getDatesToBeHighlighted()) {
                 if (d != null) {

@@ -19,10 +19,12 @@ public class TrainingService {
     @Inject
     private EntityManager em;
 
-    public void update(Training training) throws Exception {
+    public Training update(Training training) throws Exception {
         log.info("Updating " + training);
         
-        em.merge(training);
+        return em.merge(training);
+        
+        
     }
         
 }
