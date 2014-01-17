@@ -119,6 +119,7 @@ public class ParticipationListProducer implements Serializable {
     public void retrieveAllParticipatorsForSpecificDate() {
         if (sportEventDate != null) {
             participations = participationRepository.getAllForSpecificDateOrderedByName(sportEventDate);
+            log.info(participations.size() + " Participations gefunden");
             calculateParticipationAttributes();
         } else {
             log.info("sportEventDate is null");
@@ -149,18 +150,18 @@ public class ParticipationListProducer implements Serializable {
                 numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
             }
             if (p.isDrivingForth()) {
-                numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
+                numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
             }
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
         numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable;
-
-        log.info("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
-        log.info("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
-        log.info("Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
-        log.info("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
-        log.info("Calculated NumberOfParticipators = " + numberOfParticipators);
-
+        
+        log.fine("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
+        log.fine("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
+        log.fine("Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
+        log.fine("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
+        log.fine("Calculated NumberOfParticipators = " + numberOfParticipators);
+        
     }
 
     /**

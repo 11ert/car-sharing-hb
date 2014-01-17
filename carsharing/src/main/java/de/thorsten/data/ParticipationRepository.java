@@ -13,7 +13,6 @@ import java.util.List;
 import de.thorsten.model.Participation;
 import java.util.Date;
 import java.util.logging.Logger;
-import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.criteria.Root;
 
@@ -47,7 +46,6 @@ public class ParticipationRepository {
     }
 
     public List<Participation> getAllForSpecificDateOrderedByName(Date curDate) {
-        log.info("Getting all training participations for = " + curDate + "...");
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate = :curDate order by p.player.firstname, p.player.name")
                 .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
     }
