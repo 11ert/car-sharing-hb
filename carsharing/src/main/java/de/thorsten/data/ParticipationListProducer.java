@@ -119,7 +119,6 @@ public class ParticipationListProducer implements Serializable {
     public void retrieveAllParticipatorsForSpecificDate() {
         if (sportEventDate != null) {
             participations = participationRepository.getAllForSpecificDateOrderedByName(sportEventDate);
-            log.info(participations.size() + " Participations gefunden");
             calculateParticipationAttributes();
         } else {
             log.info("sportEventDate is null");
