@@ -14,11 +14,11 @@
         -->
 
         <div>
-<!--            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
--->
+            <!--            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
+            -->
         </div>
 
-<!--        <h2>Trainingskalender für die D-Jugend:</h2>-->
+        <!--        <h2>Trainingskalender für die D-Jugend:</h2>-->
 
         <h:outputStylesheet>
             .tdc {
@@ -63,10 +63,16 @@
                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
 
                     </rich:calendar>
-<!--                    <br/>
-                    <h:outputText style="height: 200px" value="Training" styleClass="tdc" />
+                    <h:panelGrid columns="3" columnClasses="titleCell">
+                        <table>
+                            <tr>
+                                <td align="center" width="45" height="18" style="background-color: green; color: white">Training</td>
+                                <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
+                            </tr>
+                        </table>
+                    </h:panelGrid>
                     <p/>
--->
+
                 </rich:panel>
 
                 <rich:panel id="trainingDate_output">

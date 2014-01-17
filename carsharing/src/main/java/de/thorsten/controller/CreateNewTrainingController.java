@@ -74,7 +74,6 @@ public class CreateNewTrainingController implements Serializable {
         this.nextTrainingDate = nextTrainingDate;
     }
 
-    @SuppressWarnings("empty-statement")
     public void createParticipationsForNextTrainingDate() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(nextTrainingDate);

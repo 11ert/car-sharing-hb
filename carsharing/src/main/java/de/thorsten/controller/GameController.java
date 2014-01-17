@@ -1,239 +1,146 @@
 package de.thorsten.controller;
 
+import de.thorsten.data.MemberRepository;
 import de.thorsten.model.Game;
-import de.thorsten.controller.util.JsfUtil;
-import de.thorsten.controller.util.PaginationHelper;
-
+import de.thorsten.model.Member;
+import de.thorsten.model.Participation;
+import de.thorsten.model.Training;
+import de.thorsten.service.GameService;
+import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
-import java.util.ResourceBundle;
-import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
-import javax.faces.component.UIComponent;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
-import javax.faces.model.DataModel;
-import javax.faces.model.ListDataModel;
-import javax.faces.model.SelectItem;
+import javax.faces.event.ValueChangeEvent;
+import javax.inject.Inject;
+import javax.inject.Named;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
+/**
+ *
+ * @author Thorsten
+ */
 @Named("gameController")
-@SessionScoped
+@ViewAccessScoped
 public class GameController implements Serializable {
 
-    private Game current;
-    private DataModel items = null;
-    @EJB
-    private de.thorsten.controller.GameFacade ejbFacade;
-    private PaginationHelper pagination;
-    private int selectedItemIndex;
+    @Inject
+    private Logger log;
 
-    public GameController() {
-    }
+    @Inject
+    private MemberRepository memberRepository;
 
-    public Game getSelected() {
-        if (current == null) {
-            current = new Game();
-            selectedItemIndex = -1;
+    @Inject
+    private FacesContext facesContext;
+
+    @Inject
+    private ParticipationService participationService;
+
+    @Inject
+    private GameService gameService;
+
+    private Date nextDate;
+
+    private List<Member> initialMembers;
+
+    @Produces
+    @Named
+    private Game newGame;
+
+    @PostConstruct
+    public void loadMembers() {
+        newGame = new Game();
+
+        initialMembers = memberRepository.findAllOrderedByName();
+        if (initialMembers != null) {
+            log.info(initialMembers.size() + " initial Members loaded.");
         }
-        return current;
+
     }
 
-    private GameFacade getFacade() {
-        return ejbFacade;
+    /**
+     * @return the nextTrainingDate
+     */
+    public Date getNextDate() {
+        return nextDate;
     }
 
-    public PaginationHelper getPagination() {
-        if (pagination == null) {
-            pagination = new PaginationHelper(10) {
+    /**
+     * @param nextDate the nextDate to set
+     */
+    public void setNextDate(Date nextDate) {
+        this.nextDate = nextDate;
+    }
 
-                @Override
-                public int getItemsCount() {
-                    return getFacade().count();
-                }
+    public void createParticipationsForNextDate() {
 
-                @Override
-                public DataModel createPageDataModel() {
-                    return new ListDataModel(getFacade().findRange(new int[]{getPageFirstItem(), getPageFirstItem() + getPageSize()}));
+        newGame.setEventDate(nextDate);
+
+        FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Fehler!", "Neues Spiel konnte nicht gespeichert werden !");
+        FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Erfolgreich!", "Neues Spiel gespeichert!");
+        try {
+
+            Game game = gameService.update(newGame);
+
+            for (final Iterator it = initialMembers.iterator(); it.hasNext();) {
+                Participation newParticipation = new Participation();
+                newParticipation.setPlayer((Member) it.next());
+                newParticipation.setTraining(game);
+
+                try {
+                    participationService.update(newParticipation);
+                } catch (Exception e) {
+                    facesContext.addMessage(null, errorMsg);
+                    log.info("Participation could not be stored");
+                    e.printStackTrace();
                 }
             };
-        }
-        return pagination;
-    }
-
-    public String prepareList() {
-        recreateModel();
-        return "List";
-    }
-
-    public String prepareView() {
-        current = (Game) getItems().getRowData();
-        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "View";
-    }
-
-    public String prepareCreate() {
-        current = new Game();
-        selectedItemIndex = -1;
-        return "Create";
-    }
-
-    public String create() {
-        try {
-            getFacade().create(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GameCreated"));
-            return prepareCreate();
         } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
+            facesContext.addMessage(null, errorMsg);
+            log.info("Spiel konnte nicht persistiert werden");
+            e.printStackTrace();
+        }
+        facesContext.addMessage(null, successMsg);
+
+    }
+
+    public void trainingDateChanged(ValueChangeEvent event) {
+
+        if (event.getNewValue() != null) {
+            nextDate = (Date) event.getNewValue();
         }
     }
 
-    public String prepareEdit() {
-        current = (Game) getItems().getRowData();
-        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        return "Edit";
+    public void createErrorMessage(String msg) {
+        FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Fehler!",
+                msg);
+        facesContext.addMessage(null, m);
     }
 
-    public String update() {
-        try {
-            getFacade().edit(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GameUpdated"));
-            return "View";
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-            return null;
-        }
+    public void removeMemberFromList(Member member) {
+        log.info("removeMemberFromList called");
     }
 
-    public String destroy() {
-        current = (Game) getItems().getRowData();
-        selectedItemIndex = pagination.getPageFirstItem() + getItems().getRowIndex();
-        performDestroy();
-        recreatePagination();
-        recreateModel();
-        return "List";
+    /**
+     * @return the members
+     */
+    public List<Member> getInitialMembers() {
+        return initialMembers;
     }
 
-    public String destroyAndView() {
-        performDestroy();
-        recreateModel();
-        updateCurrentItem();
-        if (selectedItemIndex >= 0) {
-            return "View";
-        } else {
-            // all items were removed - go back to list
-            recreateModel();
-            return "List";
-        }
-    }
-
-    private void performDestroy() {
-        try {
-            getFacade().remove(current);
-            JsfUtil.addSuccessMessage(ResourceBundle.getBundle("/Bundle").getString("GameDeleted"));
-        } catch (Exception e) {
-            JsfUtil.addErrorMessage(e, ResourceBundle.getBundle("/Bundle").getString("PersistenceErrorOccured"));
-        }
-    }
-
-    private void updateCurrentItem() {
-        int count = getFacade().count();
-        if (selectedItemIndex >= count) {
-            // selected index cannot be bigger than number of items:
-            selectedItemIndex = count - 1;
-            // go to previous page if last page disappeared:
-            if (pagination.getPageFirstItem() >= count) {
-                pagination.previousPage();
-            }
-        }
-        if (selectedItemIndex >= 0) {
-            current = getFacade().findRange(new int[]{selectedItemIndex, selectedItemIndex + 1}).get(0);
-        }
-    }
-
-    public DataModel getItems() {
-        if (items == null) {
-            items = getPagination().createPageDataModel();
-        }
-        return items;
-    }
-
-    private void recreateModel() {
-        items = null;
-    }
-
-    private void recreatePagination() {
-        pagination = null;
-    }
-
-    public String next() {
-        getPagination().nextPage();
-        recreateModel();
-        return "List";
-    }
-
-    public String previous() {
-        getPagination().previousPage();
-        recreateModel();
-        return "List";
-    }
-
-    public SelectItem[] getItemsAvailableSelectMany() {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), false);
-    }
-
-    public SelectItem[] getItemsAvailableSelectOne() {
-        return JsfUtil.getSelectItems(ejbFacade.findAll(), true);
-    }
-
-    public Game getGame(long id) {
-        return ejbFacade.find(id);
-    }
-
-    @FacesConverter(forClass = Game.class)
-    public static class GameControllerConverter implements Converter {
-//
-//        @Override
-//        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-//            if (value == null || value.length() == 0) {
-//                return null;
-//            }
-//            GameController controller = (GameController) facesContext.getApplication().getELResolver().
-//                    getValue(facesContext.getELContext(), null, "gameController");
-//            return controller.getGame(getKey(value));
-//        }
-
-                @Override
-        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-return null;
-                }
-                
-        long getKey(String value) {
-            long key;
-            key = Long.parseLong(value);
-            return key;
-        }
-
-        String getStringKey(long value) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(value);
-            return sb.toString();
-        }
-
-        @Override
-        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-            if (object == null) {
-                return null;
-            }
-            if (object instanceof Game) {
-                Game o = (Game) object;
-                return getStringKey(o.getId());
-            } else {
-                throw new IllegalArgumentException("object " + object + " is of type " + object.getClass().getName() + "; expected type: " + Game.class.getName());
-            }
-        }
-
+    /**
+     * @param initialMembers the members to set
+     */
+    public void setInitialMembers(List<Member> initialMembers) {
+        this.initialMembers = initialMembers;
     }
 
 }
