@@ -8,25 +8,28 @@ import de.thorsten.data.GameListProducer;
 import de.thorsten.data.TrainingListProducer;
 import de.thorsten.util.DateUtil;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.SortedSet;
 import java.util.logging.Logger;
+import javax.enterprise.context.ApplicationScoped;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.richfaces.model.CalendarDataModel;
 import org.richfaces.model.CalendarDataModelItem;
 
-public class CalendarModel implements CalendarDataModel {
+@ApplicationScoped
+@Named("sportsEventsCalendarModelReadOnly")
+public class SportsEventCalendarModel implements CalendarDataModel {
 
-    protected static final String TRAINING_DAY_CLASS = "tdc";
+    private static final String TRAINING_DAY_CLASS = "tdc";
+    private static final String GAME_DAY_CLASS = "gdc";
 
     @Inject
     private TrainingListProducer trainingListProducer;
 
     @Inject
     private GameListProducer gameListProducer;
-
+    
     @Inject
     protected Logger log;
 
@@ -40,14 +43,29 @@ public class CalendarModel implements CalendarDataModel {
 
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];
+
         for (int i = 0; i < datesInCalendar.length; i++) {
             CalendarDataModelItemImpl modelItem = new CalendarDataModelItemImpl();
             modelItem.setEnabled(isDefaultModeEditable()); // default!
-            for (Date d : getDatesToBeHighlighted()) {
-                if (d != null) {
-                    if (DateUtil.getDatePortion(d).compareTo(
+
+            
+            // Trainings ermitteln
+            for (Training element : trainingListProducer.getTrainings()) {
+                if (element != null) {
+                    if (DateUtil.getDatePortion(element.getEventDate()).compareTo(
                             DateUtil.getDatePortion(datesInCalendar[i])) == 0) {
                         modelItem.setStyleClass(TRAINING_DAY_CLASS);
+                        modelItem.setEnabled(true);
+                    }
+                }
+            }
+
+            // Matches ermitteln
+            for (Game element : gameListProducer.getGames()) {
+                if (element != null) {
+                    if (DateUtil.getDatePortion(element.getEventDate()).compareTo(
+                            DateUtil.getDatePortion(datesInCalendar[i])) == 0) {
+                        modelItem.setStyleClass(GAME_DAY_CLASS);
                         modelItem.setEnabled(true);
                     }
                 }
@@ -56,8 +74,10 @@ public class CalendarModel implements CalendarDataModel {
         }
         return modelItems;
     }
+        
+    
 
-    public CalendarModel() {
+    public SportsEventCalendarModel() {
         selectedDate = new Date();
     }
 
@@ -65,24 +85,8 @@ public class CalendarModel implements CalendarDataModel {
         return "Training";
     }
 
-    protected Date[] getDatesToBeHighlighted() {
-        
-        SortedSet<Date> sportEventDates = trainingListProducer.getTrainingDates();
-        sportEventDates.addAll(gameListProducer.getGameDates());
-        
-        Date[] dates = new Date[sportEventDates.size()];
-        
-        int i = 0;
-        for (final Iterator it = sportEventDates.iterator(); it.hasNext();) {
-            dates[i] = (Date) it.next();
-            i++;
-        };
-        return dates;
-    }
-
     public void setSelectedDate(Date selectedDate) {
         this.selectedDate = selectedDate;
-        log.info("setSelectedDate() called");
     }
 
     public Date getSelectedDate() {
@@ -103,4 +107,5 @@ public class CalendarModel implements CalendarDataModel {
         this.defaultModeEditable = defaultModeEditable;
     }
 
+     
 }

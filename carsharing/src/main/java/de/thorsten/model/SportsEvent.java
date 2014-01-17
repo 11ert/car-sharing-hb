@@ -6,7 +6,9 @@
 package de.thorsten.model;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,9 +23,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Inheritance
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventDate"))
-//@DiscriminatorColumn(name="SportsEvent_Type", discriminatorType=DiscriminatorType.CHAR)
-public class SportsEvent implements Serializable {
+public abstract class SportsEvent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -179,6 +179,15 @@ public class SportsEvent implements Serializable {
      */
     public void setEventDate(Date eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public String getDateAsString() {
+        String dateString = null;
+        if (eventDate != null) {
+            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
+            dateString = sdf.format(eventDate.getTime());
+        }
+        return dateString;
     }
 
     @Override

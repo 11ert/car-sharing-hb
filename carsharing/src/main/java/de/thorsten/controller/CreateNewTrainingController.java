@@ -92,7 +92,7 @@ public class CreateNewTrainingController implements Serializable {
         newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
         newTraining.initializeTrainingWithTrainingDayTemplateData();
 
-        log.info("Neuer Trainingseintrag " + newTraining.getTrainingDateAsString()
+        log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
                 + ", " + newTraining.getLocation()
                 + ", " + newTraining.getTimeFrom()

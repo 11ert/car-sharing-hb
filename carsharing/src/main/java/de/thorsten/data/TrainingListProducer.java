@@ -1,5 +1,6 @@
 package de.thorsten.data;
 
+import de.thorsten.model.SportsEvent;
 import de.thorsten.model.Training;
 import java.util.Date;
 import javax.annotation.PostConstruct;

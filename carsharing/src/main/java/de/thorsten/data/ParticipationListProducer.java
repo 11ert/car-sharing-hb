@@ -1,10 +1,12 @@
 package de.thorsten.data;
 
+import de.thorsten.model.Game;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.SportsEvent;
 import de.thorsten.model.Training;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
@@ -21,25 +23,29 @@ import javax.faces.event.ValueChangeEvent;
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
 import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
-
 @ViewAccessScoped
 @Named
 public class ParticipationListProducer implements Serializable {
+
+    private static String TRAINING = "Training";
+    private static String GAME = "Spiel";
+
+    private String sportEventType;
 
     @Inject
     private ParticipationRepository participationRepository;
 
     @Inject
-    TrainingRepository trainingRepository;
+    SportsEventRepository sportsEventRepository;
 
     @Inject
     private Logger log;
 
     private List<Participation> participations;
 
-    private Date trainingDate;
+    private Date sportEventDate;
 
-    private Training selectedTraining;
+    private SportsEvent selectedSportsEvent;
 
     private int numberOfParticipators;
 
@@ -77,26 +83,25 @@ public class ParticipationListProducer implements Serializable {
         return participations;
     }
 
-    public void setTrainingDate(Date x) {
-        trainingDate = x;
+    public void setSportEventDate(Date x) {
+        sportEventDate = x;
     }
 
-    public void trainingDateChanged(ValueChangeEvent event) {
+    public void sportEventDateChanged(ValueChangeEvent event) {
         if (event.getNewValue() != null) {
-            trainingDate = (Date) event.getNewValue();
+            sportEventDate = (Date) event.getNewValue();
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
-            updateSelectedTraining(trainingDate);
+            updateSelectedSportsEvent(sportEventDate);
         }
     }
 
-
-    public Date getTrainingDate() {
-        return trainingDate;
+    public Date getSportEventDate() {
+        return sportEventDate;
     }
 
-    public String getTrainingDateAsFormattedString() {
-        return DateUtil.getSelectedDateAsFormattedString(trainingDate);
+    public String getSportEventDateAsFormattedString() {
+        return DateUtil.getSelectedDateAsFormattedString(sportEventDate);
     }
 
     /**
@@ -112,11 +117,11 @@ public class ParticipationListProducer implements Serializable {
 
     // todo: Nicht intuitiv - besser mit  Injection
     public void retrieveAllParticipatorsForSpecificDate() {
-        if (trainingDate != null) {
-            participations = participationRepository.getAllForSpecificDateOrderedByName(trainingDate);
+        if (sportEventDate != null) {
+            participations = participationRepository.getAllForSpecificDateOrderedByName(sportEventDate);
             calculateParticipationAttributes();
         } else {
-            log.info("trainingDate is null");
+            log.info("sportEventDate is null");
         }
     }
 
@@ -159,47 +164,73 @@ public class ParticipationListProducer implements Serializable {
     }
 
     /**
-     * @return the selectedTraining
+     * @return the selectedSportsEvent
      */
     @Named
     @Produces
-    public Training getSelectedTraining() {
-        return selectedTraining;
+    public SportsEvent getSelectedSportsEvent() {
+        return selectedSportsEvent;
     }
 
     /**
-     * @param selectedTraining the selectedTraining to set
+     * @param selectedSportsEvent the selectedSportsEvent to set
      */
-    public void setSelectedTraining(Training selectedTraining) {
-        this.selectedTraining = selectedTraining;
+    public void setSelectedSportsEvent(SportsEvent selectedSportsEvent) {
+        this.selectedSportsEvent = selectedSportsEvent;
     }
 
-    private void updateSelectedTraining(Date selectedTrainingDate) {
-        log.info("updateSelectedTraining()");
-        List<Training> trainings;
-        trainings = trainingRepository.findByDate(selectedTrainingDate);
-        if (trainings != null) {
-            if (trainings.size() != 0) {
-              selectedTraining = trainings.get(0);
-              log.info("found selected Training " + selectedTraining.getTrainingDateAsString());
+    private void updateSelectedSportsEvent(Date selectedDate) {
+        log.info("updateSelectedSportsEvent()");
+        List<SportsEvent> events;
+        events = sportsEventRepository.findByDate(selectedDate);
+        if (events != null) {
+            if (events.size() != 0) {
+                selectedSportsEvent = events.get(0);
+                determineSportEventType(); // todo: käse
+                log.info("found selected Sport Event " + selectedSportsEvent.getDateAsString());
             }
         }
     }
 
     @PostConstruct
-    public void initializeSelectedTraining() {
-        log.info("initializeSelectedTraing()");
-        List<Training> trainings;
-        trainings = trainingRepository.findAllGeDate(new Date());
-        if (trainings == null) {
-            log.info("updateSelectedTraining() - Training null");
-        } else if (trainings.size() == 0) {
-            log.info("updateSelectedTraining() - Training null");
+    public void initializeSelectedSportsEvent() {
+        log.info("initializeSelectedSportsEvent()");
+        List<SportsEvent> sportEvents;
+        sportEvents = sportsEventRepository.findAllGeDate(new Date());
+        if (sportEvents == null) {
+            log.info("updateSelectedSportsEvent() - Training null");
+        } else if (sportEvents.size() == 0) {
+            log.info("updateSelectedSportsEvent() - Training null");
         } else {
-            selectedTraining = trainings.get(0);
-            trainingDate = selectedTraining.getEventDate();
+            selectedSportsEvent = sportEvents.get(0);
+            sportEventDate = selectedSportsEvent.getEventDate();
             retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
+            determineSportEventType();
         }
+    }
+
+    /**
+     * @return the sportEventType
+     */
+    public String getSportEventType() {
+        return sportEventType;
+    }
+
+    /**
+     * @param sportEventType the sportEventType to set
+     */
+    public void setSportEventType(String sportEventType) {
+        this.sportEventType = sportEventType;
+    }
+
+    //todo 
+    private void determineSportEventType() {
+        if (selectedSportsEvent instanceof Training) {
+            sportEventType = TRAINING;
+        } else if (selectedSportsEvent instanceof Game) {
+            sportEventType = GAME;
+        }
+
     }
 }

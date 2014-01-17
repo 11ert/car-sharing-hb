@@ -24,6 +24,9 @@
             .tdc {
             background-color: green;
             }
+            .gdc {
+            background-color: blue;
+            }
             .wdc {
             font-weight: bold;
             font-style: italic;
@@ -39,8 +42,8 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-        <!-- funktioniert nicht (mehr) ? -->
-        <!--        <f:event listener="#{participationListProducer.initializeSelectedTraining()}" type="preRenderView" />-->
+
+<!--        <f:event listener="#{participationListProducer.initializeSelectedSportsEvent()}" type="preRenderView" />-->
 
         <h:form id="calendar_form">
             <h:panelGrid columns="2" >
@@ -53,9 +56,9 @@
                                    popup="false"
                                    boundaryDatesMode="scroll" 
                                    datePattern="dd.MM.yyyy"  
-                                   dataModel="#{trainingDataModelReadOnly}" 
-                                   value="#{participationListProducer.trainingDate}"
-                                   valueChangeListener="#{participationListProducer.trainingDateChanged}">
+                                   dataModel="#{sportsEventsCalendarModelReadOnly}" 
+                                   value="#{participationListProducer.sportEventDate}"
+                                   valueChangeListener="#{participationListProducer.sportEventDateChanged}">
 
                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
 
@@ -68,21 +71,21 @@
 
                 <rich:panel id="trainingDate_output">
                     <h:outputText style="font-size: small;font-weight: bold;"
-                                  value="Training am #{participationListProducer.trainingDateAsFormattedString}:" /><br/>
+                                  value="#{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString}:" /><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.timeFrom} bis #{selectedTraining.timeTo} Uhr in #{selectedTraining.location}"/><br/>
+                                  value="#{selectedSportsEvent.timeFrom} bis #{selectedSportsEvent.timeTo} Uhr in #{selectedSportsEvent.location}"/><br/>
                     <p/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
                                   value="D Jugend PreAgBerg"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem Training"/>                
+                                  value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem #{participationListProducer.sportEventType}"/>                
                     <p></p>
                     <h:outputText style="font-size: smaller;font-weight: bold;"
                                   value="Hinfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedTraining.pickUpTimeSource}"/><br/>
+                                  value="Abfahrt: #{selectedSportsEvent.pickUpTimeSource}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.pickUpLocationSource}"/><br/>
+                                  value="#{selectedSportsEvent.pickUpLocationSource}"/><br/>
                     <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
@@ -93,9 +96,9 @@
                     <h:outputText style="font-size: smaller;font-weight: bold;" 
                                   value="Rückfahrt"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedTraining.pickUpTimeTarget}"/><br/>
+                                  value="Abfahrt: #{selectedSportsEvent.pickUpTimeTarget}"/><br/>
                     <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedTraining.pickUpLocationTarget}"/><br/>
+                                  value="#{selectedSportsEvent.pickUpLocationTarget}"/><br/>
                     <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
                                   value="Genügend Plätze auf der Rückfahrt vorhanden!"
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>
@@ -104,7 +107,7 @@
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired > 0}"/>
                 </rich:panel>
             </h:panelGrid>
-            <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.trainingDateAsFormattedString}">
+            <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString}">
 
                 <rich:dataTable var="_participation" value="#{participations}"
                                 iterationStatusVar="it"

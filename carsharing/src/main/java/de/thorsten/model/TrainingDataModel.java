@@ -20,7 +20,7 @@ import org.richfaces.model.CalendarDataModelItem;
  */
 @ApplicationScoped
 @Named("trainingCalendar")
-public class TrainingDataModel extends CalendarModel {
+public class TrainingDataModel extends TrainingCalendarModel {
 
     private static final String POTENTIAL_TRAINING_DAY_CLASS = "ptdc";
 
@@ -48,7 +48,7 @@ public class TrainingDataModel extends CalendarModel {
             }
 
             // Grün, wenn ein Trainingstag aktiviert ist
-            for (Date d : super.getDatesToBeHighlighted()) {
+            for (Date d : getDatesToBeHighlighted()) {
                 if (d != null) {
                     if (DateUtil.getDatePortion(d).compareTo(
                             DateUtil.getDatePortion(datesInCalendar[i])) == 0) {

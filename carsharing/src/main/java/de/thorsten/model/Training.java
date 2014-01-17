@@ -44,15 +44,7 @@ public class Training extends SportsEvent implements Serializable {
         return eventDate.get(Calendar.WEEK_OF_YEAR);
     }*/
 
-    public String getTrainingDateAsString() {
-        String dateString = null;
-        if (eventDate != null) {
-            DateFormat sdf = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.GERMANY);
-            dateString = sdf.format(eventDate.getTime());
-        }
-        return dateString;
-    }
-   
+  
 
     /**
      * @return the trainingDay (Mo. - Fr.)
