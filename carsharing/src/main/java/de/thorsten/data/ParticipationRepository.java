@@ -11,8 +11,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.Team;
 import java.util.Date;
 import java.util.logging.Logger;
+import javax.persistence.Query;
 import javax.persistence.TemporalType;
 import javax.persistence.criteria.Root;
 
@@ -54,6 +56,14 @@ public class ParticipationRepository {
         log.info("Getting all training participations for = " + curDate + "...");
         return em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate >= :curDate order by p.trainingItem.eventDate, p.player.firstname, p.player.name")
                 .setParameter("curDate", curDate, TemporalType.DATE).getResultList();
+    }
+
+    public List<Participation> getAllForSpecificDateAndTeamOrderedByName(Date curDate, Team curTeam) {
+        log.info("Getting all participations for = " + curDate + " team " + curTeam);
+        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate = :curDate AND :curTeam MEMBER OF p.trainingItem.teams AND :curTeam = p.player.team order by p.trainingItem.eventDate, p.player.firstname, p.player.name");
+        q.setParameter("curDate", curDate, TemporalType.DATE);
+        q.setParameter("curTeam", curTeam);
+        return q.getResultList();
     }
 
 }

@@ -8,12 +8,14 @@ package de.thorsten.model;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -54,6 +56,9 @@ public abstract class SportsEvent implements Serializable {
 
     @NotNull
     protected Date eventDate;
+    
+    @OneToMany
+    private List<Team> teams;
 
     /**
      * @return the timeFrom
@@ -193,6 +198,20 @@ public abstract class SportsEvent implements Serializable {
     @Override
     public String toString() {
         return "SportsEvent{" + "id=" + id + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo + ", pickUpTimeSource=" + pickUpTimeSource + ", pickUpTimeTarget=" + pickUpTimeTarget + ", location=" + location + ", pickUpLocationSource=" + pickUpLocationSource + ", pickUpLocationTarget=" + pickUpLocationTarget + ", eventDate=" + eventDate + '}';
+    }
+
+    /**
+     * @return the teams
+     */
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    /**
+     * @param teams the teams to set
+     */
+    public void setTeams(List<Team> teams) {
+        this.teams = teams;
     }
 
 }

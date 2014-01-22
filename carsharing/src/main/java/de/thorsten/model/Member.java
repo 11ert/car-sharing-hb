@@ -51,8 +51,8 @@ public class Member implements Serializable {
     @Size(min = 0, max = 25)
     private String city;
 
-    
-    private String team; 
+    @OneToOne
+    private Team team; 
     
     public Long getId() {
         return id;
@@ -132,14 +132,14 @@ public class Member implements Serializable {
     /**
      * @return the team
      */
-    public String getTeam() {
+    public Team getTeam() {
         return team;
     }
 
     /**
      * @param team the team to set
      */
-    public void setTeam(String team) {
+    public void setTeam(Team team) {
         this.team = team;
     }
 }

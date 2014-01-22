@@ -7,6 +7,7 @@ import java.util.List;
 
 import de.thorsten.model.Participation;
 import de.thorsten.model.SportsEvent;
+import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
@@ -34,6 +35,9 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     private ParticipationRepository participationRepository;
+    
+    @Inject
+    private TeamRepository teamRepository;
 
     @Inject
     SportsEventRepository sportsEventRepository;
@@ -46,6 +50,8 @@ public class ParticipationListProducer implements Serializable {
     private Date sportEventDate;
 
     private SportsEvent selectedSportsEvent;
+    
+    private Team selectedTeam;
 
     private int numberOfParticipators;
 
@@ -90,7 +96,14 @@ public class ParticipationListProducer implements Serializable {
     public void sportEventDateChanged(ValueChangeEvent event) {
         if (event.getNewValue() != null) {
             sportEventDate = (Date) event.getNewValue();
-            retrieveAllParticipatorsForSpecificDate();
+            
+            // Neu!
+            // 1. events für datum ermitteln und teamermitteln
+            // 3. dann erst teilnmehmer
+            retrieveAllParticipatorsForSelectedDateAndTeam();
+            
+            
+           // retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
             updateSelectedSportsEvent(sportEventDate);
         }
@@ -124,6 +137,16 @@ public class ParticipationListProducer implements Serializable {
             log.info("sportEventDate is null");
         }
     }
+    
+    public void retrieveAllParticipatorsForSelectedDateAndTeam() {
+        log.info("retrieveAllParticipatorsForSelectedDateAndTeam()");
+        if ((sportEventDate != null) && (this.selectedTeam != null)) {
+            participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(sportEventDate, selectedTeam);
+            calculateParticipationAttributes();
+        } else {
+            log.warning("sportEventDate or selectedTeam is null");
+        }
+    }
 
     /**
      *
@@ -131,7 +154,8 @@ public class ParticipationListProducer implements Serializable {
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         //retrieveAllParticipators();
-        retrieveAllParticipatorsForSpecificDate();
+        retrieveAllParticipatorsForSelectedDateAndTeam();
+        //retrieveAllParticipatorsForSpecificDate();
     }
 
     private void calculateParticipationAttributes() {
@@ -194,7 +218,12 @@ public class ParticipationListProducer implements Serializable {
 
     @PostConstruct
     public void initializeSelectedSportsEvent() {
-        log.info("initializeSelectedSportsEvent()");
+        
+        // todo: Mock
+        selectedTeam = teamRepository.findById(new Long(1)); // todo!!!!
+        
+        log.info("***Selected Team zum Testen = " + selectedTeam.toString());
+        
         List<SportsEvent> sportEvents;
         sportEvents = sportsEventRepository.findAllGeDate(new Date());
         if (sportEvents == null) {
@@ -204,7 +233,8 @@ public class ParticipationListProducer implements Serializable {
         } else {
             selectedSportsEvent = sportEvents.get(0);
             sportEventDate = selectedSportsEvent.getEventDate();
-            retrieveAllParticipatorsForSpecificDate();
+            //retrieveAllParticipatorsForSpecificDate();
+            retrieveAllParticipatorsForSelectedDateAndTeam();
             calculateParticipationAttributes();
             determineSportEventType();
         }
@@ -232,5 +262,19 @@ public class ParticipationListProducer implements Serializable {
             sportEventType = GAME;
         }
 
+    }
+
+    /**
+     * @return the selectedTeam
+     */
+    public Team getSelectedTeam() {
+        return selectedTeam;
+    }
+
+    /**
+     * @param selectedTeam the selectedTeam to set
+     */
+    public void setSelectedTeam(Team selectedTeam) {
+        this.selectedTeam = selectedTeam;
     }
 }
