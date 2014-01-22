@@ -10,12 +10,14 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -57,7 +59,7 @@ public abstract class SportsEvent implements Serializable {
     @NotNull
     protected Date eventDate;
     
-    @OneToMany
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Team> teams;
 
     /**

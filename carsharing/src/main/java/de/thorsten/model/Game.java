@@ -5,6 +5,7 @@
  */
 package de.thorsten.model;
 
+import java.io.Serializable;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,7 +19,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 //@Table(uniqueConstraints = @UniqueConstraint(columnNames = "eventDate"))
 //@DiscriminatorValue("G")
-public class Game extends SportsEvent {
+public class Game extends SportsEvent implements Serializable {
     
     private String opponent;
     

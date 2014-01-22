@@ -16,6 +16,7 @@
  */
 package de.thorsten.test;
 
+import de.thorsten.data.MemberRepository;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.logging.Logger;
@@ -25,8 +26,10 @@ import javax.inject.Inject;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import de.thorsten.model.Member;
+import de.thorsten.model.Team;
 import de.thorsten.service.MemberRegistration;
 import de.thorsten.util.Resources;
+import junit.framework.Assert;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -36,10 +39,11 @@ import org.junit.runner.RunWith;
 
 @RunWith(Arquillian.class)
 public class MemberRegistrationTest {
+
     @Deployment
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
-                .addClasses(Member.class, MemberRegistration.class, Resources.class)
+                .addClasses(Member.class, MemberRegistration.class, Resources.class, Team.class, MemberRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 // Deploy our test datasource
@@ -50,17 +54,48 @@ public class MemberRegistrationTest {
     MemberRegistration memberRegistration;
 
     @Inject
+    MemberRepository memberRepository;
+
+    @Inject
     Logger log;
 
     @Test
     public void testRegister() throws Exception {
         Member newMember = new Member();
-        newMember.setName("Jane Doe");
+        newMember.setName("Jane");
         newMember.setEmail("jane@mailinator.com");
         newMember.setPhoneNumber("2125551234");
+        Team newTeam = new Team();
+        newTeam.setId(new Long(1));
+        newTeam.setLongName("First team");
+        newTeam.setShortName("1. Team");
         memberRegistration.register(newMember);
         assertNotNull(newMember.getId());
         log.info(newMember.getName() + " was persisted with id " + newMember.getId());
+        
+        newMember = new Member();
+        newMember.setName("Tarzan");
+        newMember.setEmail("tarzan@mailinator.com");
+        newMember.setPhoneNumber("4623764");
+        newTeam = new Team();
+        newTeam.setId(new Long(1));
+        newTeam.setLongName("Second team");
+        newTeam.setShortName("2. Team");
+        memberRegistration.register(newMember);
+        assertNotNull(newMember.getId());
+        log.info(newMember.getName() + " was persisted with id " + newMember.getId());
+        
+    }
+
+    @Test
+    public void testFindAll() throws Exception {
+        Assert.assertEquals(2, memberRepository.findAllOrderedByName().size());
+    }
+
+    @Test
+    public void testFindbyEMail() throws Exception {
+        Member member = memberRepository.findByEmail("jane@mailinator.com");
+        Assert.assertEquals("Jane", member.getName());
     }
 
 }
