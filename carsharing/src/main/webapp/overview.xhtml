@@ -68,10 +68,21 @@
                             <tr>
                                 <td align="center" width="45" height="18" style="background-color: green; color: white">Training</td>
                                 <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
+                                <td>                    
+                                    <h:selectOneListbox id="teamListbox" valueChangeListener="#{participationListProducer.teamChanged}" size="1" >
+                                        <f:selectItems value="#{teams}" 
+                                                       var="selectedTeam" 
+                                                       itemLabel="#{selectedTeam.shortName}"
+                                                       itemValue="#{selectedTeam.id}"
+                                                       />
+                                        <a4j:ajax event="change" render="trainingDate_output participation_table" />
+                                   </h:selectOneListbox>
+                                </td>
                             </tr>
                         </table>
                     </h:panelGrid>
                     <p/>
+
 
                 </rich:panel>
 
@@ -191,7 +202,7 @@
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                                         return false;" />
+                                        return false;" />
                 <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:popupPanel>
         </h:form>

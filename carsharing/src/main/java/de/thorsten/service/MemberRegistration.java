@@ -17,6 +17,7 @@
 package de.thorsten.service;
 
 import de.thorsten.model.Member;
+import de.thorsten.model.Team;
 
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
@@ -36,12 +37,20 @@ public class MemberRegistration {
 
     @Inject
     private Event<Member> memberEventSrc;
-
-    public void register(Member member) throws Exception {
+    
+    public Member register(Member member) throws Exception {
+        Member newMember = new Member();
         log.info("Registering " + member.getName());
-        em.persist(member);
+        newMember = (Member)em.merge(member);
         
         memberEventSrc.fire(member);
-        em.flush(); // TE
+        //em.flush(); // TE
+        return newMember;
+    }
+    
+    public void delete(Member member) throws Exception {
+        log.info("Removing" + member.getName());
+        em.remove(member);
+        
     }
 }

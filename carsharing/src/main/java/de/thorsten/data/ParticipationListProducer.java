@@ -35,7 +35,7 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     private ParticipationRepository participationRepository;
-    
+
     @Inject
     private TeamRepository teamRepository;
 
@@ -50,7 +50,7 @@ public class ParticipationListProducer implements Serializable {
     private Date sportEventDate;
 
     private SportsEvent selectedSportsEvent;
-    
+
     private Team selectedTeam;
 
     private int numberOfParticipators;
@@ -96,14 +96,30 @@ public class ParticipationListProducer implements Serializable {
     public void sportEventDateChanged(ValueChangeEvent event) {
         if (event.getNewValue() != null) {
             sportEventDate = (Date) event.getNewValue();
-            
+
             // Neu!
             // 1. events für datum ermitteln und teamermitteln
             // 3. dann erst teilnmehmer
             retrieveAllParticipatorsForSelectedDateAndTeam();
-            
-            
-           // retrieveAllParticipatorsForSpecificDate();
+
+            // retrieveAllParticipatorsForSpecificDate();
+            calculateParticipationAttributes();
+            updateSelectedSportsEvent(sportEventDate);
+        }
+    }
+
+    public void teamChanged(ValueChangeEvent event) {
+        if (event.getNewValue() != null) {
+            Long tmpId = Long.valueOf((String) event.getNewValue());
+            selectedTeam = teamRepository.findById(tmpId);
+            log.info("*** Neues Team = " + selectedTeam.toString());
+
+            // Neu!
+            // 1. events für datum ermitteln und teamermitteln
+            // 3. dann erst teilnmehmer
+            retrieveAllParticipatorsForSelectedDateAndTeam();
+
+            // retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
             updateSelectedSportsEvent(sportEventDate);
         }
@@ -137,11 +153,13 @@ public class ParticipationListProducer implements Serializable {
             log.info("sportEventDate is null");
         }
     }
-    
+
     public void retrieveAllParticipatorsForSelectedDateAndTeam() {
         log.info("retrieveAllParticipatorsForSelectedDateAndTeam()");
         if ((sportEventDate != null) && (this.selectedTeam != null)) {
+            log.info("...Team = " + selectedTeam.getShortName() + " , sportEventDate = " + sportEventDate);
             participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(sportEventDate, selectedTeam);
+            log.info("found " + participations.size() + " Participations");
             calculateParticipationAttributes();
         } else {
             log.warning("sportEventDate or selectedTeam is null");
@@ -178,13 +196,13 @@ public class ParticipationListProducer implements Serializable {
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
         numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable;
-        
+
         log.fine("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
         log.fine("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
         log.fine("Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
         log.fine("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
         log.fine("Calculated NumberOfParticipators = " + numberOfParticipators);
-        
+
     }
 
     /**
@@ -211,19 +229,20 @@ public class ParticipationListProducer implements Serializable {
             if (events.size() != 0) {
                 selectedSportsEvent = events.get(0);
                 determineSportEventType(); // todo: käse
-                log.info("found selected Sport Event " + selectedSportsEvent.getDateAsString());
+                log.info("found selected Sport Event " + selectedSportsEvent.toString());
             }
         }
     }
 
     @PostConstruct
     public void initializeSelectedSportsEvent() {
-        
+
         // todo: Mock
         selectedTeam = teamRepository.findById(new Long(1)); // todo!!!!
-        
-        log.info("***Selected Team zum Testen = " + selectedTeam.toString());
-        
+        if (selectedTeam != null) {
+            log.info("***Selected Team in PostConstruct = " + selectedTeam.toString());
+        }
+
         List<SportsEvent> sportEvents;
         sportEvents = sportsEventRepository.findAllGeDate(new Date());
         if (sportEvents == null) {

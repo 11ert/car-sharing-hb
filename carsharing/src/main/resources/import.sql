@@ -16,6 +16,7 @@ INSERT INTO `member` (`id`,`carsize`,`city`,`firstname`,`name`) VALUES (14,4,'Gr
 INSERT INTO `trainingday` (`id`,`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (1,3,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','18:00','19:55','17:00','18:30');
 INSERT INTO `trainingday` (`id`,`weekday`,`location`,`pickUpLocationSource`,`pickUpLocationTarget`,`pickUpTimeSource`,`pickUpTimeTarget`,`timeFrom`,`timeTo`) VALUES (2,4,'Grossauheim','Geschwister-Scholl Schule','Lindenauhalle','17:00','19:10','17:00','18:30');
 INSERT INTO `team` (`id`,`shortName`,`longName`), VALUES (1, `D1`,`D1 PreagBerg`);
+INSERT INTO `team` (`id`,`shortName`,`longName`), VALUES (2, `D2`,`D2 PreagBerg`);
 -- evtl. das hier ausführen!!!
 -- update hibernate_sequence set next_val = 20;
 

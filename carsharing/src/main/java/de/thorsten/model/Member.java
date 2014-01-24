@@ -20,7 +20,7 @@ import org.hibernate.validator.constraints.Email;
 @SuppressWarnings("serial")
 @Entity
 @XmlRootElement
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "email"))
+@Table
 public class Member implements Serializable {
 
     @Id

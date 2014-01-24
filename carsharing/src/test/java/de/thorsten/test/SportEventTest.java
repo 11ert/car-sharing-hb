@@ -1,23 +1,8 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
- * contributors by the @authors tag. See the copyright.txt in the
- * distribution for a full listing of individual contributors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package de.thorsten.test;
 
 import de.thorsten.controller.CreateNewTrainingController;
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.ParticipationRepository;
 import de.thorsten.data.TrainingDayRepository;
 import de.thorsten.data.TrainingRepository;
 import de.thorsten.model.Game;
@@ -34,6 +19,7 @@ import de.thorsten.model.SportsEvent;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.model.TrainingDay;
+import de.thorsten.service.MemberRegistration;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
@@ -46,6 +32,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -56,20 +43,22 @@ public class SportEventTest {
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClasses(SportsEvent.class,
-                CreateNewTrainingController.class,
-                Resources.class,
-                Training.class,
-                Team.class,
-                TrainingRepository.class,
-                TrainingDay.class,
-                TrainingDayRepository.class,
-                MemberRepository.class,
-                ParticipationService.class,
-                Participation.class,
-                TrainingService.class,
-                TeamService.class,
-                Member.class,
-                Game.class)
+                        CreateNewTrainingController.class,
+                        Resources.class,
+                        Training.class,
+                        Team.class,
+                        TrainingRepository.class,
+                        TrainingDay.class,
+                        TrainingDayRepository.class,
+                        MemberRepository.class,
+                        MemberRegistration.class,
+                        ParticipationService.class,
+                        Participation.class,
+                        TrainingService.class,
+                        TeamService.class,
+                        Member.class,
+                        Game.class,
+                        ParticipationRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 // Deploy our test datasource
@@ -86,12 +75,53 @@ public class SportEventTest {
     private TrainingService trainingService;
 
     @Inject
+    private ParticipationRepository participationRepository;
+
+    @Inject
+    private MemberRegistration memberRegistration;
+
+    @Inject
+    MemberRepository memberRepository;
+
+    @Inject
     private TeamService teamService;
+
+    private Training newTraining;
+
+    private Team firstTeam;
+
+    private Team secondTeam;
+
+    private Date eventDate;
+
+    private Member firstTeamMember;
+
+    private Member secondTeamMember;
+
+    @Before
+    public void initializeTestData() throws Exception {
+        log.info("*** initializeTestData()");
+        firstTeamMember = new Member();
+        firstTeamMember.setFirstname("first");
+        firstTeamMember.setName("teammember");
+        firstTeamMember.setTeam(firstTeam);
+        long newId = memberRegistration.register(firstTeamMember).getId();
+        Assert.assertEquals(firstTeamMember.getName(), memberRepository.findById(newId).getName());
+
+        secondTeamMember = new Member();
+        secondTeamMember.setFirstname("second");
+        secondTeamMember.setName("teammember");
+        secondTeamMember.setTeam(secondTeam);
+        memberRegistration.register(secondTeamMember);
+        newId = memberRegistration.register(firstTeamMember).getId();
+        Assert.assertEquals(firstTeamMember.getName(), memberRepository.findById(newId).getName());
+    }
 
     @Test
     public void testCreateTraining() throws Exception {
-        Training newTraining = new Training();
-        newTraining.setEventDate(new Date());
+        newTraining = new Training();
+        eventDate = new Date();
+        newTraining.setEventDate(eventDate);
         newTraining.setLocation("irgendwo");
         newTraining.setTimeFrom("10:00");
         newTraining.setTimeTo("12:00");
@@ -100,18 +130,17 @@ public class SportEventTest {
         newTraining.setPickUpTimeSource("09:00");
         newTraining.setPickUpTimeTarget("13:00");
 
-        Team firstTeam = new Team();
-        Team secondTeam = new Team();
+        firstTeam = new Team();
+        secondTeam = new Team();
 
-        firstTeam.setId(new Long(1));
         firstTeam.setShortName("first");
         firstTeam.setLongName("first team");
         teamService.update(firstTeam);
 
-        secondTeam.setId(new Long(2));
         secondTeam.setShortName("second");
         secondTeam.setLongName("second Team");
         teamService.update(secondTeam);
+        
         List teams = new ArrayList();
         teams.add(firstTeam);
         teams.add(secondTeam);
@@ -148,5 +177,7 @@ public class SportEventTest {
         log.info("Neues Training hat ID " + updatedTraining.getId() + " bekommen");
         Assert.assertEquals("irgendwo_2", trainingRepository.findById(updatedTraining.getId()).getLocation());
 
+        Assert.assertEquals(1, participationRepository.getAllForSpecificDateAndTeamOrderedByName(eventDate, firstTeam).size());
+        Assert.assertEquals(1, participationRepository.getAllForSpecificDateAndTeamOrderedByName(eventDate, secondTeam).size());
     }
 }
