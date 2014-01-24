@@ -6,6 +6,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:rich="http://richfaces.org/rich"
                 template="/WEB-INF/templates/default.xhtml">
     <ui:define name="content">
         <h:form id="reg">
@@ -40,13 +41,13 @@
                              value="#{newMember.carsize}" />
                 <h:message for="carsize" errorClass="invalid" />
 
-                <h:outputLabel for="team" value="Team:" />
+                <h:outputLabel value="Team:" />
                 <h:selectOneListbox id="teamListbox"  value="#{newMember.team}">
                     <f:converter converterId="TeamConverter" />
                     <f:selectItems value="#{teams}" 
                                    var="selectedTeam" 
                                    itemLabel="#{selectedTeam.shortName}"
-                                   itemValue="#{selectedTeam.id}"
+                                   itemValue="#{selectedTeam}"
                                    />
                 </h:selectOneListbox>
 
@@ -104,18 +105,16 @@
                 <f:facet name="header">Team</f:facet>
                     #{_member.team.longName}
             </h:column>
-            <h:column>
-                <f:facet name="header">Team</f:facet>
-                    #{_member.team}
-            </h:column>
-            <h:column>
+
+<!--            <h:column>
                 <f:facet name="header">REST URL</f:facet>
                 <a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
-            </h:column>
+            </h:column>-->
             <f:facet name="footer">
                 REST URL for all members: <a
                     href="#{request.contextPath}/rest/members">/rest/members</a>
             </f:facet>
-        </h:dataTable>
+        </h:dataTable>                
+        <rich:notifyMessages stayTime="2000" nonblocking="true" />
     </ui:define>
 </ui:composition>
