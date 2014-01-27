@@ -40,6 +40,16 @@ background-repeat: repeat-x;
 padding: 20px;
 }
 
+#news_side {
+    font-size: 0.9em;
+    width: 275px; 
+    float: left;
+    border: 0px;
+    background: #F1F1F1;
+    background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
+ background-repeat: repeat-x;
+}
+
 #aside ul {
     padding-left: 30px;
 }

@@ -76,7 +76,7 @@
                                                        itemValue="#{selectedTeam.id}"
                                                        />
                                         <a4j:ajax event="change" render="trainingDate_output participation_table" />
-                                   </h:selectOneListbox>
+                                    </h:selectOneListbox>
                                 </td>
                             </tr>
                         </table>
@@ -206,6 +206,17 @@
                 <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:popupPanel>
         </h:form>
+    </ui:define>
+
+    <ui:define name="news_side">
+        <rich:panel id="news_table" header="News" >
+
+            <rich:dataTable var="_news" value="#{news}" >
+                <rich:column style="border: ">
+                    #{_news.creationDate}: #{_news.text}
+                </rich:column> 
+            </rich:dataTable>
+        </rich:panel>
     </ui:define>
 
 </ui:composition>
