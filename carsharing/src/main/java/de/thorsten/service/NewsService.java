@@ -1,6 +1,5 @@
 package de.thorsten.service;
 
-import de.thorsten.model.Member;
 import de.thorsten.model.News;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -22,13 +21,14 @@ public class NewsService {
     @Inject
     private EntityManager em;
 
-        @Inject
+    @Inject
     private Event<News> newsEventSrc;
-        
+
     public News update(News news) throws Exception {
         log.info("Updating " + news);
         news.setCreationDate((new Date()));
-        newsEventSrc.fire(news);
-        return em.merge(news);
+        News newNews = em.merge(news);
+        newsEventSrc.fire(newNews);
+        return newNews;
     }
 }

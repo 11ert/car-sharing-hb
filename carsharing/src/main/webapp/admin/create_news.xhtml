@@ -6,17 +6,24 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/WEB-INF/templates/default.xhtml">
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
     <ui:define name="content">
         <h2>Bitte neue News hier eintragen:</h2>
         <h:form id="reg_news">
-            <h:outputLabel for="text" value="Text:" />
-            <h:inputText id="text" value="#{newNews.text}" size="50"/>
-
-            <h:commandButton id="register"
-                             action="#{newsController.register()}"
-                             value="Speichern" />
-
+            <h:panelGrid columns="2" columnClasses="titleCell">
+                <h:outputLabel for="text" value="Text:" />
+                <h:inputTextarea id="text" value="#{newNews.text}">
+                    <rich:placeholder value="Neuigkeiten hier eintragen..." />
+                </h:inputTextarea>
+                <h:outputLabel for="author" value="Autor:" />
+                <h:inputText id="author" value="#{newNews.author}" />            
+                <h:commandButton id="register"
+                                 action="#{newsController.register()}"
+                                 value="Speichern" />
+            </h:panelGrid>
         </h:form>
         <h2>Bisherige News:</h2>
         <h:panelGroup rendered="#{empty news}">
@@ -37,6 +44,12 @@
                 <f:facet name="header">Text</f:facet>
                     #{_news.text}
             </h:column>
+            <h:column>
+                <f:facet name="header">Autor</f:facet>
+                    #{_news.author}
+            </h:column>
         </h:dataTable>
+        <rich:notifyMessages stayTime="2000" nonblocking="true" />
+
     </ui:define>
 </ui:composition>

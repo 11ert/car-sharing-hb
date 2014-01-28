@@ -26,6 +26,8 @@ public class News {
     
     private String text;
     
+    private String author;
+    
     private Date creationDate;
 
     /**
@@ -72,6 +74,20 @@ public class News {
     
     public String getCreationDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(creationDate);
+    }
+
+    /**
+     * @return the author
+     */
+    public String getAuthor() {
+        return author;
+    }
+
+    /**
+     * @param author the author to set
+     */
+    public void setAuthor(String author) {
+        this.author = author;
     }
     
 }

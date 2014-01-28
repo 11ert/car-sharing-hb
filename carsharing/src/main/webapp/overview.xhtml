@@ -13,7 +13,6 @@
         <div>
             <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
         </div>
-
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -196,17 +195,24 @@
                                    execute="editPane"
                                    oncomplete="#{rich:component('editPane')}.hide();" />
                 <a4j:commandButton value="Abbruch" onclick="#{rich:component('editPane')}.hide();
-                                        return false;" />
+                                                         return false;" />
                 <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:popupPanel>
         </h:form>
     </ui:define>
 
     <ui:define name="news_side">
-        <h3 style="color: red">News:</h3>
-        <rich:dataTable var="_news" value="#{news}" style="border-top: 0px; border-left: 0px; border-right: 0px; width: 275px; max-width: 275px; background: transparent;" rows="5">
+        <h:panelGroup rendered="#{not empty news}">
+            <h3>News:</h3>
+        </h:panelGroup>
+        <hr/>
+        <rich:dataTable var="_news" value="#{news}" style="border-top: 0px; border-left: 0px; border-right: 0px; border-bottom: 0px; width: 275px; max-width: 275px; background: transparent;" rows="5" rendered="#{not empty news}">
             <rich:column style="border-width: 0px; margin-bottom: 20px; margin-right: 5px; background: transparent" width="20" headerClass="newsTextColumnWidth">
-                <h:outputText value="#{_news.creationDateAsFormattedString}: #{_news.text}"/>
+                <h:outputText value="am #{_news.creationDateAsFormattedString} " style="color: #666666;font-size: 0.85em;"/>
+                <h:outputText value="von #{_news.author}" rendered="#{not empty _news.author}" style="color: #666666; font-size: 0.85em;"/>
+                <h:outputText value=":" style="color: #666666; font-size: 0.85em;"/>
+                <br/>
+                <h:outputText style="color:#243446;" value="#{_news.text}"/>
             </rich:column>
         </rich:dataTable>
     </ui:define>

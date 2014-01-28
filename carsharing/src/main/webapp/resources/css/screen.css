@@ -35,18 +35,19 @@ box-shadow: 3px 3px 15px #d5d5d5;
     margin: 20px 0px;
     background: #F1F1F1;
     background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
-    background-repeat: repeat-x;
-    padding: 20px;
+background-repeat: repeat-x;
+padding: 20px;
 }
 
 #news_side {
     font-size: 0.9em;
     width: 275px; 
     float: left;
-    margin: 20px 0px;
-    background: #F1F1F1;
-    background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
-    background-repeat: repeat-x;
+/*    margin: 20px 0px;
+        background: #F1F1F1;
+        background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
+        background-repeat: repeat-x;
+    */
     padding-left: 20px;
     padding-right: 20px;
     padding-top: 5px;
@@ -242,3 +243,11 @@ text-align:left;
 }
 
 .newsTextColumnWidth {width:75px}
+
+.newsText {color: #8c8f91}
+.newsDate {
+    color: #666666;
+    font-size: 0.85em;
+}
+.newsAuthor {color: lightsteelblue; font-style: italic}
+
