@@ -6,6 +6,7 @@
 
 package de.thorsten.model;
 
+import de.thorsten.util.DateUtil;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -67,6 +68,10 @@ public class News {
      */
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+    
+    public String getCreationDateAsFormattedString() {
+        return DateUtil.getSelectedDateAsFormattedString(creationDate);
     }
     
 }

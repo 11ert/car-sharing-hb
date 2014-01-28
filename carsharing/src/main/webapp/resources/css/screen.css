@@ -33,21 +33,24 @@ box-shadow: 3px 3px 15px #d5d5d5;
     width: 275px; 
     float: left;
     margin: 20px 0px;
-    border: 1px solid #D5D5D5;
     background: #F1F1F1;
     background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
-background-repeat: repeat-x;
-padding: 20px;
+    background-repeat: repeat-x;
+    padding: 20px;
 }
 
 #news_side {
     font-size: 0.9em;
     width: 275px; 
     float: left;
-    border: 0px;
+    margin: 20px 0px;
     background: #F1F1F1;
     background-image: url(#{request.contextPath}/resources/gfx/asidebkg.png);
- background-repeat: repeat-x;
+    background-repeat: repeat-x;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 20px;
 }
 
 #aside ul {
@@ -226,3 +229,16 @@ text-align:left;
     font-size: smaller;
     font-weight: normal;
 }
+
+.newsTableGrid tr, .newsTableGrid td, .newsTableGrid th .newsTableGrid table {
+    border: transparent;
+    background: transparent;
+}
+
+.newsTable {
+    width: 275px;
+    background: transparent; 
+    border: transparent;
+}
+
+.newsTextColumnWidth {width:75px}

@@ -11,7 +11,7 @@
     <ui:define name="content">
         <h1>Handball Jugend Großkrotzenburg</h1>
         <div>
-<h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
+            <h3>Dies ist ein Portal um Fahrgemeinschaften zu bilden</h3> 
         </div>
 
         <h:outputStylesheet>
@@ -37,7 +37,7 @@
             }
         </h:outputStylesheet>
 
-<!--        <f:event listener="#{participationListProducer.initializeSelectedSportsEvent()}" type="preRenderView" />-->
+        <f:event listener="#{participationListProducer.initializeSelectedSportsEvent()}" type="preRenderView" />
 
         <h:form id="calendar_form">
             <h:panelGrid columns="2" >
@@ -203,14 +203,12 @@
     </ui:define>
 
     <ui:define name="news_side">
-        <rich:panel id="news_table" header="News" >
-
-            <rich:dataTable var="_news" value="#{news}" >
-                <rich:column style="border: ">
-                    #{_news.creationDate}: #{_news.text}
-                </rich:column> 
-            </rich:dataTable>
-        </rich:panel>
+        <h3 style="color: red">News:</h3>
+        <rich:dataTable var="_news" value="#{news}" style="border-top: 0px; border-left: 0px; border-right: 0px; width: 275px; max-width: 275px; background: transparent;" rows="5">
+            <rich:column style="border-width: 0px; margin-bottom: 20px; margin-right: 5px; background: transparent" width="20" headerClass="newsTextColumnWidth">
+                <h:outputText value="#{_news.creationDateAsFormattedString}: #{_news.text}"/>
+            </rich:column>
+        </rich:dataTable>
     </ui:define>
 
 </ui:composition>
