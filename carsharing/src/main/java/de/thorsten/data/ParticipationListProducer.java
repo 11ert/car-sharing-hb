@@ -18,9 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import javax.transaction.Transactional;
 
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
 import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
@@ -152,22 +150,20 @@ public class ParticipationListProducer implements Serializable {
 //    }
 
     public void retrieveAllParticipatorsForSelectedDateAndTeam() {
-        log.info("retrieveAllParticipatorsForSelectedDateAndTeam()");
+        log.fine("retrieveAllParticipatorsForSelectedDateAndTeam()");
 
         if ((getSportEventDate() != null) && (this.selectedTeam != null)) {
-            log.info("... for Team = " + selectedTeam.toString());
-            log.info("... and sportEventDate = " + getSportEventDate());
+            log.fine("... for Team = " + selectedTeam.toString());
+            log.fine("... and sportEventDate = " + getSportEventDate());
             participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(getSportEventDate(), selectedTeam);
-            log.info("found " + participations.size() + " Participations");
+            log.fine("found " + participations.size() + " Participations");
 
             // todo zum testen schleife durc participations und daranhängende Teams anzeigen!
-            log.info("********************************************************");
             for (Participation p : participations) {
-                log.info(p.toString());
-
-                log.info("SportEvent - teams");
+                log.fine(p.toString());
+                log.fine("SportEvent - teams");
                 for (Team t : p.getTrainingItem().getTeams()) {
-                    log.info("Team: " + t.toString());
+                    log.fine("Team: " + t.toString());
                 }
             }
         } else {
@@ -181,9 +177,8 @@ public class ParticipationListProducer implements Serializable {
      * @param participation
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
-    log.info("onParticipationListChanged() called");        //retrieveAllParticipators();
+    log.fine("onParticipationListChanged() called");        
         retrieveAllParticipatorsForSelectedDateAndTeam();
-        //retrieveAllParticipatorsForSpecificDate();
     }
 
     private void calculateParticipationAttributes() {
@@ -238,20 +233,19 @@ public class ParticipationListProducer implements Serializable {
         selectedTeam = teamRepository.findAll().get(0);
 
         if (selectedTeam != null) {
-            log.info("***Selected Team in PostConstruct = " + selectedTeam.toString());
+            log.fine("***Selected Team in PostConstruct = " + selectedTeam.toString());
         }
         // Als Datum das aktuelle datum verwenden
         List<SportsEvent> sportEvents;
         sportEvents = sportsEventRepository.findAllGeDateAndForSpecificTeam(new Date(), selectedTeam);
         if (sportEvents == null) {
-            log.info("initializte() - Training null");
+            log.fine("initializte() - Training null");
         } else if (sportEvents.size() == 0) {
-            log.info("initialize() - Training null");
+            log.fine("initialize() - Training null");
         } else {
             // 1. SportEvent nehmen
             selectedSportsEvent = sportEvents.get(0);
             sportEventDate = selectedSportsEvent.getEventDate();
-            //retrieveAllParticipatorsForSpecificDate();
             retrieveAllParticipatorsForSelectedDateAndTeam();
             calculateParticipationAttributes();
             determineSportEventType();

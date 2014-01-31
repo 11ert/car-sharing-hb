@@ -30,6 +30,7 @@ public class News {
     
     private Date creationDate;
 
+    private boolean activ = true;
     /**
      * @return the id
      */
@@ -88,6 +89,20 @@ public class News {
      */
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    /**
+     * @return the activ
+     */
+    public boolean isActiv() {
+        return activ;
+    }
+
+    /**
+     * @param activ the activ to set
+     */
+    public void setActiv(boolean activ) {
+        this.activ = activ;
     }
     
 }

@@ -15,7 +15,7 @@
         <h:form id="reg_news">
             <h:panelGrid columns="2" columnClasses="titleCell">
                 <h:outputLabel for="text" value="Text:" />
-                <h:inputTextarea id="text" value="#{newNews.text}">
+                <h:inputTextarea rows="4" cols="50" id="text" value="#{newNews.text}" >
                     <rich:placeholder value="Neuigkeiten hier eintragen..." />
                 </h:inputTextarea>
                 <h:outputLabel for="author" value="Autor:" />
@@ -25,30 +25,47 @@
                                  value="Speichern" />
             </h:panelGrid>
         </h:form>
+        
+        <a href="/carsharing/overview.jsf">Übersicht</a>
+        
         <h2>Bisherige News:</h2>
-        <h:panelGroup rendered="#{empty news}">
+        <h:panelGroup rendered="#{empty allNews}">
             <em>Keine bisherigen News</em>
         </h:panelGroup>
-        <h:dataTable var="_news" value="#{news}"
-                     rendered="#{not empty news}"
-                     styleClass="simpletablestyle">
-            <h:column>
-                <f:facet name="header">Id</f:facet>
-                    #{_news.id}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Erstellungsdatum</f:facet>
-                    #{_news.creationDate}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Text</f:facet>
-                    #{_news.text}
-            </h:column>
-            <h:column>
-                <f:facet name="header">Autor</f:facet>
-                    #{_news.author}
-            </h:column>
-        </h:dataTable>
+        <h:form id="news_list">
+            <h:dataTable var="_news" value="#{allNews}"
+                         rendered="#{not empty allNews}"
+                         styleClass="simpletablestyle"
+                         id="news_table"
+                         >
+                <h:column>
+                    <f:facet name="header">Id</f:facet>
+                        #{_news.id}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Erstellungsdatum</f:facet>
+                        #{_news.creationDate}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Text</f:facet>
+                        #{_news.text}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Autor</f:facet>
+                        #{_news.author}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">Sichtbar?</f:facet>
+                    <h:selectBooleanCheckbox value="#{_news.activ}" readonly="true" onclick="return false"/>
+                </h:column>
+                
+                <h:column>
+                    <h:commandLink value="Sichtbarkeit ändern" action="#{newsController.setInactive(_news)}"/>
+                </h:column>            
+            </h:dataTable>
+            
+        </h:form>
         <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
     </ui:define>

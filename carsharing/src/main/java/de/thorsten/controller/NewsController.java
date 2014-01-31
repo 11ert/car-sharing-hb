@@ -10,6 +10,7 @@ import javax.inject.Named;
 
 import de.thorsten.model.News;
 import de.thorsten.service.NewsService;
+import java.util.logging.Logger;
 
 @Model
 public class NewsController {
@@ -19,11 +20,14 @@ public class NewsController {
 
     @Inject
     private NewsService newsService;
+    
+    @Inject
+    private Logger log;
 
     @Produces
     @Named
     private News newNews;
-
+    
     @PostConstruct
     public void initNewNews() {
         newNews = new News();
@@ -32,12 +36,29 @@ public class NewsController {
     public void register() throws Exception {
         try {
             newsService.update(newNews);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "Registered!", "Registration successful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "News angelegt!", "News erfolgreich angelegt");
             facesContext.addMessage(null, m);
             initNewNews();
         } catch (Exception e) {
             String errorMessage = getRootErrorMessage(e);
-            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "Registration unsuccessful");
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "News konnte nicht angelegt werden");
+            facesContext.addMessage(null, m);
+        }
+    }
+
+    public void setInactive(News editedNews) throws Exception {
+        log.fine("editedNews= " + editedNews);
+        try {
+            if (editedNews.isActiv())
+                editedNews.setActiv(false);
+            else
+                editedNews.setActiv(true);
+            newsService.update(editedNews);
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "News geändert!", "Änderung erfolgreich");
+            facesContext.addMessage(null, m);
+        } catch (Exception e) {
+            String errorMessage = getRootErrorMessage(e);
+            FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR, errorMessage, "News konnte nicht geändert werden");
             facesContext.addMessage(null, m);
         }
     }
@@ -61,4 +82,5 @@ public class NewsController {
         return errorMessage;
     }
 
+    
 }

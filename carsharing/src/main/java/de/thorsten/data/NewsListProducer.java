@@ -16,27 +16,36 @@ import javax.enterprise.event.Reception;
 public class NewsListProducer {
 
     @Inject
-    private NewsRepository teamRepository;
+    private NewsRepository newsRepository;
 
     @Inject 
     private Logger log;
     
-    private List<News> teams;
+    private List<News> news;
 
+    private List<News> allNews;
+    
     @Produces
     @Named
     public List<News> getNews() {
-        return teams;
+        return news;
+    }
+    
+    @Produces
+    @Named
+    public List<News> getAllNews() {
+        return allNews;
     }
     
     public void onNewsListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final News news) {
         log.fine("*** onNewsListChanged() called!");
-        retrieveAllNews();
+        loadAll();
     }
 
     @PostConstruct
-    public void retrieveAllNews() {
-        log.fine("*** retrieveAllNews called!");
-        teams = teamRepository.findAll();
+    public void loadAll() {
+        log.fine("*** loadAll called!");
+        news = newsRepository.findAllActivNews();
+        allNews = newsRepository.findAll();
     }
 }
