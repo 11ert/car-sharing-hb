@@ -2,15 +2,15 @@ package de.thorsten.data;
 
 import de.thorsten.model.News;
 import java.util.Date;
+import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.List;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 @ApplicationScoped
 public class NewsRepository {
@@ -33,7 +33,7 @@ public class NewsRepository {
     }
 
     public List<News> findAllActivNews() {
-        Query q = em.createQuery("SELECT t FROM News t WHERE t.activ = TRUE order by t.creationDate");
+        Query q = em.createQuery("SELECT t FROM News t WHERE t.activ = TRUE order by t.creationDate DESC");
         return q.getResultList();
     }
 

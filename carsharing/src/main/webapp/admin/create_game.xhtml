@@ -51,8 +51,19 @@
                 <p></p>
                 <a4j:commandButton value="Spiel speichern" action="#{gameController.createParticipationsForNextDate()}" render="gameCalendar"/>
                 <rich:notifyMessages stayTime="2000" nonblocking="true" />
-
+                <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
                 <h:panelGrid columns="3" columnClasses="titleCell">
+
+                    <h:outputLabel for="team" value="Team:" />
+                    <h:selectOneListbox id="teamListbox" valueChangeListener="#{gameController.teamChanged}" size="1" >
+                        <f:selectItems value="#{teams}" 
+                                       var="teamForGame" 
+                                       itemLabel="#{teamForGame.shortName}"
+                                       itemValue="#{teamForGame.id}"
+                                       />
+                    </h:selectOneListbox>
+                    <h:message for="team" errorClass="invalid" />
+
                     <h:outputLabel for="opponent" value="Gegner:" />
                     <h:inputText id="opponent" value="#{newGame.opponent}" />
                     <h:message for="opponent" errorClass="invalid" />
@@ -62,12 +73,12 @@
                                  value="#{newGame.location}" />
                     <h:message for="location" errorClass="invalid" />
 
-                    <h:outputLabel for="timeFrom" value="Treffpunkt um:" />
+                    <h:outputLabel for="timeFrom" value="Von:" />
                     <h:inputText id="timeFrom"
                                  value="#{newGame.timeFrom}" />
                     <h:message for="timeFrom" errorClass="invalid" />
 
-                    <h:outputLabel for="timeTo" value="Spielende:" />
+                    <h:outputLabel for="timeTo" value="Bis:" />
                     <h:inputText id="timeTo"
                                  value="#{newGame.timeTo}" />
                     <h:message for="timeTo" errorClass="invalid" />
@@ -90,7 +101,7 @@
                     <h:inputText id="pickUpLocationTarget"
                                  value="#{newGame.pickUpLocationTarget}" />
                     <h:message for="pickUpLocationTarget" errorClass="invalid" />
-           </h:panelGrid>
+                </h:panelGrid>
 
 
             </rich:panel>

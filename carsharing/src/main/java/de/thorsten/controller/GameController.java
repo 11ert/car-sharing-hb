@@ -1,13 +1,16 @@
 package de.thorsten.controller;
 
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.TeamListProducer;
+import de.thorsten.data.TeamRepository;
 import de.thorsten.model.Game;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
-import de.thorsten.model.Training;
+import de.thorsten.model.Team;
 import de.thorsten.service.GameService;
 import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -47,15 +50,27 @@ public class GameController implements Serializable {
     private Date nextDate;
 
     private List<Member> initialMembers;
+    
+    private Team teamForGame;
+    
+    private List<Team> listOfTeamsForTheGame = new ArrayList();
 
+    @Inject
+    private TeamRepository teamRepository;
+    
+    @Inject
+    private TeamListProducer teamListProducer;
+            
+    
     @Produces
     @Named
     private Game newGame;
 
     @PostConstruct
-    public void loadMembers() {
+    public void load() {
         newGame = new Game();
-
+        teamForGame = teamListProducer.getTeams().get(0);
+        listOfTeamsForTheGame.add(teamForGame);
         initialMembers = memberRepository.findAllOrderedByName();
         if (initialMembers != null) {
             log.info(initialMembers.size() + " initial Members loaded.");
@@ -80,6 +95,7 @@ public class GameController implements Serializable {
     public void createParticipationsForNextDate() {
 
         newGame.setEventDate(nextDate);
+        newGame.setTeams(listOfTeamsForTheGame);
 
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Spiel konnte nicht gespeichert werden !");
@@ -142,5 +158,15 @@ public class GameController implements Serializable {
     public void setInitialMembers(List<Member> initialMembers) {
         this.initialMembers = initialMembers;
     }
-
+    
+    public void teamChanged(ValueChangeEvent event) {
+        log.info("teamChanged()");
+        listOfTeamsForTheGame.clear();
+        if (event.getNewValue() != null) {
+            Long tmpId = Long.valueOf((String) event.getNewValue());
+            teamForGame = teamRepository.findById(tmpId);
+            listOfTeamsForTheGame.add(teamForGame);
+            log.info("...to new Team = " + teamForGame.toString());
+        }
+    }
 }

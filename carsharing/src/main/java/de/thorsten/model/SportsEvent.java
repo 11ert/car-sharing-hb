@@ -17,7 +17,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -60,7 +59,7 @@ public abstract class SportsEvent implements Serializable {
     @NotNull
     protected Date eventDate;
 
-    @OneToMany (fetch=FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Team> teams;
 
     /**
