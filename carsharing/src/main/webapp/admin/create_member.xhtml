@@ -40,9 +40,9 @@
                 <h:inputText id="carsize"
                              value="#{newMember.carsize}" />
                 <h:message for="carsize" errorClass="invalid" />
-
+<!-- todo: Mehrere Teams auswählen lassen
                 <h:outputLabel value="Team:" />
-                <h:selectOneListbox id="teamListbox"  value="#{newMember.team}">
+                <h:selectOneListbox id="teamListbox"  value="#{newMember.teams}">
                     <f:converter converterId="TeamConverter" />
                     <f:selectItems value="#{teams}" 
                                    var="selectedTeam" 
@@ -50,7 +50,7 @@
                                    itemValue="#{selectedTeam}"
                                    />
                 </h:selectOneListbox>
-
+-->
             </h:panelGrid>
 
             <p>
@@ -101,19 +101,22 @@
                     #{_member.carsize}
             </h:column>
 
-            <h:column>
+<!--    
+todo: Liste der zugewiesenen Teams anzeigen
+<h:column>
                 <f:facet name="header">Team</f:facet>
                     #{_member.team.longName}
-            </h:column>
+            </h:column>-->
 
 <!--            <h:column>
                 <f:facet name="header">REST URL</f:facet>
                 <a href="#{request.contextPath}/rest/members/#{_member.id}">/rest/members/#{_member.id}</a>
-            </h:column>-->
+            </h:column>
             <f:facet name="footer">
                 REST URL for all members: <a
                     href="#{request.contextPath}/rest/members">/rest/members</a>
             </f:facet>
+-->
         </h:dataTable>                
         <rich:notifyMessages stayTime="2000" nonblocking="true" />
     </ui:define>

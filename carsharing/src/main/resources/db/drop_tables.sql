@@ -1,0 +1,9 @@
+drop table sportsevent_team;
+drop table participation;
+drop table member_team;
+drop table sportsevent;
+drop table member;
+drop table team;
+drop table trainingday;
+drop table news;
+drop table hibernate_sequence;

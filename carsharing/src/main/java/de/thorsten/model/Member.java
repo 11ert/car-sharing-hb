@@ -1,15 +1,18 @@
 package de.thorsten.model;
 
 import java.io.Serializable;
+import java.util.List;
+import javax.persistence.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -52,9 +55,6 @@ public class Member implements Serializable {
     @Size(min = 0, max = 25)
     private String city;
 
-    @OneToOne
-    private Team team; 
-    
     public Long getId() {
         return id;
     }
@@ -130,17 +130,5 @@ public class Member implements Serializable {
         this.city = city;
     }
 
-    /**
-     * @return the team
-     */
-    public Team getTeam() {
-        return team;
-    }
-
-    /**
-     * @param team the team to set
-     */
-    public void setTeam(Team team) {
-        this.team = team;
-    }
+  
 }

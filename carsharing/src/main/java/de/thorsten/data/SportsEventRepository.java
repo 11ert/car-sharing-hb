@@ -1,6 +1,7 @@
 package de.thorsten.data;
 
 import de.thorsten.model.SportsEvent;
+import de.thorsten.model.Team;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -36,15 +37,17 @@ public class SportsEventRepository {
         return em.createQuery(criteria).getResultList();
     }
 
-    public List<SportsEvent> findByDate(Date eventDate) {
-        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate = :eventDate");
+    public List<SportsEvent> findByDateAndTeam(Date eventDate, Team curTeam) {
+        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate = :eventDate AND :curTeam in elements(t.teams)");
         q.setParameter("eventDate", eventDate, TemporalType.DATE);
+        q.setParameter("curTeam", curTeam);
         return q.getResultList();
     }
     
-    public List<SportsEvent> findAllGeDate(Date eventDate) {
-        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate >= :eventDate");
+    public List<SportsEvent> findAllGeDateAndForSpecificTeam(Date eventDate, Team curTeam) {
+        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate >= :eventDate AND :curTeam in elements(t.teams)");
         q.setParameter("eventDate", eventDate, TemporalType.DATE);
+        q.setParameter("curTeam", curTeam);
         return q.getResultList();
     }
 

@@ -36,7 +36,7 @@
             }
         </h:outputStylesheet>
 
-        <f:event listener="#{participationListProducer.initializeSelectedSportsEvent()}" type="preRenderView" />
+   <!--     <f:event listener="#{participationListProducer.initialize()}" type="preRenderView" /> -->
 
         <h:form id="calendar_form">
             <h:panelGrid columns="2" >
@@ -75,9 +75,7 @@
                         </table>
                     </h:panelGrid>
                     <p/>
-
-
-                </rich:panel>
+               </rich:panel>
 
                 <rich:panel id="trainingDate_output">
                     <h:outputText style="font-size: small;font-weight: bold;"

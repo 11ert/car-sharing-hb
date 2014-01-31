@@ -1,5 +1,6 @@
 package de.thorsten.controller;
 
+import de.thorsten.data.TeamListProducer;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -23,7 +24,7 @@ public class MemberController {
 
     @Inject
     private MemberRegistration memberRegistration;
-
+    
     @Produces
     @Named
     private Member newMember;

@@ -3,6 +3,7 @@ package de.thorsten.test;
 import de.thorsten.controller.CreateNewTrainingController;
 import de.thorsten.data.MemberRepository;
 import de.thorsten.data.ParticipationRepository;
+import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingDayRepository;
 import de.thorsten.data.TrainingRepository;
 import de.thorsten.model.Game;
@@ -26,6 +27,7 @@ import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import junit.framework.Assert;
 import org.jboss.shrinkwrap.api.Archive;
@@ -53,6 +55,7 @@ public class SportEventTest {
                         MemberRepository.class,
                         MemberRegistration.class,
                         ParticipationService.class,
+                        TeamRepository.class,
                         Participation.class,
                         TrainingService.class,
                         TeamService.class,
@@ -104,15 +107,35 @@ public class SportEventTest {
         firstTeamMember = new Member();
         firstTeamMember.setFirstname("first");
         firstTeamMember.setName("teammember");
-        firstTeamMember.setTeam(firstTeam);
+        List<Team> teams = new LinkedList();
+        
+        firstTeam = new Team();
+        firstTeam.setLongName("Team1");
+        firstTeam.setShortName("T1");
+        
+        teamService.update(firstTeam);
+        
+        secondTeam = new Team();
+        secondTeam.setLongName("Team2");
+        secondTeam.setShortName("T2");
+        
+        teamService.update(secondTeam);
+        
+        teams.add(firstTeam);
+        
+        firstTeamMember.setTeams(teams);
         long newId = memberRegistration.register(firstTeamMember).getId();
         Assert.assertEquals(firstTeamMember.getName(), memberRepository.findById(newId).getName());
 
         secondTeamMember = new Member();
         secondTeamMember.setFirstname("second");
         secondTeamMember.setName("teammember");
-        secondTeamMember.setTeam(secondTeam);
+        teams = new LinkedList();
+        teams.add(secondTeam);
+
+        secondTeamMember.setTeams(teams);
         memberRegistration.register(secondTeamMember);
+        
         newId = memberRegistration.register(firstTeamMember).getId();
         Assert.assertEquals(firstTeamMember.getName(), memberRepository.findById(newId).getName());
     }

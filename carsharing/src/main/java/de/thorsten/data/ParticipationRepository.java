@@ -59,8 +59,10 @@ public class ParticipationRepository {
     }
 
     public List<Participation> getAllForSpecificDateAndTeamOrderedByName(Date curDate, Team curTeam) {
-        log.info("Getting all participations for = " + curDate + " team " + curTeam.getShortName());
-        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate = :curDate AND :curTeam MEMBER OF p.trainingItem.teams AND :curTeam = p.player.team order by p.trainingItem.eventDate, p.player.firstname, p.player.name");
+        log.info("Getting all participations for = " + curDate + " team " + curTeam.toString());
+//        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate = :curDate AND :curTeam MEMBER OF p.trainingItem.teams order by p.trainingItem.eventDate, p.player.firstname, p.player.name");
+        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem.eventDate = :curDate AND :curTeam in elements(p.trainingItem.teams) order by p.trainingItem.eventDate, p.player.firstname, p.player.name");
+
         q.setParameter("curDate", curDate, TemporalType.DATE);
         q.setParameter("curTeam", curTeam);
         return q.getResultList();

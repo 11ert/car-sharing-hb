@@ -102,11 +102,6 @@ public class Participation implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "Participation{" + "id=" + id + ", player=" + player + ", trainingItem=" + trainingItem + ", participating=" + participating + ", notParticipating=" + notParticipating + ", drivingBack=" + drivingBack + ", drivingForth=" + drivingForth + ", lastChanged=" + lastChanged + '}';
-    }
-
    
     /**
      * @return the player
@@ -215,6 +210,11 @@ public class Participation implements Serializable {
      */
     public void setNotParticipating(boolean notParticipating) {
         this.notParticipating = notParticipating;
+    }
+
+    @Override
+    public String toString() {
+        return "Participation{" + "log=" + log + ", id=" + id + ", player=" + player + ", trainingItem=" + trainingItem + ", participating=" + participating + ", notParticipating=" + notParticipating + ", drivingBack=" + drivingBack + ", drivingForth=" + drivingForth + ", lastChanged=" + lastChanged + '}';
     }
 
 }

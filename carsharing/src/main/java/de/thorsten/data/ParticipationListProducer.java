@@ -20,6 +20,7 @@ import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
+import javax.transaction.Transactional;
 
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
 import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
@@ -89,14 +90,13 @@ public class ParticipationListProducer implements Serializable {
         return participations;
     }
 
-    public void setSportEventDate(Date x) {
-        sportEventDate = x;
-    }
+  
 
     public void sportEventDateChanged(ValueChangeEvent event) {
+        log.info("sportEventDateChanged");
         if (event.getNewValue() != null) {
-            sportEventDate = (Date) event.getNewValue();
-
+            this.sportEventDate = ((Date) event.getNewValue());
+            log.info("...to " + sportEventDate);
             // Neu!
             // 1. events für datum ermitteln und teamermitteln
             // 3. dann erst teilnmehmer
@@ -104,15 +104,16 @@ public class ParticipationListProducer implements Serializable {
 
             // retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
-            updateSelectedSportsEvent(sportEventDate);
+            updateSelectedSportsEvent();
         }
     }
 
     public void teamChanged(ValueChangeEvent event) {
+        log.info("teamChanged()");
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTeam = teamRepository.findById(tmpId);
-            log.info("*** Neues Team = " + selectedTeam.toString());
+            log.info("...to new Team = " + selectedTeam.toString());
 
             // Neu!
             // 1. events für datum ermitteln und teamermitteln
@@ -121,16 +122,12 @@ public class ParticipationListProducer implements Serializable {
 
             // retrieveAllParticipatorsForSpecificDate();
             calculateParticipationAttributes();
-            updateSelectedSportsEvent(sportEventDate);
+            updateSelectedSportsEvent();
         }
     }
 
-    public Date getSportEventDate() {
-        return sportEventDate;
-    }
-
     public String getSportEventDateAsFormattedString() {
-        return DateUtil.getSelectedDateAsFormattedString(sportEventDate);
+        return DateUtil.getSelectedDateAsFormattedString(getSportEventDate());
     }
 
     /**
@@ -138,32 +135,45 @@ public class ParticipationListProducer implements Serializable {
      * Initialisierung Es darf nur eine solch annotierte Methode geben!
      */
     //@PostConstruct
-    public void retrieveAllParticipators() {
-        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        participations = participationRepository.getAll();
-        calculateParticipationAttributes();
-    }
+//    public void retrieveAllParticipators() {
+//        FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+//        participations = participationRepository.getAll();
+//        calculateParticipationAttributes();
+//    }
 
     // todo: Nicht intuitiv - besser mit  Injection
-    public void retrieveAllParticipatorsForSpecificDate() {
-        if (sportEventDate != null) {
-            participations = participationRepository.getAllForSpecificDateOrderedByName(sportEventDate);
-            calculateParticipationAttributes();
-        } else {
-            log.info("sportEventDate is null");
-        }
-    }
+//    public void retrieveAllParticipatorsForSpecificDate() {
+//        if (sportEventDate != null) {
+//            participations = participationRepository.getAllForSpecificDateOrderedByName(sportEventDate);
+//            calculateParticipationAttributes();
+//        } else {
+//            log.info("sportEventDate is null");
+//        }
+//    }
 
     public void retrieveAllParticipatorsForSelectedDateAndTeam() {
         log.info("retrieveAllParticipatorsForSelectedDateAndTeam()");
-        if ((sportEventDate != null) && (this.selectedTeam != null)) {
-            log.info("...Team = " + selectedTeam.getShortName() + " , sportEventDate = " + sportEventDate);
-            participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(sportEventDate, selectedTeam);
+
+        if ((getSportEventDate() != null) && (this.selectedTeam != null)) {
+            log.info("... for Team = " + selectedTeam.toString());
+            log.info("... and sportEventDate = " + getSportEventDate());
+            participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(getSportEventDate(), selectedTeam);
             log.info("found " + participations.size() + " Participations");
-            calculateParticipationAttributes();
+
+            // todo zum testen schleife durc participations und daranhängende Teams anzeigen!
+            log.info("********************************************************");
+            for (Participation p : participations) {
+                log.info(p.toString());
+
+                log.info("SportEvent - teams");
+                for (Team t : p.getTrainingItem().getTeams()) {
+                    log.info("Team: " + t.toString());
+                }
+            }
         } else {
             log.warning("sportEventDate or selectedTeam is null");
         }
+        calculateParticipationAttributes();
     }
 
     /**
@@ -171,7 +181,7 @@ public class ParticipationListProducer implements Serializable {
      * @param participation
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
-        //retrieveAllParticipators();
+    log.info("onParticipationListChanged() called");        //retrieveAllParticipators();
         retrieveAllParticipatorsForSelectedDateAndTeam();
         //retrieveAllParticipatorsForSpecificDate();
     }
@@ -221,35 +231,24 @@ public class ParticipationListProducer implements Serializable {
         this.selectedSportsEvent = selectedSportsEvent;
     }
 
-    private void updateSelectedSportsEvent(Date selectedDate) {
-        log.info("updateSelectedSportsEvent()");
-        List<SportsEvent> events;
-        events = sportsEventRepository.findByDate(selectedDate);
-        if (events != null) {
-            if (events.size() != 0) {
-                selectedSportsEvent = events.get(0);
-                determineSportEventType(); // todo: käse
-                log.info("found selected Sport Event " + selectedSportsEvent.toString());
-            }
-        }
-    }
-
     @PostConstruct
-    public void initializeSelectedSportsEvent() {
+    public void initialize() {
+        log.info("initialize() called");
+        // Initial einfach erste Team nehmen        
+        selectedTeam = teamRepository.findAll().get(0);
 
-        // todo: Mock
-        selectedTeam = teamRepository.findById(new Long(1)); // todo!!!!
         if (selectedTeam != null) {
             log.info("***Selected Team in PostConstruct = " + selectedTeam.toString());
         }
-
+        // Als Datum das aktuelle datum verwenden
         List<SportsEvent> sportEvents;
-        sportEvents = sportsEventRepository.findAllGeDate(new Date());
+        sportEvents = sportsEventRepository.findAllGeDateAndForSpecificTeam(new Date(), selectedTeam);
         if (sportEvents == null) {
-            log.info("updateSelectedSportsEvent() - Training null");
+            log.info("initializte() - Training null");
         } else if (sportEvents.size() == 0) {
-            log.info("updateSelectedSportsEvent() - Training null");
+            log.info("initialize() - Training null");
         } else {
+            // 1. SportEvent nehmen
             selectedSportsEvent = sportEvents.get(0);
             sportEventDate = selectedSportsEvent.getEventDate();
             //retrieveAllParticipatorsForSpecificDate();
@@ -295,5 +294,32 @@ public class ParticipationListProducer implements Serializable {
      */
     public void setSelectedTeam(Team selectedTeam) {
         this.selectedTeam = selectedTeam;
+    }
+
+    private void updateSelectedSportsEvent() {
+        log.info("updateSelectedSportsEvent() with " +  sportEventDate + " and " + this.selectedTeam);
+        List<SportsEvent> events;
+        events = sportsEventRepository.findByDateAndTeam(sportEventDate, selectedTeam);
+        if (events != null) {
+            if (events.size() != 0) {
+                selectedSportsEvent = events.get(0);
+                determineSportEventType(); // todo: käse
+                log.info("found selected Sport Event " + selectedSportsEvent.toString());
+            }
+        }
+    }
+
+    /**
+     * @return the sportEventDate
+     */
+    public Date getSportEventDate() {
+        return sportEventDate;
+    }
+
+    /**
+     * @param sportEventDate the sportEventDate to set
+     */
+    public void setSportEventDate(Date sportEventDate) {
+        this.sportEventDate = sportEventDate;
     }
 }

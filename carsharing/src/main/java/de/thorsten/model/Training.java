@@ -23,10 +23,10 @@ public class Training extends SportsEvent implements Serializable {
     public Training() {
     }
 
-    public Training(Date date, List<Member> players, TrainingDay trainingDay) {
-        this.eventDate = date;
-        this.trainingDay = trainingDay;
-    }
+//    public Training(Date date, List<Member> players, TrainingDay trainingDay) {
+//        this.eventDate = date;
+//        this.trainingDay = trainingDay;
+//    }
 
     @OneToOne
     private TrainingDay trainingDay;

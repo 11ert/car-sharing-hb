@@ -58,8 +58,9 @@ public class Team implements Serializable {
 
     @Override
     public String toString() {
-        return "de.thorsten.model.Team[ id=" + id + " ]";
+        return "Team{" + "id=" + id + ", longName=" + longName + ", shortName=" + shortName + '}';
     }
+
 
     /**
      * @return the longName

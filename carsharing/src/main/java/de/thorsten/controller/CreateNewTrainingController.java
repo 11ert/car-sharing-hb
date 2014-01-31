@@ -1,6 +1,7 @@
 package de.thorsten.controller;
 
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingDayRepository;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
@@ -44,6 +45,9 @@ public class CreateNewTrainingController implements Serializable {
 
     @Inject
     private ParticipationService participationService;
+
+    @Inject
+    private TeamRepository teamRepository;
 
     @Inject
     TrainingService trainingService;
@@ -91,15 +95,19 @@ public class CreateNewTrainingController implements Serializable {
         newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
         newTraining.initializeTrainingWithTrainingDayTemplateData();
 
+        // todo: vorübergehend (bis UI angepasst ist) werden alle Teams dem Training
+        // zugeordnet!
+        newTraining.setTeams(teamRepository.findAll());
+
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
                 + ", " + newTraining.getLocation()
                 + ", " + newTraining.getTimeFrom()
                 + " - " + newTraining.getTimeTo());
-        
+
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !");
-        FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, 
+        FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Erfolgreich!", "Neues Training gespeichert!");
 
         try {

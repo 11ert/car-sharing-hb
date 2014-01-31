@@ -46,6 +46,8 @@ public class MemberListProducer {
     public void onMemberListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Member member) {
         retrieveAllMembersOrderedByName();
     }
+    
+    // todo: Neue Methode hinzufügen, um nach Teams auszuwählen
 
     @PostConstruct
     public void retrieveAllMembersOrderedByName() {

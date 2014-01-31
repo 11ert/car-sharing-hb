@@ -8,8 +8,8 @@ package de.thorsten.model;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -17,7 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
-import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -58,8 +59,8 @@ public abstract class SportsEvent implements Serializable {
 
     @NotNull
     protected Date eventDate;
-    
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @OneToMany (fetch=FetchType.EAGER)
     private List<Team> teams;
 
     /**
@@ -199,7 +200,7 @@ public abstract class SportsEvent implements Serializable {
 
     @Override
     public String toString() {
-        return "SportsEvent{" + "id=" + id + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo + ", pickUpTimeSource=" + pickUpTimeSource + ", pickUpTimeTarget=" + pickUpTimeTarget + ", location=" + location + ", pickUpLocationSource=" + pickUpLocationSource + ", pickUpLocationTarget=" + pickUpLocationTarget + ", eventDate=" + eventDate + '}';
+        return "SportsEvent{" + "id=" + id + ", timeFrom=" + timeFrom + ", timeTo=" + timeTo + ", pickUpTimeSource=" + pickUpTimeSource + ", pickUpTimeTarget=" + pickUpTimeTarget + ", location=" + location + ", pickUpLocationSource=" + pickUpLocationSource + ", pickUpLocationTarget=" + pickUpLocationTarget + ", eventDate=" + eventDate + ", teams=" + teams + '}';
     }
 
     /**
