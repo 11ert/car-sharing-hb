@@ -27,7 +27,7 @@ public class ParticipationService implements Serializable {
     // speichern!
     public void update(Participation participation) throws Exception {
         participation.setLastChanged(new Date());
-        log.info("Updating " + participation);
+        log.fine("Updating " + participation);
         
         //em.merge(participation.getTrainingItem());
         em.merge(participation);
