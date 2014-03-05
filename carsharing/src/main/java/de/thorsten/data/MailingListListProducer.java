@@ -72,6 +72,8 @@ public class MailingListListProducer {
     /**
      * @return the allAvailableEMailAdresses
      */
+    @Produces
+    @Named
     public Collection<String> getAllAvailableEMailAdresses() {
         return allAvailableEMailAdresses;
     }

@@ -12,10 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
- * @author QTK100
+ * @author Thorsten Elfert
  */
 @Entity
 public class News {
@@ -29,6 +30,9 @@ public class News {
     private String author;
     
     private Date creationDate;
+    
+    @OneToOne
+    private MailingList mailingList;
 
     private boolean activ = true;
     /**
@@ -103,6 +107,20 @@ public class News {
      */
     public void setActiv(boolean activ) {
         this.activ = activ;
+    }
+
+    /**
+     * @return the mailingList
+     */
+    public MailingList getMailingList() {
+        return mailingList;
+    }
+
+    /**
+     * @param mailingList the mailingList to set
+     */
+    public void setMailingList(MailingList mailingList) {
+        this.mailingList = mailingList;
     }
     
 }

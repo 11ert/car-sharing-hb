@@ -40,17 +40,6 @@
                 <h:inputText id="carsize"
                              value="#{newMember.carsize}" />
                 <h:message for="carsize" errorClass="invalid" />
-<!-- todo: Mehrere Teams auswählen lassen
-                <h:outputLabel value="Team:" />
-                <h:selectOneListbox id="teamListbox"  value="#{newMember.teams}">
-                    <f:converter converterId="TeamConverter" />
-                    <f:selectItems value="#{teams}" 
-                                   var="selectedTeam" 
-                                   itemLabel="#{selectedTeam.shortName}"
-                                   itemValue="#{selectedTeam}"
-                                   />
-                </h:selectOneListbox>
--->
             </h:panelGrid>
 
             <p>
@@ -100,13 +89,6 @@
                 <f:facet name="header">Anzahl Sitzplätze</f:facet>
                     #{_member.carsize}
             </h:column>
-
-<!--    
-todo: Liste der zugewiesenen Teams anzeigen
-<h:column>
-                <f:facet name="header">Team</f:facet>
-                    #{_member.team.longName}
-            </h:column>-->
 
 <!--            <h:column>
                 <f:facet name="header">REST URL</f:facet>
