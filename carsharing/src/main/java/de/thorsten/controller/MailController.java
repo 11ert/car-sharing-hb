@@ -1,6 +1,10 @@
 package de.thorsten.controller;
 
-import de.thorsten.model.MailingList;
+import de.thorsten.data.MailConfigException;
+import de.thorsten.data.MailConfigRepository;
+import de.thorsten.model.MailConfig;
+import static de.thorsten.model.News_.mailingList;
+import de.thorsten.service.MailService;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.faces.context.FacesContext;
@@ -11,12 +15,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
-import javax.mail.Address;
-import javax.mail.Message;
 import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 @Model
 public class MailController {
@@ -26,6 +25,14 @@ public class MailController {
 
     @Inject
     private Logger log;
+    
+    @Inject
+    private MailService mailService;
+    
+    @Inject
+    private MailConfigRepository mailConfigRepository;
+    
+    private MailConfig mailConfig;
 
     @Produces
     @Named
@@ -36,28 +43,16 @@ public class MailController {
 
     @PostConstruct
     public void init() {
-        MailingList mailingList = new MailingList();
-        
-        
+        try {
+        mailConfig = mailConfigRepository.findMailConfigForNews();
+        } catch (MailConfigException e) {
+            e.printStackTrace();
+        }
     }
-    
-    
     
     @Asynchronous
     public void send() throws Exception {
-        try {
-            Message message = new MimeMessage(mailSession);
-            message.setFrom(new InternetAddress("mailFrom"));
-            Address toAddress = new InternetAddress("thorsten.elfert@gmail.com");
-            message.addRecipient(Message.RecipientType.TO, toAddress);
-            message.setSubject("subject");
-            message.setContent(newMail, "text/plain");
-            Transport.send(message);
-            log.info("<font color=red>Sent Mail</font>");
-        } catch (javax.mail.MessagingException e) {
-            e.printStackTrace();
-            log.info("<font color=red>Error in Sending Mail: " + e + "</font>");
-        }
+        mailService.send(newMail, mailingList);
     }
     
 }
