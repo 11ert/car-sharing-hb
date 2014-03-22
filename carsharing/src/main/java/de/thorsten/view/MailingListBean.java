@@ -64,7 +64,9 @@ public class MailingListBean implements Serializable {
     public void init() {
         log.info("MailingListBean.init()");
         allAvalaibleEMailAdresses = mailingListProducer.getAllAvailableEMailAdresses();
-        log.info(allAvalaibleEMailAdresses.size() + " eMailAdresses available");
+        if (allAvalaibleEMailAdresses != null) {
+            log.fine(allAvalaibleEMailAdresses.size() + " eMailAdresses available");
+        }
 
     }
 
@@ -284,7 +286,6 @@ public class MailingListBean implements Serializable {
     }
 
     public Collection<String> getAllAvalaibleEMailAdresses() {
-        log.fine("getAllAvalaibleEMailAdresses(), size=" + allAvalaibleEMailAdresses.size());
         return allAvalaibleEMailAdresses;
     }
 }

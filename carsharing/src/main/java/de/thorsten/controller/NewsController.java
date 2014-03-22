@@ -1,7 +1,8 @@
 package de.thorsten.controller;
 
+import de.thorsten.data.MailingListRepository;
+import de.thorsten.model.MailingList;
 import javax.annotation.PostConstruct;
-import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -10,10 +11,14 @@ import javax.inject.Named;
 
 import de.thorsten.model.News;
 import de.thorsten.service.NewsService;
+import java.io.Serializable;
 import java.util.logging.Logger;
+import javax.faces.event.ValueChangeEvent;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
-@Model
-public class NewsController {
+@ViewAccessScoped
+@Named
+public class NewsController implements Serializable{
 
     @Inject
     private FacesContext facesContext;
@@ -28,6 +33,11 @@ public class NewsController {
     @Named
     private News newNews;
     
+    private MailingList selectedMailingList;
+    
+    @Inject
+    private MailingListRepository mailingListRepository ;
+    
     @PostConstruct
     public void initNewNews() {
         newNews = new News();
@@ -35,7 +45,10 @@ public class NewsController {
 
     public void register() throws Exception {
         try {
+            newNews.setMailingList(selectedMailingList);
             newsService.update(newNews);
+            
+            log.fine("News updated: " + newNews);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, "News angelegt!", "News erfolgreich angelegt");
             facesContext.addMessage(null, m);
             initNewNews();
@@ -82,5 +95,29 @@ public class NewsController {
         return errorMessage;
     }
 
-    
+    /**
+     * @return the selectedMailingList
+     */
+    public MailingList getSelectedMailingList() {
+        return selectedMailingList;
+    }
+
+    /**
+     * @param selectedMailingList the selectedMailingList to set
+     */
+    public void setSelectedMailingList(MailingList selectedMailingList) {
+        log.fine("set selectedMailingList");
+        this.selectedMailingList = selectedMailingList;
+    }
+
+    public void mailingListChanged(ValueChangeEvent event) {
+        log.fine("mailingListChanged ");
+        if (event.getNewValue() != null) {
+            Long tmpId = Long.valueOf((String) event.getNewValue());
+            selectedMailingList = mailingListRepository.findById(tmpId);
+            log.fine("...to new MailingList = " + selectedMailingList.getDescription());
+            newNews.setMailingList(selectedMailingList);
+        }
+    }
+
 }

@@ -10,30 +10,44 @@
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
 
+
+
+
     <ui:define name="content">
         <h2>Bitte neue News hier eintragen:</h2>
         <h:form id="reg_news">
-            <h:panelGrid columns="2" columnClasses="titleCell">
+            <h:panelGrid id="reg_news_content" columns="2" columnClasses="titleCell">
                 <h:outputLabel for="text" value="Text:" />
                 <h:inputTextarea rows="4" cols="50" id="text" value="#{newNews.text}" >
                     <rich:placeholder value="Neuigkeiten hier eintragen..." />
                 </h:inputTextarea>
-                <h:outputLabel for="mail_distributionlist" value="Mailverteiler:" />
-                <h:selectOneListbox value="#{newNews.mailingList}" id="mailingListListbox" size="1" >
-                    <f:selectItems value="#{mailingListBean.allAvalaibleEMailAdresses}" />
-                </h:selectOneListbox>
-
-
-
                 <h:outputLabel for="author" value="Autor:" />
                 <h:inputText id="author" value="#{newNews.author}" />            
-                <h:commandButton id="register"
-                                 action="#{newsController.register()}"
-                                 value="Speichern" />
+                <h:outputLabel id="mailSent" value="Mailversand:" />
+
+                <h:selectBooleanCheckbox  id="mailCheckbox" value="#{newNews.mail}">
+                    <f:ajax event="click" render="mailingListPanel" execute="mailingListPanel" />
+                </h:selectBooleanCheckbox>
             </h:panelGrid>
+
+            <h:panelGrid id="mailingListPanel" columns="2" columnClasses="titleCell">
+                <h:outputLabel id="mail_distributionlist" value="Mailverteiler:" rendered="#{newNews.mail}"/>
+                <h:selectOneListbox id="mailingListListbox" size="1" valueChangeListener="#{newsController.mailingListChanged}" rendered="#{newNews.mail}" > 
+
+                    <f:selectItems value="#{mailingLists}"
+                                   var="selectedMailingList" 
+                                   itemLabel="#{selectedMailingList.description}"
+                                   itemValue="#{selectedMailingList.id}"
+                                   />
+                </h:selectOneListbox>
+            </h:panelGrid>
+            <p></p>
+            <h:commandButton id="register"
+                             action="#{newsController.register()}"
+                             value="Speichern" />
+
         </h:form>
 
-        <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
 
         <h2>Bisherige News:</h2>
         <h:panelGroup rendered="#{empty allNews}">
@@ -61,18 +75,43 @@
                     <f:facet name="header">Autor</f:facet>
                         #{_news.author}
                 </h:column>
-
                 <h:column>
                     <f:facet name="header">Sichtbar?</f:facet>
                     <h:selectBooleanCheckbox value="#{_news.activ}" readonly="true" onclick="return false"/>
                 </h:column>
                 <h:column>
+                    <f:facet name="header">Mailverteiler</f:facet>
+                    <h:link outcome="/test/mailingList/view" value="#{_news.mailingList.description}">
+                        <f:param name="id" value="#{_news.mailingList.id}"/>
+                    </h:link>
+
+
+                </h:column>
+                <h:column>
                     <h:commandLink value="Sichtbarkeit ändern" action="#{newsController.setInactive(_news)}"/>
                 </h:column>            
             </h:dataTable>
-
+            <p>
+                <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
+            </p>
         </h:form>
         <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
     </ui:define>
+
+    <script type="text/javascript">
+        function hideOrShowMailingPanel(show) {
+            // Get the panel using its ID
+            var obj = document.getElementById("reg_news:reg_news_content:mailingPanel");
+            if (show) {
+                obj.style.display = "block";
+            } else {
+                obj.style.display = "none";
+            }
+        }
+    </script>
+
 </ui:composition>
+
+
+

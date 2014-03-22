@@ -6,6 +6,7 @@
 package de.thorsten.service;
 
 import de.thorsten.model.MailConfig;
+import java.util.Collection;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
@@ -31,10 +32,9 @@ public class MailService {
     @Resource(mappedName = "java:/mail/Gmail")
     private Session mailSession;
 
-    private MailConfig mailConfig;
 
     @Asynchronous
-    public void send(String text, String[] mailingList) throws Exception {
+    public void send(String text, Collection<String> mailingList, MailConfig mailConfig) throws Exception {
         try {
             Message message = new MimeMessage(mailSession);
             message.setFrom(new InternetAddress(mailConfig.getSender()));
@@ -60,19 +60,6 @@ public class MailService {
         }
     }
 
-    /**
-     * @return the mailConfig
-     */
-    public MailConfig getMailConfig() {
-        return mailConfig;
-    }
-
-    /**
-     * @param mailConfig the mailConfig to set
-     */
-    public void setMailConfig(MailConfig mailConfig) {
-        this.mailConfig = mailConfig;
-    }
 
     private String convertToCsv(String[] listOfStrings) {
         StringBuffer retString = new StringBuffer(100);

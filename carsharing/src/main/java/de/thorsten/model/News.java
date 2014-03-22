@@ -22,7 +22,7 @@ import javax.persistence.OneToOne;
 public class News {
     
     @Id
-    @GeneratedValue( strategy = GenerationType.SEQUENCE )
+    @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
     
     private String text;
@@ -31,10 +31,14 @@ public class News {
     
     private Date creationDate;
     
+    private boolean mail;
+    
     @OneToOne
     private MailingList mailingList;
 
     private boolean activ = true;
+    
+    
     /**
      * @return the id
      */
@@ -121,6 +125,25 @@ public class News {
      */
     public void setMailingList(MailingList mailingList) {
         this.mailingList = mailingList;
+    }
+
+    /**
+     * @return the mail
+     */
+    @Override
+    public String toString() {
+        return "News{" + "id=" + id + ", text=" + text + ", author=" + author + ", creationDate=" + creationDate + ", mail=" + mail + ", mailingList=" + mailingList + ", activ=" + activ + '}';
+    }
+
+    public boolean isMail() {
+        return mail;
+    }
+
+    /**
+     * @param mail the mail to set
+     */
+    public void setMail(boolean mail) {
+        this.mail = mail;
     }
     
 }

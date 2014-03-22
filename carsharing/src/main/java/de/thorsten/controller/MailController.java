@@ -2,8 +2,9 @@ package de.thorsten.controller;
 
 import de.thorsten.data.MailConfigException;
 import de.thorsten.data.MailConfigRepository;
+import de.thorsten.data.MailingListRepository;
 import de.thorsten.model.MailConfig;
-import static de.thorsten.model.News_.mailingList;
+import de.thorsten.model.MailingList;
 import de.thorsten.service.MailService;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -13,9 +14,7 @@ import javax.inject.Named;
 
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Asynchronous;
-import javax.mail.Session;
 
 @Model
 public class MailController {
@@ -32,27 +31,37 @@ public class MailController {
     @Inject
     private MailConfigRepository mailConfigRepository;
     
-    private MailConfig mailConfig;
+    @Inject 
+            private MailingListRepository mailingListRepository;
+    
+    private Long mailingListId;
+    private MailingList mailingList;
+    
+    private MailConfig mailConfigForNews;
 
+    
     @Produces
     @Named
     private String newMail;
-    
-    @Resource(mappedName = "java:/mail/Gmail")
-    private Session mailSession;
+
 
     @PostConstruct
     public void init() {
         try {
-        mailConfig = mailConfigRepository.findMailConfigForNews();
+        mailConfigForNews = mailConfigRepository.findMailConfigForNews();
         } catch (MailConfigException e) {
             e.printStackTrace();
         }
+        mailingList = mailingListRepository.findById(mailingListId);
     }
     
     @Asynchronous
     public void send() throws Exception {
-        mailService.send(newMail, mailingList);
+        mailService.send(newMail, mailingList.geteMailAdresses(), mailConfigForNews);
+    }
+    
+    public void setMailingListid(Long id) {
+        mailingListId = id;
     }
     
 }
