@@ -31,7 +31,16 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
-        <h:form id="training_creation_date_calendar">
+        <h:form id="training_creation_form">
+            <rich:panel>
+                <h:selectManyCheckbox id="teamsCheckBox"  value="#{trainingController.selectedTeamIds}" valueChangeListener="#{trainingController.teamChanged}">
+                    <f:selectItems value="#{teams}" 
+                                   var="selectedTeam" 
+                                   itemLabel="#{selectedTeam.shortName}"
+                                   itemValue="#{selectedTeam.id}"
+                                   />
+                </h:selectManyCheckbox> 
+            </rich:panel>
             <rich:panel styleClass="stable" header="Nächstes Traingsdatum">
                 <rich:calendar id="trainingCalendar"
                                mode="ajax" 

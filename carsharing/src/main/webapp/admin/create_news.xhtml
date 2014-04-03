@@ -32,14 +32,20 @@
 
             <h:panelGrid id="mailingListPanel" columns="2" columnClasses="titleCell">
                 <h:outputLabel id="mail_distributionlist" value="Mailverteiler:" rendered="#{newNews.mail}"/>
-                <h:selectOneListbox id="mailingListListbox" size="1" valueChangeListener="#{newsController.mailingListChanged}" rendered="#{newNews.mail}" > 
+                <h:selectOneListbox id="mailingListListbox" size="1" valueChangeListener="#{newsController.mailingListChanged}" rendered="#{newNews.mail}"> 
 
                     <f:selectItems value="#{mailingLists}"
                                    var="selectedMailingList" 
                                    itemLabel="#{selectedMailingList.description}"
                                    itemValue="#{selectedMailingList.id}"
                                    />
+                    <!--
+                    <h:link id="mailListLink" outcome="/test/mailingList/view" value="#{selectedMailingList.description}" rendered="#{newNews.mail}">
+                        <f:param name="id" value="#{selectedMailingList.id}"/>
+                    </h:link>
+-->
                 </h:selectOneListbox>
+
             </h:panelGrid>
             <p></p>
             <h:commandButton id="register"

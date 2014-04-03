@@ -5,11 +5,13 @@ import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingDayRepository;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
+import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.model.TrainingDay;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TrainingService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -56,8 +58,13 @@ public class CreateNewTrainingController implements Serializable {
 
     private List<Member> initialMembers;
 
+    private Long[] selectedTeamIds;
+    
+    private List<Team> selectedTeams;
+
     @PostConstruct
-    public void loadMembers() {
+    public void init() {
+        selectedTeams = new ArrayList();
         initialMembers = memberRepository.findAllOrderedByName();
         if (initialMembers != null) {
             log.info(initialMembers.size() + " initial Members loaded.");
@@ -97,7 +104,7 @@ public class CreateNewTrainingController implements Serializable {
 
         // todo: vorübergehend (bis UI angepasst ist) werden alle Teams dem Training
         // zugeordnet!
-        newTraining.setTeams(teamRepository.findAll());
+        newTraining.setTeams(selectedTeams);
 
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
@@ -142,6 +149,19 @@ public class CreateNewTrainingController implements Serializable {
         }
     }
 
+    public void teamChanged(ValueChangeEvent event) {
+        log.info("teamChanged");
+        selectedTeamIds = (Long[]) event.getNewValue();
+        for (int x = 0; x < selectedTeamIds.length; x++) {
+            Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
+            log.info("CurrentTeam = " + currentTeam.toString());
+            selectedTeams.add(currentTeam);
+            log.info("..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
+        }
+        log.info("teamChanged - selectedTeams)");
+        
+    }
+
     public void createErrorMessage(String msg) {
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!",
@@ -166,5 +186,23 @@ public class CreateNewTrainingController implements Serializable {
     public void setInitialMembers(List<Member> initialMembers) {
         this.initialMembers = initialMembers;
     }
+
+    /**
+     * @return the selectedTeams
+     */
+    public Long[] getSelectedTeamIds() {
+        return selectedTeamIds;
+    }
+
+    /**
+     * @param selectedTeams the selectedTeams to set
+     */
+    public void setSelectedTeamIds(Long[] selectedTeams) {
+        this.selectedTeamIds = selectedTeams;
+    }
+
+    
+
+    
 
 }
