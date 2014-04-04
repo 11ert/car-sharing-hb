@@ -216,4 +216,19 @@ public abstract class SportsEvent implements Serializable {
         this.teams = teams;
     }
 
+    public String getTeamsAsFormattedString() {
+        StringBuffer retString = new StringBuffer(50);
+        if (teams != null) {
+            int x = 1;
+            for (Team currentTeam : teams) {
+                retString.append(currentTeam.getShortName());
+                if ((teams.size() > 1) && (teams.size() != x)) {
+                    retString.append(", ");
+                }
+                x++;
+            }
+        }
+        return retString.toString();
+    }
+
 }

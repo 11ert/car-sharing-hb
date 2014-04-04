@@ -1,10 +1,12 @@
 package de.thorsten.controller;
 
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.ParticipationGroupListProducer;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingDayRepository;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
+import de.thorsten.model.ParticipationGroup;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.model.TrainingDay;
@@ -56,19 +58,22 @@ public class CreateNewTrainingController implements Serializable {
 
     private Date nextTrainingDate;
 
-    private List<Member> initialMembers;
-
     private Long[] selectedTeamIds;
-    
+
     private List<Team> selectedTeams;
+
+    private ParticipationGroup selectedParticipationGroup;
+
+    @Inject
+    private List<ParticipationGroup> participationGroups;
+
+    @Inject
+    private ParticipationGroupListProducer participationGroupListProducer;
 
     @PostConstruct
     public void init() {
         selectedTeams = new ArrayList();
-        initialMembers = memberRepository.findAllOrderedByName();
-        if (initialMembers != null) {
-            log.info(initialMembers.size() + " initial Members loaded.");
-        }
+        selectedParticipationGroup = participationGroups.get(0); // initial einfach erste laden
     }
 
     /**
@@ -102,10 +107,12 @@ public class CreateNewTrainingController implements Serializable {
         newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
         newTraining.initializeTrainingWithTrainingDayTemplateData();
 
-        // todo: vorübergehend (bis UI angepasst ist) werden alle Teams dem Training
-        // zugeordnet!
         newTraining.setTeams(selectedTeams);
 
+        String specificErrorMsg = new String();
+        if (selectedTeams.size() == 0) {
+            specificErrorMsg = "Mindestens ein Team muß ausgewählt sein";
+        }
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
                 + ", " + newTraining.getLocation()
@@ -113,14 +120,15 @@ public class CreateNewTrainingController implements Serializable {
                 + " - " + newTraining.getTimeTo());
 
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                "Fehler!", "Neues Training konnte nicht gespeichert werden !");
+                "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
         FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Erfolgreich!", "Neues Training gespeichert!");
 
         try {
 
             Training tr = trainingService.update(newTraining);
-            for (final Iterator it = initialMembers.iterator(); it.hasNext();) {
+            List<Member> members = selectedParticipationGroup.getMembers();
+            for (final Iterator it = members.iterator(); it.hasNext();) {
                 Participation newParticipation = new Participation();
                 newParticipation.setPlayer((Member) it.next());
                 newParticipation.setTraining(tr);
@@ -149,6 +157,15 @@ public class CreateNewTrainingController implements Serializable {
         }
     }
 
+    public void participationGroupChanged(ValueChangeEvent event) {
+        log.fine("participationGroupChanged ");
+        if (event.getNewValue() != null) {
+            Long tmpId = Long.valueOf((String) event.getNewValue());
+            selectedParticipationGroup = participationGroupListProducer.getParticipationGroupById(tmpId);
+            log.fine("...to new participationGroup = " + selectedParticipationGroup.toString());
+        }
+    }
+
     public void teamChanged(ValueChangeEvent event) {
         log.info("teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();
@@ -159,7 +176,7 @@ public class CreateNewTrainingController implements Serializable {
             log.info("..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
         }
         log.info("teamChanged - selectedTeams)");
-        
+
     }
 
     public void createErrorMessage(String msg) {
@@ -171,20 +188,6 @@ public class CreateNewTrainingController implements Serializable {
 
     public void removeMemberFromList(Member member) {
         log.info("removeMemberFromList called");
-    }
-
-    /**
-     * @return the members
-     */
-    public List<Member> getInitialMembers() {
-        return initialMembers;
-    }
-
-    /**
-     * @param initialMembers the members to set
-     */
-    public void setInitialMembers(List<Member> initialMembers) {
-        this.initialMembers = initialMembers;
     }
 
     /**
@@ -201,8 +204,18 @@ public class CreateNewTrainingController implements Serializable {
         this.selectedTeamIds = selectedTeams;
     }
 
-    
+    /**
+     * @return the selectedParticipationGroup
+     */
+    public ParticipationGroup getSelectedParticipationGroup() {
+        return selectedParticipationGroup;
+    }
 
-    
+    /**
+     * @param selectedParticipationGroup the selectedParticipationGroup to set
+     */
+    public void setSelectedParticipationGroup(ParticipationGroup selectedParticipationGroup) {
+        this.selectedParticipationGroup = selectedParticipationGroup;
+    }
 
 }

@@ -32,8 +32,12 @@
             }
         </h:outputStylesheet>
         <h:form id="training_creation_form">
-            <rich:panel>
-                <h:selectManyCheckbox id="teamsCheckBox"  value="#{trainingController.selectedTeamIds}" valueChangeListener="#{trainingController.teamChanged}">
+            <rich:panel styleClass="stable" header="Teamtraining">
+                <h:selectManyCheckbox id="teamsCheckBox"  
+                                      value="#{trainingController.selectedTeamIds}" 
+                                      valueChangeListener="#{trainingController.teamChanged}"
+                                      layout="pageDirection"
+                                      >
                     <f:selectItems value="#{teams}" 
                                    var="selectedTeam" 
                                    itemLabel="#{selectedTeam.shortName}"
@@ -62,9 +66,20 @@
                 <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:panel>
 
+            <rich:panel styleClass="stable" header="Teilnehmer am Training">
+                <h:selectOneListbox id="participationGroupListbox" valueChangeListener="#{trainingController.participationGroupChanged}" size="1" >
+                    <f:selectItems value="#{participationGroups}" 
+                                   var="selectedParticipationGroup" 
+                                   itemLabel="#{selectedParticipationGroup.description}"
+                                   itemValue="#{selectedParticipationGroup.id}"
+                                   />
+                    <a4j:ajax event="change" render="member_table" />
+                </h:selectOneListbox>
+            </rich:panel>
+
             <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
 
-            <rich:dataTable var="_member" value="#{trainingController.initialMembers}"
+            <rich:dataTable var="_member" value="#{trainingController.selectedParticipationGroup.members}"
                             iterationStatusVar="it"
                             id="member_table"
                             rowClasses="odd-row, even-row"
