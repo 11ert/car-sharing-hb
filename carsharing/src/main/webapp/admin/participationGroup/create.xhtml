@@ -14,19 +14,19 @@
         <f:event type="preRenderView" listener="#{participationGroupBean.retrieve}"/>
     </f:metadata>
 
-    <ui:param name="pageTitle" value="Create Participation Group"/>
+    <ui:param name="pageTitle" value="Teilnehmergruppen erstellen"/>
 
     <ui:define name="header">
-        Participation Group
+        Teilnehmergruppen
     </ui:define>
 
     <ui:define name="subheader">
         <c:choose>
             <c:when test="#{!empty participationGroupBean.id}">
-                Edit existing Participation Group
+                Existierende Teilnehmergruppen ändern
             </c:when>
             <c:otherwise>
-                Create a new Participation Group
+                Neue Teilnehmergruppe erstellen
             </c:otherwise>
         </c:choose>
     </ui:define>
@@ -38,10 +38,11 @@
             <h:messages globalOnly="true" styleClass="error"/>
 
             <h:panelGrid columnClasses="label,component,required" columns="3">
-                <h:outputLabel for="participationGroupBeanParticipationGroupMembers" value="Members:"/>
+                <h:outputLabel for="participationGroupBeanParticipationGroupMembers" value="Teilnehmer:"/>
                 <h:panelGroup>
                     <ui:param name="_collection" value="#{participationGroupBean.participationGroup.members}"/>
                     <rich:pickList value="#{participationGroupBean.participationGroup.members}"  
+                                   converter="#{memberBean.converter}"
                                    sourceCaption="Verfügbare Spieler" 
                                    targetCaption="Zugeordnete Spieler" 
                                    listWidth="165px" 
@@ -50,36 +51,10 @@
                         <f:selectItems value="#{participationGroupBean.allAvalaibleMembers}" 
                                        var="member" itemValue="#{member}" itemLabel="#{member.name}, #{member.firstname}" />
                     </rich:pickList>     
-                    <!--
-                    <h:dataTable id="participationGroupBeanParticipationGroupMembers" styleClass="data-table" value="#{_collection}" var="_item">
-                            <h:column>
-                                    <f:facet name="header">
-                                            <h:outputText value="Name"/>
-                                    </f:facet>
-                                    <h:link outcome="/test/member/view">
-                                            <f:param name="id" value="#{_item.id}"/>
-                                            <h:outputText id="itemName" value="#{_item.name}"/>
-                                    </h:link>
-                            </h:column>
-                            <h:column footerClass="remove-column" headerClass="remove-column">
-                                    <h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
-                            </h:column>
-                    </h:dataTable>
-                    
-                    <h:panelGrid columnClasses=",remove-column" columns="2" styleClass="data-table-footer">
-                        <h:selectOneMenu converter="#{memberBean.converter}" id="participationGroupBeanParticipationGroupMembersSelect" value="#{requestScope['participationGroupBeanParticipationGroupMembersSelect']}">
-                            <f:selectItem/>
-                            <f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{memberBean.all}" var="_item"/>
-                        </h:selectOneMenu>
-                        <h:commandLink action="#{_collection.add(requestScope['participationGroupBeanParticipationGroupMembersSelect'])}" id="participationGroupBeanParticipationGroupMembersAdd" onclick="if (document.getElementById(document.forms[0].id + ':participationGroupBeanParticipationGroupMembersSelect').selectedIndex & lt; 1) {
-                                                            alert('Must select a Member');
-                                                            return false;
-                                                        }" styleClass="add-button"/>
-                    </h:panelGrid>
-                    -->
+
                 </h:panelGroup>
                 <h:outputText/>
-                <h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Description:"/>
+                <h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Beschreibung:"/>
                 <h:panelGroup>
                     <h:inputText id="participationGroupBeanParticipationGroupDescription" value="#{participationGroupBean.participationGroup.description}"/>
                     <h:message for="participationGroupBeanParticipationGroupDescription" styleClass="error"/>
@@ -88,16 +63,16 @@
             </h:panelGrid>
 
             <div class="buttons">
-                <h:commandLink value="Save" action="#{participationGroupBean.update}" styleClass="btn btn-primary"/>
+                <h:commandLink value="Speichern" action="#{participationGroupBean.update}" styleClass="btn btn-primary"/>
                 <c:choose>
                     <c:when test="#{!empty participationGroupBean.id}">
-                        <h:link value="Cancel" outcome="view" styleClass="btn btn-primary">
+                        <h:link value="Abbrechen" outcome="view" styleClass="btn btn-primary">
                             <f:param name="id" value="#{participationGroupBean.id}"/>
                         </h:link>
-                        <h:commandLink value="Delete" action="#{participationGroupBean.delete}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Löschen" action="#{participationGroupBean.delete}" styleClass="btn btn-primary"/>
                     </c:when>
                     <c:otherwise>
-                        <h:link value="Cancel" outcome="search" styleClass="btn btn-primary"/>
+                        <h:link value="Abbrechen" outcome="search" styleClass="btn btn-primary"/>
                     </c:otherwise>
                 </c:choose>
             </div>

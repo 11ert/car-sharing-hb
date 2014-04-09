@@ -11,14 +11,14 @@
 		<f:event type="preRenderView" listener="#{participationGroupBean.retrieve}"/>
 	</f:metadata>
 
-	<ui:param name="pageTitle" value="View Participation Group"/>
+	<ui:param name="pageTitle" value="Teilnehmergruppen ansehen"/>
 
 	<ui:define name="header">
-		Participation Group
+		Teilnehmergruppen
 	</ui:define>
 
 	<ui:define name="subheader">
-		View existing Participation Group
+		Teilnehmergruppen ansehen
 	</ui:define>
 
 	<ui:define name="footer"/>
@@ -31,22 +31,22 @@
 					<f:facet name="header">
 						<h:outputText value="Name"/>
 					</f:facet>
-					<h:link outcome="/test/member/view">
+					<h:link outcome="/admin/member/view">
 						<f:param name="id" value="#{_item.id}"/>
                                                 <h:outputText id="itemName" value="#{_item.name}, #{_item.firstname}"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>
 			<h:outputText/>
-			<h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Description:"/>
+			<h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Beschreibung:"/>
 			<h:outputText id="participationGroupBeanParticipationGroupDescription" value="#{participationGroupBean.participationGroup.description}"/>
 			<h:outputText/>
 		</h:panelGrid>
 
 		<div class="buttons">
-			<h:link value="View All" outcome="search" styleClass="btn btn-primary"/> 
-			<h:link value="Edit" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
-			<h:link value="Create New" outcome="create" styleClass="btn btn-primary"/>
+			<h:link value="Alle ansehen" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="Ändern" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="Neu" outcome="create" styleClass="btn btn-primary"/>
 		</div>
 	</ui:define>
 

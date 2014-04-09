@@ -39,13 +39,13 @@
             <h:messages globalOnly="true" styleClass="error"/>
 
             <h:panelGrid columnClasses="label,component,required" columns="3">
-                <h:outputLabel for="mailingListBeanMailingListDescription" value="Description:"/>
+                <h:outputLabel for="mailingListBeanMailingListDescription" value="Beschreibung:"/>
                 <h:panelGroup>
                     <h:inputText id="mailingListBeanMailingListDescription" value="#{mailingListBean.mailingList.description}"/>
                     <h:message for="mailingListBeanMailingListDescription" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText/>
-                <h:outputLabel for="mailingListBeanMailingListEMailAdresses" value="E Mail Adresses:"/>
+                <h:outputLabel for="mailingListBeanMailingListEMailAdresses" value="E Mail Adressen"/>
                 <h:panelGroup>
                     <rich:panel style="width:560px;">             
                         <f:facet name="header">                 
@@ -67,16 +67,16 @@
             </h:panelGrid>
 
             <div class="buttons">
-                <h:commandLink value="Save" action="#{mailingListBean.update}" styleClass="btn btn-primary"/>
+                <h:commandLink value="Speichern" action="#{mailingListBean.update}" styleClass="btn btn-primary"/>
                 <c:choose>
                     <c:when test="#{!empty mailingListBean.id}">
-                        <h:link value="Cancel" outcome="view" styleClass="btn btn-primary">
+                        <h:link value="Abbrechen" outcome="view" styleClass="btn btn-primary">
                             <f:param name="id" value="#{mailingListBean.id}"/>
                         </h:link>
-                        <h:commandLink value="Delete" action="#{mailingListBean.delete}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Löschen" action="#{mailingListBean.delete}" styleClass="btn btn-primary"/>
                     </c:when>
                     <c:otherwise>
-                        <h:link value="Cancel" outcome="search" styleClass="btn btn-primary"/>
+                        <h:link value="Abbrechen" outcome="search" styleClass="btn btn-primary"/>
                     </c:otherwise>
                 </c:choose>
             </div>

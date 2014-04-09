@@ -12,6 +12,7 @@ import de.thorsten.model.Training;
 import de.thorsten.model.TrainingDay;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TrainingService;
+import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -85,6 +86,10 @@ public class CreateNewTrainingController implements Serializable {
      */
     public Date getNextTrainingDate() {
         return nextTrainingDate;
+    }
+    
+    public String getNextTrainingDateAsFormattedString() {
+        return DateUtil.getSelectedDateAsFormattedString(nextTrainingDate);
     }
 
     /**

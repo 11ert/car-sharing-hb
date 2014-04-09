@@ -90,8 +90,6 @@
                     <h:link outcome="/test/mailingList/view" value="#{_news.mailingList.description}">
                         <f:param name="id" value="#{_news.mailingList.id}"/>
                     </h:link>
-
-
                 </h:column>
                 <h:column>
                     <h:commandLink value="Sichtbarkeit ändern" action="#{newsController.setInactive(_news)}"/>
@@ -104,18 +102,6 @@
         <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
     </ui:define>
-
-    <script type="text/javascript">
-        function hideOrShowMailingPanel(show) {
-            // Get the panel using its ID
-            var obj = document.getElementById("reg_news:reg_news_content:mailingPanel");
-            if (show) {
-                obj.style.display = "block";
-            } else {
-                obj.style.display = "none";
-            }
-        }
-    </script>
 
 </ui:composition>
 

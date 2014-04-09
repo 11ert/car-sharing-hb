@@ -11,30 +11,12 @@
 </h:head>
 
 <h:body>
-    <!--
-	<div class="navbar navbar-fixed-top">
-		<div class="navbar-inner">
-			<div class="container">
-				<h:link id="brandLink" outcome="/test/index.xhtml" styleClass="brand">Carsharing</h:link>
-				<div class="nav-collapse collapse">
-					<ul class="nav">
-						<li><a href="http://forge.jboss.org/docs/important_plugins/ui-scaffolding.html">How to Customize</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-    -->
+
 
 	<div class="container forgecontainer">
             
 		<div id="navigation">
-                    <!--
-			<h:link id="homeLink" outcome="/test/index.xhtml">
-				<img src="#{resource['forge-logo.png']}" alt="Forge... get hammered" border="0" />
-			</h:link>
-                    -->
-			<ul>
+   			<ul>
 				<li>
 					<h:link outcome="/overview" value="Übersicht"/>
 				</li>
@@ -42,7 +24,7 @@
 					<h:link outcome="/admin/create_news" value="News"/>
 				</li>
 				<li>
-					<h:link outcome="/admin/create_member" value="Spieler"/>
+					<h:link outcome="/admin/member/search" value="Spieler"/>
 				</li>
                                 <li>
 					<h:link outcome="/admin/mailingList/search" value="Mailverteiler"/>
