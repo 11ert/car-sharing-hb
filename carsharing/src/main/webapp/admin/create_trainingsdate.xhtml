@@ -32,7 +32,7 @@
             }
         </h:outputStylesheet>
         <h:form id="training_creation_form">
-            <rich:panel styleClass="stable" header="Teamtraining">
+            <rich:panel styleClass="stable" header="Teamtraining für:">
                 <h:selectManyCheckbox id="teamsCheckBox"  
                                       value="#{trainingController.selectedTeamIds}" 
                                       valueChangeListener="#{trainingController.teamChanged}"
@@ -62,11 +62,9 @@
             <rich:panel id="next_trainingdate_out">
                 <h:outputText value="Nächstes Training = #{trainingController.nextTrainingDate}"/>
                 <p></p>
-                <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar"/>
-                <rich:notifyMessages stayTime="2000" nonblocking="true" />
             </rich:panel>
 
-            <rich:panel styleClass="stable" header="Teilnehmer am Training">
+            <rich:panel styleClass="stable" header="Teilnehmerliste für's Training">
                 <h:selectOneListbox id="participationGroupListbox" valueChangeListener="#{trainingController.participationGroupChanged}" size="1" >
                     <f:selectItems value="#{participationGroups}" 
                                    var="selectedParticipationGroup" 
@@ -77,24 +75,26 @@
                 </h:selectOneListbox>
             </rich:panel>
 
-            <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
-
-            <rich:dataTable var="_member" value="#{trainingController.selectedParticipationGroup.members}"
-                            iterationStatusVar="it"
-                            id="member_table"
-                            rowClasses="odd-row, even-row"
-                            styleClass="stable">
-                <rich:column>
-                    <f:facet name="header">Spieler</f:facet>
-                    #{_member.name}, #{_member.firstname}
-                </rich:column> 
-                <rich:column>
-                    <a4j:commandLink styleClass="no-decor" 
-                                     render="member_table" execute="@this">
-                        <h:graphicImage value="/resources/icons/delete.gif" alt="delete" />
-                    </a4j:commandLink>
-                </rich:column>
-            </rich:dataTable>
+            <rich:panel styleClass="stable" header="Teilnehmer am Training:">
+                <rich:dataTable var="_member" value="#{trainingController.selectedParticipationGroup.members}"
+                                iterationStatusVar="it"
+                                id="member_table"
+                                rowClasses="odd-row, even-row"
+                                styleClass="stable">
+                    <rich:column>
+                        <!--                    <f:facet name="header">Spieler</f:facet>-->
+                        #{_member.name}, #{_member.firstname}
+                    </rich:column> 
+                    <rich:column>
+                        <a4j:commandLink styleClass="no-decor" 
+                                         render="member_table" execute="@this">
+                        </a4j:commandLink>
+                    </rich:column>
+                </rich:dataTable>
+            </rich:panel>
+            <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar"/>
+            <rich:notifyMessages stayTime="2000" nonblocking="true" />
         </h:form>
+        <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
     </ui:define>
 </ui:composition>

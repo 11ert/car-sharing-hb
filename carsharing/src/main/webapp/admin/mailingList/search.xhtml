@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	template="/resources/scaffold/pageTemplate.xhtml">
+        	xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/templates/admin_template.xhtml">
 
 	<f:metadata>
 		<f:viewParam name="page" value="#{mailingListBean.page}"/>
@@ -48,19 +48,13 @@
 					<f:facet name="header">
 						<h:outputText value="Beschreibung"/>
 					</f:facet>
-                                    <!--
-					<h:link outcome="/mailingList/view" >
-						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemDescription" value="#{_item.description}"/>
-					</h:link>
-                                    -->
-					<h:link outcome="/test/mailingList/view" value="#{_item.description}">
+  					<h:link outcome="/admin/mailingList/view" value="#{_item.description}">
 						<f:param name="id" value="#{_item.id}"/>
 					</h:link>
                                     
 				</h:column>
 			</h:dataTable>
-			<ui:include src="/resources/scaffold/paginator.xhtml">
+			<ui:include src="/WEB-INF/templates/paginator.xhtml">
 				<ui:param name="paginatorBean" value="#{mailingListBean}"/>
 			</ui:include>
 		</h:form>

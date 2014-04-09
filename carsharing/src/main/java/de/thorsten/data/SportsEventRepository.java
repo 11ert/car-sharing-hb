@@ -45,7 +45,7 @@ public class SportsEventRepository {
     }
     
     public List<SportsEvent> findAllGeDateAndForSpecificTeam(Date eventDate, Team curTeam) {
-        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate >= :eventDate AND :curTeam in elements(t.teams)");
+        Query q = em.createQuery("SELECT t FROM SportsEvent t WHERE t.eventDate >= :eventDate AND :curTeam in elements(t.teams) order by t.eventDate");
         q.setParameter("eventDate", eventDate, TemporalType.DATE);
         q.setParameter("curTeam", curTeam);
         return q.getResultList();

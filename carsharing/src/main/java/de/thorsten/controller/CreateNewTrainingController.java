@@ -73,7 +73,11 @@ public class CreateNewTrainingController implements Serializable {
     @PostConstruct
     public void init() {
         selectedTeams = new ArrayList();
-        selectedParticipationGroup = participationGroups.get(0); // initial einfach erste laden
+         // initial einfach erste laden
+
+        if (participationGroups != null && participationGroups.size() != 0) {
+            selectedParticipationGroup = participationGroups.get(0);
+        }
     }
 
     /**

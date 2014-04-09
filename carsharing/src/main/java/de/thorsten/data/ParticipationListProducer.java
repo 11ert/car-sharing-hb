@@ -111,7 +111,6 @@ public class ParticipationListProducer implements Serializable {
         return DateUtil.getSelectedDateAsFormattedString(getSportEventDate());
     }
 
-    
     public void retrieveAllParticipatorsForSelectedDateAndTeam() {
         log.fine("retrieveAllParticipatorsForSelectedDateAndTeam()");
 
@@ -193,6 +192,7 @@ public class ParticipationListProducer implements Serializable {
     public void initialize() {
         log.fine("initialize() called");
         // Initial einfach erste Team nehmen        
+        // todo: funktioniert nicht, wenn keine Teams vorhanden
         selectedTeam = teamRepository.findAll().get(0);
 
         if (selectedTeam != null) {

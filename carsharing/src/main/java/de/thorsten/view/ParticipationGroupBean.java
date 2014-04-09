@@ -1,5 +1,7 @@
 package de.thorsten.view;
 
+import de.thorsten.data.MemberListProducer;
+import de.thorsten.model.Member;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,290 +27,277 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import de.thorsten.model.ParticipationGroup;
+import static java.lang.StrictMath.log;
+import java.util.Collection;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 
 /**
  * Backing bean for ParticipationGroup entities.
  * <p>
- * This class provides CRUD functionality for all ParticipationGroup entities. It focuses
- * purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt> for
- * state management, <tt>PersistenceContext</tt> for persistence,
- * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD framework or
- * custom base class.
+ * This class provides CRUD functionality for all ParticipationGroup entities.
+ * It focuses purely on Java EE 6 standards (e.g.
+ * <tt>&#64;ConversationScoped</tt> for state management,
+ * <tt>PersistenceContext</tt> for persistence,
+ * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD
+ * framework or custom base class.
  */
-
 @Named
 @Stateful
 @ConversationScoped
-public class ParticipationGroupBean implements Serializable
-{
+public class ParticipationGroupBean implements Serializable {
 
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-   /*
-    * Support creating and retrieving ParticipationGroup entities
-    */
+    /*
+     * Support creating and retrieving ParticipationGroup entities
+     */
+    private Long id;
 
-   private Long id;
+    @Inject 
+    private Logger log;
+    
+    private Collection<Member> allAvalaibleMembers;
 
-   public Long getId()
-   {
-      return this.id;
-   }
+    @Inject
+    private MemberListProducer memberListProducer;
 
-   public void setId(Long id)
-   {
-      this.id = id;
-   }
+    public Long getId() {
+        return this.id;
+    }
 
-   private ParticipationGroup participationGroup;
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-   public ParticipationGroup getParticipationGroup()
-   {
-      return this.participationGroup;
-   }
+    private ParticipationGroup participationGroup;
 
-   @Inject
-   private Conversation conversation;
+    public ParticipationGroup getParticipationGroup() {
+        return this.participationGroup;
+    }
 
-   @PersistenceContext(type = PersistenceContextType.EXTENDED)
-   private EntityManager entityManager;
+    @Inject
+    private Conversation conversation;
 
-   public String create()
-   {
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    private EntityManager entityManager;
 
-      this.conversation.begin();
-      return "create?faces-redirect=true";
-   }
+    @PostConstruct
+    public void init() {
+        log.fine("ParticipationGroupBean.init()");
+        allAvalaibleMembers = memberListProducer.getMembers();
+        if (allAvalaibleMembers != null) {
+            log.fine(allAvalaibleMembers.size() + " Members available");
+        }
 
-   public void retrieve()
-   {
+    }
 
-      if (FacesContext.getCurrentInstance().isPostback())
-      {
-         return;
-      }
+    public String create() {
 
-      if (this.conversation.isTransient())
-      {
-         this.conversation.begin();
-      }
+        this.conversation.begin();
+        return "create?faces-redirect=true";
+    }
 
-      if (this.id == null)
-      {
-         this.participationGroup = this.example;
-      }
-      else
-      {
-         this.participationGroup = findById(getId());
-      }
-   }
+    public void retrieve() {
 
-   public ParticipationGroup findById(Long id)
-   {
+        if (FacesContext.getCurrentInstance().isPostback()) {
+            return;
+        }
 
-      return this.entityManager.find(ParticipationGroup.class, id);
-   }
+        if (this.conversation.isTransient()) {
+            this.conversation.begin();
+        }
 
-   /*
-    * Support updating and deleting ParticipationGroup entities
-    */
+        if (this.id == null) {
+            this.participationGroup = this.example;
+        } else {
+            this.participationGroup = findById(getId());
+        }
+    }
 
-   public String update()
-   {
-      this.conversation.end();
+    public ParticipationGroup findById(Long id) {
 
-      try
-      {
-         if (this.id == null)
-         {
-            this.entityManager.persist(this.participationGroup);
+        return this.entityManager.find(ParticipationGroup.class, id);
+    }
+
+    /*
+     * Support updating and deleting ParticipationGroup entities
+     */
+    public String update() {
+        this.conversation.end();
+
+        try {
+            if (this.id == null) {
+                this.entityManager.persist(this.participationGroup);
+                return "search?faces-redirect=true";
+            } else {
+                this.entityManager.merge(this.participationGroup);
+                return "view?faces-redirect=true&id=" + this.participationGroup.getId();
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            return null;
+        }
+    }
+
+    public String delete() {
+        this.conversation.end();
+
+        try {
+            ParticipationGroup deletableEntity = findById(getId());
+
+            this.entityManager.remove(deletableEntity);
+            this.entityManager.flush();
             return "search?faces-redirect=true";
-         }
-         else
-         {
-            this.entityManager.merge(this.participationGroup);
-            return "view?faces-redirect=true&id=" + this.participationGroup.getId();
-         }
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            return null;
+        }
+    }
 
-   public String delete()
-   {
-      this.conversation.end();
+    /*
+     * Support searching ParticipationGroup entities with pagination
+     */
+    private int page;
+    private long count;
+    private List<ParticipationGroup> pageItems;
 
-      try
-      {
-         ParticipationGroup deletableEntity = findById(getId());
+    private ParticipationGroup example = new ParticipationGroup();
 
-         this.entityManager.remove(deletableEntity);
-         this.entityManager.flush();
-         return "search?faces-redirect=true";
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
+    public int getPage() {
+        return this.page;
+    }
 
-   /*
-    * Support searching ParticipationGroup entities with pagination
-    */
+    public void setPage(int page) {
+        this.page = page;
+    }
 
-   private int page;
-   private long count;
-   private List<ParticipationGroup> pageItems;
+    public int getPageSize() {
+        return 10;
+    }
 
-   private ParticipationGroup example = new ParticipationGroup();
+    public ParticipationGroup getExample() {
+        return this.example;
+    }
 
-   public int getPage()
-   {
-      return this.page;
-   }
+    public void setExample(ParticipationGroup example) {
+        this.example = example;
+    }
 
-   public void setPage(int page)
-   {
-      this.page = page;
-   }
+    public void search() {
+        this.page = 0;
+    }
 
-   public int getPageSize()
-   {
-      return 10;
-   }
+    public void paginate() {
 
-   public ParticipationGroup getExample()
-   {
-      return this.example;
-   }
-
-   public void setExample(ParticipationGroup example)
-   {
-      this.example = example;
-   }
-
-   public void search()
-   {
-      this.page = 0;
-   }
-
-   public void paginate()
-   {
-
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
       // Populate this.count
-
-      CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<ParticipationGroup> root = countCriteria.from(ParticipationGroup.class);
-      countCriteria = countCriteria.select(builder.count(root)).where(
-            getSearchPredicates(root));
-      this.count = this.entityManager.createQuery(countCriteria)
-            .getSingleResult();
+        CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+        Root<ParticipationGroup> root = countCriteria.from(ParticipationGroup.class);
+        countCriteria = countCriteria.select(builder.count(root)).where(
+                getSearchPredicates(root));
+        this.count = this.entityManager.createQuery(countCriteria)
+                .getSingleResult();
 
       // Populate this.pageItems
+        CriteriaQuery<ParticipationGroup> criteria = builder.createQuery(ParticipationGroup.class);
+        root = criteria.from(ParticipationGroup.class);
+        TypedQuery<ParticipationGroup> query = this.entityManager.createQuery(criteria
+                .select(root).where(getSearchPredicates(root)));
+        query.setFirstResult(this.page * getPageSize()).setMaxResults(
+                getPageSize());
+        this.pageItems = query.getResultList();
+    }
 
-      CriteriaQuery<ParticipationGroup> criteria = builder.createQuery(ParticipationGroup.class);
-      root = criteria.from(ParticipationGroup.class);
-      TypedQuery<ParticipationGroup> query = this.entityManager.createQuery(criteria
-            .select(root).where(getSearchPredicates(root)));
-      query.setFirstResult(this.page * getPageSize()).setMaxResults(
-            getPageSize());
-      this.pageItems = query.getResultList();
-   }
+    private Predicate[] getSearchPredicates(Root<ParticipationGroup> root) {
 
-   private Predicate[] getSearchPredicates(Root<ParticipationGroup> root)
-   {
+        CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+        List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-      List<Predicate> predicatesList = new ArrayList<Predicate>();
+        String description = this.example.getDescription();
+        if (description != null && !"".equals(description)) {
+            predicatesList.add(builder.like(root.<String>get("description"), '%' + description + '%'));
+        }
 
-      String description = this.example.getDescription();
-      if (description != null && !"".equals(description))
-      {
-         predicatesList.add(builder.like(root.<String> get("description"), '%' + description + '%'));
-      }
+        return predicatesList.toArray(new Predicate[predicatesList.size()]);
+    }
 
-      return predicatesList.toArray(new Predicate[predicatesList.size()]);
-   }
+    public List<ParticipationGroup> getPageItems() {
+        return this.pageItems;
+    }
 
-   public List<ParticipationGroup> getPageItems()
-   {
-      return this.pageItems;
-   }
+    public long getCount() {
+        return this.count;
+    }
 
-   public long getCount()
-   {
-      return this.count;
-   }
+    /*
+     * Support listing and POSTing back ParticipationGroup entities (e.g. from inside an
+     * HtmlSelectOneMenu)
+     */
+    public List<ParticipationGroup> getAll() {
 
-   /*
-    * Support listing and POSTing back ParticipationGroup entities (e.g. from inside an
-    * HtmlSelectOneMenu)
-    */
+        CriteriaQuery<ParticipationGroup> criteria = this.entityManager
+                .getCriteriaBuilder().createQuery(ParticipationGroup.class);
+        return this.entityManager.createQuery(
+                criteria.select(criteria.from(ParticipationGroup.class))).getResultList();
+    }
 
-   public List<ParticipationGroup> getAll()
-   {
+    @Resource
+    private SessionContext sessionContext;
 
-      CriteriaQuery<ParticipationGroup> criteria = this.entityManager
-            .getCriteriaBuilder().createQuery(ParticipationGroup.class);
-      return this.entityManager.createQuery(
-            criteria.select(criteria.from(ParticipationGroup.class))).getResultList();
-   }
+    public Converter getConverter() {
 
-   @Resource
-   private SessionContext sessionContext;
+        final ParticipationGroupBean ejbProxy = this.sessionContext.getBusinessObject(ParticipationGroupBean.class);
 
-   public Converter getConverter()
-   {
+        return new Converter() {
 
-      final ParticipationGroupBean ejbProxy = this.sessionContext.getBusinessObject(ParticipationGroupBean.class);
+            @Override
+            public Object getAsObject(FacesContext context,
+                    UIComponent component, String value) {
 
-      return new Converter()
-      {
-
-         @Override
-         public Object getAsObject(FacesContext context,
-               UIComponent component, String value)
-         {
-
-            return ejbProxy.findById(Long.valueOf(value));
-         }
-
-         @Override
-         public String getAsString(FacesContext context,
-               UIComponent component, Object value)
-         {
-
-            if (value == null)
-            {
-               return "";
+                return ejbProxy.findById(Long.valueOf(value));
             }
 
-            return String.valueOf(((ParticipationGroup) value).getId());
-         }
-      };
-   }
+            @Override
+            public String getAsString(FacesContext context,
+                    UIComponent component, Object value) {
 
-   /*
-    * Support adding children to bidirectional, one-to-many tables
-    */
+                if (value == null) {
+                    return "";
+                }
 
-   private ParticipationGroup add = new ParticipationGroup();
+                return String.valueOf(((ParticipationGroup) value).getId());
+            }
+        };
+    }
 
-   public ParticipationGroup getAdd()
-   {
-      return this.add;
-   }
+    /*
+     * Support adding children to bidirectional, one-to-many tables
+     */
+    private ParticipationGroup add = new ParticipationGroup();
 
-   public ParticipationGroup getAdded()
-   {
-      ParticipationGroup added = this.add;
-      this.add = new ParticipationGroup();
-      return added;
-   }
+    public ParticipationGroup getAdd() {
+        return this.add;
+    }
+
+    public ParticipationGroup getAdded() {
+        ParticipationGroup added = this.add;
+        this.add = new ParticipationGroup();
+        return added;
+    }
+
+    /**
+     * @return the allAvalaibleMembers
+     */
+    public Collection<Member> getAllAvalaibleMembers() {
+        return allAvalaibleMembers;
+    }
+
+    /**
+     * @param allAvalaibleMembers the allAvalaibleMembers to set
+     */
+    public void setAllAvalaibleMembers(Collection<Member> allAvalaibleMembers) {
+        this.allAvalaibleMembers = allAvalaibleMembers;
+    }
 }
