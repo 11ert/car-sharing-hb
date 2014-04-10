@@ -11,14 +11,14 @@
 		<f:event type="preRenderView" listener="#{memberBean.retrieve}"/>
 	</f:metadata>
 
-	<ui:param name="pageTitle" value="View Member"/>
+	<ui:param name="pageTitle" value="Spieler ansehen"/>
 
 	<ui:define name="header">
-		Member
+		Spieler
 	</ui:define>
 
 	<ui:define name="subheader">
-		View existing Member
+		Spieler ansehen
 	</ui:define>
 
 	<ui:define name="footer"/>
@@ -28,27 +28,27 @@
 			<h:outputLabel for="memberBeanMemberName" value="Name:"/>
 			<h:outputText id="memberBeanMemberName" value="#{memberBean.member.name}"/>
 			<h:outputText/>
+			<h:outputLabel for="memberBeanMemberFirstname" value="Vorname:"/>
+			<h:outputText id="memberBeanMemberFirstname" value="#{memberBean.member.firstname}"/>
+			<h:outputText/>
 			<h:outputLabel for="memberBeanMemberEmail" value="Email:"/>
 			<h:outputText id="memberBeanMemberEmail" value="#{memberBean.member.email}"/>
 			<h:outputText/>
-			<h:outputLabel for="memberBeanMemberPhoneNumber" value="Phone Number:"/>
+			<h:outputLabel for="memberBeanMemberPhoneNumber" value="Telefon:"/>
 			<h:outputText id="memberBeanMemberPhoneNumber" value="#{memberBean.member.phoneNumber}"/>
 			<h:outputText/>
-			<h:outputLabel for="memberBeanMemberCarsize" value="Carsize:"/>
-			<h:outputText id="memberBeanMemberCarsize" value="#{memberBean.member.carsize}"/>
+			<h:outputLabel for="memberBeanMemberCarsize" value="Anzahl Sitzplätze:" />
+			<h:outputText id="memberBeanMemberCarsize" value="#{memberBean.member.carsize}" />
 			<h:outputText/>
-			<h:outputLabel for="memberBeanMemberFirstname" value="Firstname:"/>
-			<h:outputText id="memberBeanMemberFirstname" value="#{memberBean.member.firstname}"/>
-			<h:outputText/>
-			<h:outputLabel for="memberBeanMemberCity" value="City:"/>
+			<h:outputLabel for="memberBeanMemberCity" value="Wohnort:"/>
 			<h:outputText id="memberBeanMemberCity" value="#{memberBean.member.city}"/>
 			<h:outputText/>
 		</h:panelGrid>
 
 		<div class="buttons">
-			<h:link value="View All" outcome="search" styleClass="btn btn-primary"/> 
-			<h:link value="Edit" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
-			<h:link value="Create New" outcome="create" styleClass="btn btn-primary"/>
+			<h:link value="Alle ansehen" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="Ändern" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="Neu" outcome="create" styleClass="btn btn-primary"/>
 		</div>
 	</ui:define>
 

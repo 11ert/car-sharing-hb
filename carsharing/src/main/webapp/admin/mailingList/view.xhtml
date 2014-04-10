@@ -37,10 +37,7 @@
                     <f:facet name="header">
                         <h:outputText value="E Mail Adressen"/>
                     </f:facet>
-                    <h:link outcome="/string/view">
-                        <f:param name="id" value="#{_item.id}"/>
-                        <h:outputText value="#{_item}"/>
-                    </h:link>
+                    <h:outputText value="#{_item}"/>
                 </h:column>
             </h:dataTable>
         </h:panelGrid>

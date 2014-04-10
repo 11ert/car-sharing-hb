@@ -39,11 +39,6 @@
                                    itemLabel="#{selectedMailingList.description}"
                                    itemValue="#{selectedMailingList.id}"
                                    />
-                    <!--
-                    <h:link id="mailListLink" outcome="/test/mailingList/view" value="#{selectedMailingList.description}" rendered="#{newNews.mail}">
-                        <f:param name="id" value="#{selectedMailingList.id}"/>
-                    </h:link>
--->
                 </h:selectOneListbox>
 
             </h:panelGrid>
@@ -87,7 +82,7 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Mailverteiler</f:facet>
-                    <h:link outcome="/test/mailingList/view" value="#{_news.mailingList.description}">
+                    <h:link outcome="/admin/mailingList/view" value="#{_news.mailingList.description}">
                         <f:param name="id" value="#{_news.mailingList.id}"/>
                     </h:link>
                 </h:column>

@@ -222,6 +222,7 @@ public class MailingListBean implements Serializable {
     }
 
     public List<MailingList> getPageItems() {
+        // todo - warum sind pageItems nicht vom Typ List<MailingList>
         return this.pageItems;
     }
 

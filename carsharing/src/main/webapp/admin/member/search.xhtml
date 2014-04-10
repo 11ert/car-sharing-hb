@@ -12,14 +12,14 @@
 		<f:event type="preRenderView" listener="#{memberBean.paginate}"/>
 	</f:metadata>
 
-	<ui:param name="pageTitle" value="Search Member entities"/>
+	<ui:param name="pageTitle" value="Spieler suchen"/>
 
 	<ui:define name="header">
-		Member
+		Spieler
 	</ui:define>
 
 	<ui:define name="subheader">
-		Search Member entities
+		Spieler suchen
 	</ui:define>
 
 	<ui:define name="footer"/>
@@ -36,34 +36,34 @@
 							<h:message for="memberBeanExampleName" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
+						<h:outputLabel for="memberBeanExampleFirstname" value="Vorname:"/>
+						<h:panelGroup>
+							<h:inputText id="memberBeanExampleFirstname" maxlength="25" value="#{memberBean.example.firstname}"/>
+							<h:message for="memberBeanExampleFirstname" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
 						<h:outputLabel for="memberBeanExampleEmail" value="Email:"/>
 						<h:panelGroup>
 							<h:inputText id="memberBeanExampleEmail" value="#{memberBean.example.email}"/>
 							<h:message for="memberBeanExampleEmail" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
-						<h:outputLabel for="memberBeanExamplePhoneNumber" value="Phone Number:"/>
+						<h:outputLabel for="memberBeanExamplePhoneNumber" value="Telefon:"/>
 						<h:panelGroup>
 							<h:inputText id="memberBeanExamplePhoneNumber" value="#{memberBean.example.phoneNumber}"/>
 							<h:message for="memberBeanExamplePhoneNumber" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
-						<h:outputLabel for="memberBeanExampleCarsize" value="Carsize:"/>
+						<h:outputLabel for="memberBeanExampleCarsize" value="ANzahl Sitzplätze:"/>
 						<h:panelGroup>
 							<rich:inputNumberSpinner cycled="false" id="memberBeanExampleCarsize" maxValue="999999999" value="#{memberBean.example.carsize}"/>
 							<h:message for="memberBeanExampleCarsize" styleClass="error"/>
 						</h:panelGroup>
 						<h:outputText/>
-						<h:outputLabel for="memberBeanExampleFirstname" value="Firstname:"/>
-						<h:panelGroup>
-							<h:inputText id="memberBeanExampleFirstname" maxlength="25" value="#{memberBean.example.firstname}"/>
-							<h:message for="memberBeanExampleFirstname" styleClass="error"/>
-						</h:panelGroup>
-						<h:outputText/>
 					</h:panelGrid>
 					<h:panelGroup styleClass="buttons">
-						<h:commandLink value="Search" action="#{memberBean.search}" styleClass="btn btn-primary"/>
-						<h:commandLink value="Create New" action="#{memberBean.create}" styleClass="btn btn-primary"/>
+						<h:commandLink value="Suchen" action="#{memberBean.search}" styleClass="btn btn-primary"/>
+						<h:commandLink value="Neu" action="#{memberBean.create}" styleClass="btn btn-primary"/>
 					</h:panelGroup>
 				</h:panelGroup>
 			</f:validateBean>
@@ -71,11 +71,20 @@
 			<h:dataTable id="memberBeanPageItems" styleClass="data-table" value="#{memberBean.pageItems}" var="_item">
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="Name"/>
+						<h:outputText value="Name:"/>
 					</f:facet>
-					<h:link outcome="/member/view">
+					<h:link outcome="/admin/member/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemName" value="#{_item.name}"/>
+						<h:outputText value="#{_item.name}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Vorname:"/>
+					</f:facet>
+					<h:link outcome="/admin/member/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText value="#{_item.firstname}"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>
