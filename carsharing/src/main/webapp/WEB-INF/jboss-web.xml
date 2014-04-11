@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
   <context-root>/carsharing</context-root>
-  <security-domain>java:/jaas/other</security-domain>
+  <security-domain>java:/jaas/admin_domain</security-domain>
 </jboss-web>
