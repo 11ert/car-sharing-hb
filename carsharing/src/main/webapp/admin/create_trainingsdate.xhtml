@@ -4,11 +4,26 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/WEB-INF/templates/default.xhtml"
+                template="/WEB-INF/templates/admin_template.xhtml"
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
 
-    <ui:define name="content">
+
+
+
+    <ui:param name="pageTitle" value="Neue Trainings"/>
+
+    <ui:define name="header">
+        Training
+    </ui:define>
+
+    <ui:define name="subheader">
+        Neues Trainingsdatum eintragen
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -32,11 +47,13 @@
             }
         </h:outputStylesheet>
         <h:form id="training_creation_form">
-            <rich:panel styleClass="stable" header="Teamtraining für:">
+            <h:panelGrid columnClasses="label,component,required" columns="3">
+                <h:outputLabel value="Training für:"/>
                 <h:selectManyCheckbox id="teamsCheckBox"  
                                       value="#{trainingController.selectedTeamIds}" 
                                       valueChangeListener="#{trainingController.teamChanged}"
                                       layout="pageDirection"
+                                      style="background-color: #F2F2F2"
                                       >
                     <f:selectItems value="#{teams}" 
                                    var="selectedTeam" 
@@ -44,61 +61,61 @@
                                    itemValue="#{selectedTeam.id}"
                                    />
                 </h:selectManyCheckbox> 
-            </rich:panel>
-            <h:panelGrid columns="2">
-                <rich:panel styleClass="stable" header="Nächstes Traingsdatum">
-                    <rich:calendar id="trainingCalendar"
-                                   mode="ajax" 
-                                   buttonLabel="Heute"
-                                   locale="de"
-                                   popup="false"
-                                   boundaryDatesMode="scroll" 
-                                   datePattern="dd.MM.yyyy"  
-                                   dataModel="#{trainingCalendar}" 
-                                   value="#{trainingController.nextTrainingDate}">
+            </h:panelGrid>
+            <h:panelGrid columnClasses="label,component,required" columns="2">
+                <h:outputLabel value="Trainingstage:"/>
+                <rich:calendar id="trainingCalendar"
+                               style="background-color: #F2F2F2"
+                               mode="ajax" 
+                               buttonLabel="Heute"
+                               locale="de"
+                               popup="false"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               dataModel="#{trainingCalendar}" 
+                               value="#{trainingController.nextTrainingDate}">
 
-                        <a4j:ajax event="change" render="next_trainingdate_out" />
-                    </rich:calendar>
-                </rich:panel>
-                <rich:panel id="next_trainingdate_out" style="border: transparent" >
-                    <h:outputText value="Nächstes Training = #{trainingController.nextTrainingDateAsFormattedString}"/>
-                    <p></p>
-                </rich:panel>
+                    <a4j:ajax event="change" render="next_trainingdate_out" />
+                </rich:calendar>
+
+                <h:outputLabel value="Training am:"/>
+                <h:outputText id="next_trainingdate_out" value="#{trainingController.nextTrainingDateAsFormattedString}"/>
+            </h:panelGrid>
+            <h:panelGrid columnClasses="label,component,required" columns="3">
+
+                <h:outputLabel value="Gruppe:"/>
+
+                <h:selectOneListbox id="participationGroupListbox" 
+                                    valueChangeListener="#{trainingController.participationGroupChanged}" 
+                                    size="1"
+                                    >
+                    <f:selectItems value="#{participationGroups}" 
+                                   var="selectedParticipationGroup" 
+                                   itemLabel="#{selectedParticipationGroup.description}"
+                                   itemValue="#{selectedParticipationGroup.id}" />
+                    <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
+                </h:selectOneListbox>
+                <h:link outcome="/admin/participationGroup/view">
+                    <f:param name="id" value="#{trainingController.selectedParticipationGroup.id}"/>
+                    <h:outputText id="itemName" value="Ändern"/>
+                </h:link>  
             </h:panelGrid>
 
-            <h:panelGrid columns="2" title="Titel">
-                <rich:panel>
-                    <h:selectOneListbox id="participationGroupListbox" valueChangeListener="#{trainingController.participationGroupChanged}" size="1" >
-                        <f:selectItems value="#{participationGroups}" 
-                                       var="selectedParticipationGroup" 
-                                       itemLabel="#{selectedParticipationGroup.description}"
-                                       itemValue="#{selectedParticipationGroup.id}" />
-                        <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
-                    </h:selectOneListbox>
-                </rich:panel>
-                <rich:panel id="participationGroupLinkPanel" >
-                    <h:link outcome="/admin/participationGroup/view">
-                        <f:param name="id" value="#{trainingController.selectedParticipationGroup.id}"/>
-                        <h:outputText id="itemName" value="Ändern"/>
-                    </h:link>  
-                </rich:panel>
-                <rich:panel styleClass="stable" header="Teilnehmer am Training:">
-                    <rich:dataTable var="_member" value="#{trainingController.selectedParticipationGroup.members}"
-                                    iterationStatusVar="it"
-                                    id="member_table"
-                                    rowClasses="odd-row, even-row"
-                                    styleClass="stable">
-                        <rich:column>
-                            <!--                    <f:facet name="header">Spieler</f:facet>-->
-                            #{_member.name}, #{_member.firstname}
-                        </rich:column> 
-                        <rich:column>
-                            <a4j:commandLink styleClass="no-decor" 
-                                             render="member_table" execute="@this">
-                            </a4j:commandLink>
-                        </rich:column>
-                    </rich:dataTable>
-                </rich:panel>
+            <h:panelGrid columnClasses="label,component,required" columns="3">
+                <h:outputLabel value="Teilnehmer:"/>
+                <h:dataTable 
+                    var="_member" value="#{trainingController.selectedParticipationGroup.members}"
+                    id="member_table"
+                    styleClass="data-table">
+                    <h:column>
+                        #{_member.name}, #{_member.firstname}
+                    </h:column> 
+                    <h:column>
+                        <a4j:commandLink styleClass="no-decor" 
+                                         render="member_table" execute="@this">
+                        </a4j:commandLink>
+                    </h:column>
+                </h:dataTable>
             </h:panelGrid>
 
             <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar"/>

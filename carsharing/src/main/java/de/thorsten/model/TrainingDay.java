@@ -18,7 +18,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 @SuppressWarnings("serial")
 @Entity
 @XmlRootElement
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = "weekday"))
+@Table(
+        uniqueConstraints = 
+                @UniqueConstraint(columnNames = {"weekday","location","timeFrom","timeTo"})
+)
 public class TrainingDay implements Serializable {
 
     @Id
