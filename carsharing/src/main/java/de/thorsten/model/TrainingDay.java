@@ -1,6 +1,5 @@
 /*
  * Die verschiedenen Trainingstage in der Woche
- * Eindeutig pro Wochentag
  */
 package de.thorsten.model;
 

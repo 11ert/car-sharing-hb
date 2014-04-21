@@ -11,12 +11,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
@@ -63,7 +61,9 @@ public class Participation implements Serializable {
     private boolean drivingBack;
 
     private boolean drivingForth;
-
+    
+    private boolean drivingBicycle;
+  
     private Date lastChanged;
     
     public Participation() {
@@ -71,6 +71,7 @@ public class Participation implements Serializable {
         this.drivingBack = Boolean.FALSE;
         this.participating = Boolean.FALSE;
         this.notParticipating = Boolean.FALSE;
+        this.drivingBicycle = Boolean.FALSE;
         this.lastChanged = new Date();
     }
 
@@ -214,7 +215,22 @@ public class Participation implements Serializable {
 
     @Override
     public String toString() {
-        return "Participation{" + "log=" + log + ", id=" + id + ", player=" + player + ", trainingItem=" + trainingItem + ", participating=" + participating + ", notParticipating=" + notParticipating + ", drivingBack=" + drivingBack + ", drivingForth=" + drivingForth + ", lastChanged=" + lastChanged + '}';
+        return "Participation{" + "log=" + log + ", id=" + id + ", player=" + player + ", trainingItem=" + trainingItem + ", participating=" + participating + ", notParticipating=" + notParticipating + ", drivingBack=" + drivingBack + ", drivingForth=" + drivingForth + ", drivingBicycle=" + drivingBicycle + ", lastChanged=" + lastChanged + '}';
+    }
+
+    
+    /**
+     * @return the drivingBicycle
+     */
+    public boolean isDrivingBicycle() {
+        return drivingBicycle;
+    }
+
+    /**
+     * @param drivingBicycle the drivingBicycle to set
+     */
+    public void setDrivingBicycle(boolean drivingBicycle) {
+        this.drivingBicycle = drivingBicycle;
     }
 
 }

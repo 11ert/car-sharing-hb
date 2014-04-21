@@ -149,6 +149,7 @@ public class ParticipationListProducer implements Serializable {
         numberOfSeatsBackRequired = 0;
         numberOfSeatsForthRequired = 0;
         numberOfSeatsForthAvailable = 0;
+        int numberOfBicycleDrivers = 0;
 
         for (Participation p : participations) {
             if (p.isParticipating()) {
@@ -160,9 +161,12 @@ public class ParticipationListProducer implements Serializable {
             if (p.isDrivingForth()) {
                 numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
             }
+            if (p.isDrivingBicycle()) {
+                numberOfBicycleDrivers++;
+            }
         }
-        numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable;
-        numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable;
+        numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable - numberOfBicycleDrivers;
+        numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable - numberOfBicycleDrivers;
 
         log.fine("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
         log.fine("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);

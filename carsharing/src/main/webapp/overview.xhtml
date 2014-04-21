@@ -147,6 +147,11 @@
                                                  onclick="return false"/>
                     </rich:column>
                     <rich:column>
+                        <f:facet name="header">Fährt mit Rad</f:facet>
+                        <h:selectBooleanCheckbox value="#{_participation.drivingBicycle}" readonly="true" 
+                                                 onclick="return false"/>
+                    </rich:column>
+                    <rich:column>
                         <f:facet name="header">Ändern</f:facet>
                         <a4j:commandLink styleClass="no-decor" 
                                          render="editGrid" execute="@this"
@@ -167,7 +172,7 @@
             <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
             <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
 
-            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="200" height="240" >
+            <rich:popupPanel header="Ändere Teilnahme / Mitfahrt" id="editPane" domElementAttachment="parent" width="200" height="290" >
                 <h:panelGrid columns="3" id="editGrid">
                     <h:outputText value="Spieler"/>
                     <h:outputText value="#{participationController.editedParticipation.player.firstname} #{participationController.editedParticipation.player.name}"/>
@@ -185,6 +190,9 @@
                     <h:panelGroup />
                     <h:outputText value="Fährt zurück"/>
                     <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingBack}" />
+                    <h:panelGroup />
+                    <h:outputText value="Fährt mit Rad"/>
+                    <h:selectBooleanCheckbox value="#{participationController.editedParticipation.drivingBicycle}" />
                 </h:panelGrid>
 
                 <a4j:commandButton value="Speichern" 
