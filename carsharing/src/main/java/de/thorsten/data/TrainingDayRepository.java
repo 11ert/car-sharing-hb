@@ -50,7 +50,6 @@ public class TrainingDayRepository {
         Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE t.weekday = :weekday");
         q.setParameter("weekday", weekday);
         return q.getResultList();
-  
     }
     
 }

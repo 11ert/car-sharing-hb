@@ -47,7 +47,7 @@
             }
         </h:outputStylesheet>
         <h:form id="training_creation_form">
-            <h:panelGrid columnClasses="label,component,required" columns="3">
+            <h:panelGrid columnClasses="label,component" columns="2">
                 <h:outputLabel value="Training für:"/>
                 <h:selectManyCheckbox id="teamsCheckBox"  
                                       value="#{trainingController.selectedTeamIds}" 
@@ -62,7 +62,7 @@
                                    />
                 </h:selectManyCheckbox> 
             </h:panelGrid>
-            <h:panelGrid columnClasses="label,component,required" columns="2">
+            <h:panelGrid columnClasses="label,component" columns="2">
                 <h:outputLabel value="Trainingstage:"/>
                 <rich:calendar id="trainingCalendar"
                                style="background-color: #F2F2F2"
@@ -73,18 +73,34 @@
                                boundaryDatesMode="scroll" 
                                datePattern="dd.MM.yyyy"  
                                dataModel="#{trainingCalendar}" 
-                               value="#{trainingController.nextTrainingDate}">
+                               value="#{trainingController.nextTrainingDate}"
+                               valueChangeListener="#{trainingController.trainingDateChanged}"
+                               >
 
-                    <a4j:ajax event="change" render="next_trainingdate_out" />
+                    <a4j:ajax event="change" render="next_trainingdate_out trainingDay_table trainingDayListbox" />
                 </rich:calendar>
-
+            </h:panelGrid>
+            <h:panelGrid columnClasses="label,component" columns="2">
                 <h:outputLabel value="Training am:"/>
                 <h:outputText id="next_trainingdate_out" value="#{trainingController.nextTrainingDateAsFormattedString}"/>
             </h:panelGrid>
+
+            <h:panelGrid id="trainingDay_time_panel" columnClasses="label,component" columns="2">
+                <h:outputLabel value="Zeit: "/>
+                <h:selectOneListbox id="trainingDayListbox" 
+                                    valueChangeListener="#{trainingController.trainingDayChanged}" 
+                                    size="1"
+                                    >
+                    <f:selectItems value="#{trainingController.trDayList}" 
+                                   var="selectedTrainingDay" 
+                                   itemValue="#{selectedTrainingDay.id}"
+                                   itemLabel="#{selectedTrainingDay.timeFromTemplate}-#{selectedTrainingDay.timeToTemplate}, #{selectedTrainingDay.comment}" />
+                    <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
+                </h:selectOneListbox>
+            </h:panelGrid>
+
             <h:panelGrid columnClasses="label,component,required" columns="3">
-
                 <h:outputLabel value="Gruppe:"/>
-
                 <h:selectOneListbox id="participationGroupListbox" 
                                     valueChangeListener="#{trainingController.participationGroupChanged}" 
                                     size="1"
@@ -98,10 +114,9 @@
                 <h:link outcome="/admin/participationGroup/view">
                     <f:param name="id" value="#{trainingController.selectedParticipationGroup.id}"/>
                     <h:outputText id="itemName" value="Ändern"/>
-                </h:link>  
+                </h:link>
             </h:panelGrid>
-
-            <h:panelGrid columnClasses="label,component,required" columns="3">
+            <h:panelGrid columnClasses="label,component" columns="2">
                 <h:outputLabel value="Teilnehmer:"/>
                 <h:dataTable 
                     var="_member" value="#{trainingController.selectedParticipationGroup.members}"
@@ -118,7 +133,7 @@
                 </h:dataTable>
             </h:panelGrid>
 
-            <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar"/>
+            <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar member_table participationGroupListbox"/>
             <rich:notifyMessages stayTime="2000" nonblocking="true" />
         </h:form>
         <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>

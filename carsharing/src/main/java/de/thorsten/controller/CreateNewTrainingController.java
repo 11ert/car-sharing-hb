@@ -64,6 +64,11 @@ public class CreateNewTrainingController implements Serializable {
     private List<Team> selectedTeams;
 
     private ParticipationGroup selectedParticipationGroup;
+    
+    // TrainingDay Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
+    private List<TrainingDay> trDayList;
+    
+    private TrainingDay selectedTrainingDay;
 
     @Inject
     private List<ParticipationGroup> participationGroups;
@@ -74,6 +79,7 @@ public class CreateNewTrainingController implements Serializable {
     @PostConstruct
     public void init() {
         selectedTeams = new ArrayList();
+        selectedTeamIds = null;
          // initial einfach erste laden
 
         if (participationGroups != null && participationGroups.size() != 0) {
@@ -81,6 +87,21 @@ public class CreateNewTrainingController implements Serializable {
         }
     }
 
+    public void trainingDateChanged(ValueChangeEvent event) {
+        log.info("trainingDateChanged ");
+        int weekday = -1;
+        Calendar cal = Calendar.getInstance();
+        if (event.getNewValue() != null) {
+            nextTrainingDate = ((Date) event.getNewValue());
+            log.fine("...to " + nextTrainingDate);
+            cal.setTime(nextTrainingDate);
+            weekday = cal.get(Calendar.DAY_OF_WEEK);
+            trDayList = trainingDayRepository.findByWeekday(weekday);
+            log.info("trDayList.size() = " + getTrDayList().size());
+        }
+            
+    }
+    
     /**
      * @return the nextTrainingDate
      */
@@ -100,20 +121,15 @@ public class CreateNewTrainingController implements Serializable {
     }
 
     public void createParticipationsForNextTrainingDate() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(nextTrainingDate);
-        int weekday = cal.get(Calendar.DAY_OF_WEEK);
-        List trDayList = trainingDayRepository.findByWeekday(weekday);
-
-        if (trDayList == null) {
+        if (selectedTrainingDay == null) {
             this.createErrorMessage("Kein gültiges Trainingsdatum (Wochentag?)");
         }
-        if (trDayList.size() == 0) {
-            this.createErrorMessage("Kein gültiges Trainingsdatum (Wochentag?)");
-        }
+        
         Training newTraining = new Training();
+        
+        // todo: Achtung: Hier das richtige übergeben!!!!!!!
         newTraining.setEventDate(nextTrainingDate);
-        newTraining.setTrainingDay((TrainingDay) trDayList.get(0));
+        newTraining.setTrainingDay(selectedTrainingDay);
         newTraining.initializeTrainingWithTrainingDayTemplateData();
 
         newTraining.setTeams(selectedTeams);
@@ -136,7 +152,8 @@ public class CreateNewTrainingController implements Serializable {
         try {
 
             Training tr = trainingService.update(newTraining);
-            List<Member> members = selectedParticipationGroup.getMembers();
+            List<Member> members = null;
+            members = selectedParticipationGroup.getMembers();
             for (final Iterator it = members.iterator(); it.hasNext();) {
                 Participation newParticipation = new Participation();
                 newParticipation.setPlayer((Member) it.next());
@@ -156,15 +173,10 @@ public class CreateNewTrainingController implements Serializable {
         }
 
         facesContext.addMessage(null, successMsg);
+        init();
 
     }
 
-    public void trainingDateChanged(ValueChangeEvent event) {
-
-        if (event.getNewValue() != null) {
-            nextTrainingDate = (Date) event.getNewValue();
-        }
-    }
 
     public void participationGroupChanged(ValueChangeEvent event) {
         log.fine("participationGroupChanged ");
@@ -175,6 +187,14 @@ public class CreateNewTrainingController implements Serializable {
         }
     }
 
+     public void trainingDayChanged(ValueChangeEvent event) {
+        log.fine("trainingDayChanged ");
+        if (event.getNewValue() != null) {
+            Long tmpId = Long.valueOf((String) event.getNewValue());
+            selectedTrainingDay = trainingDayRepository.findById(tmpId);
+            log.info("...to new trainingDay = " + selectedTrainingDay.toString());
+        }
+    }
     public void teamChanged(ValueChangeEvent event) {
         log.info("teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();
@@ -225,6 +245,27 @@ public class CreateNewTrainingController implements Serializable {
      */
     public void setSelectedParticipationGroup(ParticipationGroup selectedParticipationGroup) {
         this.selectedParticipationGroup = selectedParticipationGroup;
+    }
+
+    /**
+     * @return the trDayList
+     */
+    public List<TrainingDay> getTrDayList() {
+        return trDayList;
+    }
+
+    /**
+     * @return the selectedTrainingDay
+     */
+    public TrainingDay getSelectedTrainingDay() {
+        return selectedTrainingDay;
+    }
+
+    /**
+     * @param selectedTrainingDay the selectedTrainingDay to set
+     */
+    public void setSelectedTrainingDay(TrainingDay selectedTrainingDay) {
+        this.selectedTrainingDay = selectedTrainingDay;
     }
 
 }

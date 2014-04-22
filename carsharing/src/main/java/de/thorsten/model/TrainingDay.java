@@ -56,6 +56,9 @@ public class TrainingDay implements Serializable {
 
     @NotNull
     private int weekday;
+    
+    private String comment;
+            
 
     /**
      * @return the weekday
@@ -178,5 +181,26 @@ public class TrainingDay implements Serializable {
     public void setPickUpLocationTargetTemplate(String pickUpLocationTargetTemplate) {
         this.pickUpLocationTargetTemplate = pickUpLocationTargetTemplate;
     }
+
+    /**
+     * @return the comment
+     */
+    public String getComment() {
+        return comment;
+    }
+
+    /**
+     * @param comment the comment to set
+     */
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    @Override
+    public String toString() {
+        return "TrainingDay{" + "id=" + id + ", timeFromTemplate=" + timeFromTemplate + ", timeToTemplate=" + timeToTemplate + ", pickUpTimeSourceTemplate=" + pickUpTimeSourceTemplate + ", pickUpTimeTargetTemplate=" + pickUpTimeTargetTemplate + ", locationTemplate=" + locationTemplate + ", pickUpLocationSourceTemplate=" + pickUpLocationSourceTemplate + ", pickUpLocationTargetTemplate=" + pickUpLocationTargetTemplate + ", weekday=" + weekday + ", comment=" + comment + '}';
+    }
+    
+    
 
 }

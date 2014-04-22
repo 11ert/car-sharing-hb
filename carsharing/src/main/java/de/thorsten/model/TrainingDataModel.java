@@ -53,7 +53,9 @@ public class TrainingDataModel extends TrainingCalendarModel {
                     if (DateUtil.getDatePortion(d).compareTo(
                             DateUtil.getDatePortion(datesInCalendar[i])) == 0) {
                         modelItem.setStyleClass(super.TRAINING_DAY_CLASS);
-                        modelItem.setEnabled(false);// bereits eingetragen lässt sich nicht mehr ändern
+                        // bereits eingetragen lässt sich nicht mehr ändern
+                        // 22.04.14: Jetzt doch wieder, da mehrere Trainings am Tag möglich sind.
+                        //modelItem.setEnabled(false);
                     }
                 }
             }
