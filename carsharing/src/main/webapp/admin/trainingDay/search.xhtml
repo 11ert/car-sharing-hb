@@ -1,0 +1,131 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:rich="http://richfaces.org/rich"
+                template="/WEB-INF/templates/admin_template.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="page" value="#{trainingDayBean.page}"/>
+        <f:event type="preRenderView" listener="#{trainingDayBean.paginate}"/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="Trainingszeiten suchen"/>
+
+    <ui:define name="header">
+        Trainingszeiten
+    </ui:define>
+
+    <ui:define name="subheader">
+        Trainingszeiten suchen
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
+        <h:form id="search">
+            <f:validateBean disabled="true">
+                <h:panelGroup styleClass="search">
+
+                    <h:panelGrid columnClasses="label,component,required" columns="3">
+                        <h:outputLabel for="trainingDayBeanExampleWeekday" value="Wochentag:"/>
+                        <h:panelGroup>
+                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6" value="#{trainingDayBean.example.weekday}"/>
+                            <h:message for="trainingDayBeanExampleWeekday" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        <h:outputLabel for="trainingDayBeanExampleTimeFromTemplate" value="Uhrzeit von:"/>
+                        <h:panelGroup>
+                            <h:inputText id="trainingDayBeanExampleTimeFromTemplate" value="#{trainingDayBean.example.timeFromTemplate}"/>
+                            <h:message for="trainingDayBeanExampleTimeFromTemplate" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        <h:outputLabel for="trainingDayBeanExampleTimeToTemplate" value="Uhrzeit bis:"/>
+                        <h:panelGroup>
+                            <h:inputText id="trainingDayBeanExampleTimeToTemplate" value="#{trainingDayBean.example.timeToTemplate}"/>
+                            <h:message for="trainingDayBeanExampleTimeToTemplate" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                    </h:panelGrid>
+                    <h:panelGroup styleClass="buttons">
+                        <h:commandLink value="Search" action="#{trainingDayBean.search}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Create New" action="#{trainingDayBean.create}" styleClass="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </f:validateBean>
+
+            <h:dataTable id="trainingDayBeanPageItems" styleClass="data-table" value="#{trainingDayBean.pageItems}" var="_item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Wochentag"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemWeekday" value="#{_item.weekday}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Von"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTimeFromTemplate" value="#{_item.timeFromTemplate}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Bis"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTimeToTemplate" value="#{_item.timeToTemplate}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Abfahrtszeit-Heimatort"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemPickUpTimeSourceTemplate" value="#{_item.pickUpTimeSourceTemplate}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Abholzeit-Zielort"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemPickUpTimeTargetTemplate" value="#{_item.pickUpTimeTargetTemplate}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Zielort"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemLocationTemplate" value="#{_item.locationTemplate}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Bezeichnung"/>
+                    </f:facet>
+                    <h:link outcome="/admin/trainingDay/view">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemComment" value="#{_item.comment}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
+            <ui:include src="/resources/scaffold/paginator.xhtml">
+                <ui:param name="paginatorBean" value="#{trainingDayBean}"/>
+            </ui:include>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
