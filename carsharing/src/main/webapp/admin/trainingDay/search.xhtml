@@ -32,7 +32,7 @@
                     <h:panelGrid columnClasses="label,component,required" columns="3">
                         <h:outputLabel for="trainingDayBeanExampleWeekday" value="Wochentag:"/>
                         <h:panelGroup>
-                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6" value="#{trainingDayBean.example.weekday}"/>
+                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6" value="#{trainingDayBean.weekdayAsString}"/>
                             <h:message for="trainingDayBeanExampleWeekday" styleClass="error"/>
                         </h:panelGroup>
                         <h:outputText/>

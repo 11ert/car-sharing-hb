@@ -45,5 +45,26 @@ public final class DateUtil {
         return dateString;
     }
 
+    public static String getWeekdayAsString(int weekday) {
+        switch (weekday) {
+            case Calendar.SATURDAY:
+                return "Samstag";
+            case Calendar.SUNDAY:
+                return "Sonntag";
+            case Calendar.MONDAY:
+                return "Montag";
+            case Calendar.TUESDAY:
+                return "Dienstag";
+            case Calendar.WEDNESDAY:
+                return "Mittwoch";
+            case Calendar.THURSDAY:
+                return "Donnerstag";
+            case Calendar.FRIDAY:
+                return "Freitag";
+            default:
+                return "Fehler";
+        }
+        
+    }
     
 }
