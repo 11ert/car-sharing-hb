@@ -17,17 +17,18 @@
 package de.thorsten.data;
 
 import de.thorsten.model.ParticipationGroup;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
 
-@ApplicationScoped
-public class ParticipationGroupListProducer {
+@ViewAccessScoped
+public class ParticipationGroupListProducer implements Serializable {
 
     public ParticipationGroupListProducer() {
     }
