@@ -23,11 +23,13 @@
                 </h:inputTextarea>
                 <h:outputLabel for="author" value="Autor:" />
                 <h:inputText id="author" value="#{newNews.author}" />            
+<!--
                 <h:outputLabel id="mailSent" value="Mailversand:" />
 
                 <h:selectBooleanCheckbox  id="mailCheckbox" value="#{newNews.mail}">
                     <f:ajax event="click" render="mailingListPanel" execute="mailingListPanel" />
                 </h:selectBooleanCheckbox>
+-->
             </h:panelGrid>
 
             <h:panelGrid id="mailingListPanel" columns="2" columnClasses="titleCell">

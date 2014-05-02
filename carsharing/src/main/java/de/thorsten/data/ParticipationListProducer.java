@@ -197,10 +197,10 @@ public class ParticipationListProducer implements Serializable {
         log.fine("initialize() called");
         // Initial einfach erste Team nehmen        
         // todo: funktioniert nicht, wenn keine Teams vorhanden
+        selectedTeam = teamRepository.findAll().get(0);
 
         if (selectedTeam != null) {
             log.fine("***Selected Team in PostConstruct = " + selectedTeam.toString());
-            selectedTeam = teamRepository.findAll().get(0);
         }
         // Als Datum das aktuelle datum verwenden
         List<SportsEvent> sportEvents;

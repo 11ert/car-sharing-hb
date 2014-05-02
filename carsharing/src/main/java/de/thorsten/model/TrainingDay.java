@@ -4,10 +4,13 @@
 package de.thorsten.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -18,8 +21,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @XmlRootElement
 @Table(
-        uniqueConstraints = 
-                @UniqueConstraint(columnNames = {"weekday","location","timeFrom","timeTo"})
+        uniqueConstraints
+        = @UniqueConstraint(columnNames = {"weekday", "location", "timeFrom", "timeTo"})
 )
 public class TrainingDay implements Serializable {
 
@@ -56,11 +59,10 @@ public class TrainingDay implements Serializable {
 
     @NotNull
     private int weekday;
-    
-    private String comment;
-            
 
-    /**
+    private String comment;
+
+     /**
      * @return the weekday
      */
     public int getWeekday() {
@@ -200,7 +202,6 @@ public class TrainingDay implements Serializable {
     public String toString() {
         return "TrainingDay{" + "id=" + id + ", timeFromTemplate=" + timeFromTemplate + ", timeToTemplate=" + timeToTemplate + ", pickUpTimeSourceTemplate=" + pickUpTimeSourceTemplate + ", pickUpTimeTargetTemplate=" + pickUpTimeTargetTemplate + ", locationTemplate=" + locationTemplate + ", pickUpLocationSourceTemplate=" + pickUpLocationSourceTemplate + ", pickUpLocationTargetTemplate=" + pickUpLocationTargetTemplate + ", weekday=" + weekday + ", comment=" + comment + '}';
     }
-    
-    
 
+   
 }

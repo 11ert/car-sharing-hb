@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!--
+    Author: Thorsten Elfert
+-->
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                template="/WEB-INF/templates/default.xhtml"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+     <div id="team_select_checkBox">
+    <h:panelGrid columnClasses="label,component" columns="2">
+        <h:outputLabel value="Training für:"/>
+        <h:selectManyCheckbox id="teamsCheckBox"  
+                              value="#{trainingController.selectedTeamIds}" 
+                              valueChangeListener="#{trainingController.teamChanged}"
+                              layout="pageDirection"
+                              style="background-color: #F2F2F2"
+                              >
+            <f:selectItems value="#{teams}" 
+                           var="selectedTeam" 
+                           itemLabel="#{selectedTeam.shortName}"
+                           itemValue="#{selectedTeam.id}"
+                           />
+        </h:selectManyCheckbox> 
+    </h:panelGrid>
+     </div>
+</ui:composition>
