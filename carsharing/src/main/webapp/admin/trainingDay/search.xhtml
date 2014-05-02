@@ -5,6 +5,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
                 template="/WEB-INF/templates/admin_template.xhtml">
 
     <f:metadata>
@@ -32,7 +33,7 @@
                     <h:panelGrid columnClasses="label,component,required" columns="3">
                         <h:outputLabel for="trainingDayBeanExampleWeekday" value="Wochentag:"/>
                         <h:panelGroup>
-                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6" value="#{trainingDayBean.weekdayAsString}"/>
+                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6"/>
                             <h:message for="trainingDayBeanExampleWeekday" styleClass="error"/>
                         </h:panelGroup>
                         <h:outputText/>

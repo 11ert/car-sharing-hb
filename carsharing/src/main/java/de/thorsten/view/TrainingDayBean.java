@@ -45,64 +45,64 @@ import javax.faces.event.ValueChangeEvent;
 @Stateful
 @ConversationScoped
 public class TrainingDayBean implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
 
     /*
      * Support creating and retrieving TrainingDay entities
      */
     private Long id;
-    
+
     @Inject
     Logger log;
-    
+
     private int selectedWeekday = -1;
 
     public Long getId() {
         return this.id;
     }
-    
+
     public void setId(Long id) {
         this.id = id;
     }
-    
+
     private TrainingDay trainingDay;
-    
+
     public TrainingDay getTrainingDay() {
         return this.trainingDay;
     }
-    
+
     @Inject
     private Conversation conversation;
-    
+
     @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private EntityManager entityManager;
-    
+
     public String create() {
-        
+
         this.conversation.begin();
         return "create?faces-redirect=true";
     }
-    
+
     public void retrieve() {
-        
+
         if (FacesContext.getCurrentInstance().isPostback()) {
             return;
         }
-        
+
         if (this.conversation.isTransient()) {
             this.conversation.begin();
         }
-        
+
         if (this.id == null) {
             this.trainingDay = this.example;
         } else {
             this.trainingDay = findById(getId());
         }
     }
-    
+
     public TrainingDay findById(Long id) {
-        
+
         return this.entityManager.find(TrainingDay.class, id);
     }
 
@@ -111,7 +111,7 @@ public class TrainingDayBean implements Serializable {
      */
     public String update() {
         this.conversation.end();
-        
+
         try {
             if (this.id == null) {
                 this.entityManager.persist(this.trainingDay);
@@ -125,13 +125,13 @@ public class TrainingDayBean implements Serializable {
             return null;
         }
     }
-    
+
     public String delete() {
         this.conversation.end();
-        
+
         try {
             TrainingDay deletableEntity = findById(getId());
-            
+
             this.entityManager.remove(deletableEntity);
             this.entityManager.flush();
             return "search?faces-redirect=true";
@@ -147,38 +147,38 @@ public class TrainingDayBean implements Serializable {
     private int page;
     private long count;
     private List<TrainingDay> pageItems;
-    
+
     private TrainingDay example = new TrainingDay();
-    
+
     public int getPage() {
         return this.page;
     }
-    
+
     public void setPage(int page) {
         this.page = page;
     }
-    
+
     public int getPageSize() {
         return 10;
     }
-    
+
     public TrainingDay getExample() {
         return this.example;
     }
-    
+
     public void setExample(TrainingDay example) {
         this.example = example;
     }
-    
+
     public void search() {
         this.page = 0;
     }
-    
+
     public void paginate() {
-        
+
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
-      // Populate this.count
+        // Populate this.count
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
         Root<TrainingDay> root = countCriteria.from(TrainingDay.class);
         countCriteria = countCriteria.select(builder.count(root)).where(
@@ -186,7 +186,7 @@ public class TrainingDayBean implements Serializable {
         this.count = this.entityManager.createQuery(countCriteria)
                 .getSingleResult();
 
-      // Populate this.pageItems
+        // Populate this.pageItems
         CriteriaQuery<TrainingDay> criteria = builder.createQuery(TrainingDay.class);
         root = criteria.from(TrainingDay.class);
         TypedQuery<TrainingDay> query = this.entityManager.createQuery(criteria
@@ -195,12 +195,12 @@ public class TrainingDayBean implements Serializable {
                 getPageSize());
         this.pageItems = query.getResultList();
     }
-    
+
     private Predicate[] getSearchPredicates(Root<TrainingDay> root) {
-        
+
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         List<Predicate> predicatesList = new ArrayList<Predicate>();
-        
+
         int weekday = this.example.getWeekday();
         if (weekday != 0) {
             predicatesList.add(builder.equal(root.get("weekday"), weekday));
@@ -221,14 +221,14 @@ public class TrainingDayBean implements Serializable {
         if (pickUpTimeSourceTemplate != null && !"".equals(pickUpTimeSourceTemplate)) {
             predicatesList.add(builder.like(root.<String>get("pickUpTimeSourceTemplate"), '%' + pickUpTimeSourceTemplate + '%'));
         }
-        
+
         return predicatesList.toArray(new Predicate[predicatesList.size()]);
     }
-    
+
     public List<TrainingDay> getPageItems() {
         return this.pageItems;
     }
-    
+
     public long getCount() {
         return this.count;
     }
@@ -238,37 +238,37 @@ public class TrainingDayBean implements Serializable {
      * HtmlSelectOneMenu)
      */
     public List<TrainingDay> getAll() {
-        
+
         CriteriaQuery<TrainingDay> criteria = this.entityManager
                 .getCriteriaBuilder().createQuery(TrainingDay.class);
         return this.entityManager.createQuery(
                 criteria.select(criteria.from(TrainingDay.class))).getResultList();
     }
-    
+
     @Resource
     private SessionContext sessionContext;
-    
+
     public Converter getConverter() {
-        
+
         final TrainingDayBean ejbProxy = this.sessionContext.getBusinessObject(TrainingDayBean.class);
-        
+
         return new Converter() {
-            
+
             @Override
             public Object getAsObject(FacesContext context,
                     UIComponent component, String value) {
-                
+
                 return ejbProxy.findById(Long.valueOf(value));
             }
-            
+
             @Override
             public String getAsString(FacesContext context,
                     UIComponent component, Object value) {
-                
+
                 if (value == null) {
                     return "";
                 }
-                
+
                 return String.valueOf(((TrainingDay) value).getId());
             }
         };
@@ -278,32 +278,41 @@ public class TrainingDayBean implements Serializable {
      * Support adding children to bidirectional, one-to-many tables
      */
     private TrainingDay add = new TrainingDay();
-    
+
     public TrainingDay getAdd() {
         return this.add;
     }
-    
+
     public TrainingDay getAdded() {
         TrainingDay added = this.add;
         this.add = new TrainingDay();
         return added;
     }
-    
+
     public String getWeekdayAsString() {
-        return DateUtil.getWeekdayAsString(this.trainingDay.getWeekday());
+        if (trainingDay != null) {
+            return DateUtil.getWeekdayAsString(this.trainingDay.getWeekday());
+        } else {
+            return "";
+        }
     }
-    
+
     public void weekdayChanged(ValueChangeEvent event) {
         log.info("weekdayChanged ");
         if (event.getNewValue() != null) {
-            String test = (String)event.getNewValue();
-            Integer intTest = Integer.parseInt(test); 
+            String test = (String) event.getNewValue();
+            Integer intTest = Integer.parseInt(test);
             selectedWeekday = intTest;
-        this.trainingDay.setWeekday(selectedWeekday);
+            if (trainingDay != null) {
+                this.trainingDay.setWeekday(selectedWeekday);
+            }
+            if (example != null) {
+                this.example.setWeekday(selectedWeekday);
+            }
             log.fine("...to " + selectedWeekday);
             // todo - was mit attribut "weekday" ?
         }
-        
+
     }
 
     /**
