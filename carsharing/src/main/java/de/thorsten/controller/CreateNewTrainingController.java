@@ -195,6 +195,7 @@ public class CreateNewTrainingController implements Serializable {
             log.info("...to new trainingDay = " + selectedTrainingDay.toString());
         }
     }
+     
     public void teamChanged(ValueChangeEvent event) {
         log.info("teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();

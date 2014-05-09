@@ -61,8 +61,7 @@
                                    itemValue="#{selectedTeam.id}"
                                    />
                 </h:selectManyCheckbox> 
-            </h:panelGrid>
-            <h:panelGrid columnClasses="label,component" columns="2">
+
                 <h:outputLabel value="Trainingstage:"/>
                 <rich:calendar id="trainingCalendar"
                                style="background-color: #F2F2F2"
@@ -79,13 +78,9 @@
 
                     <a4j:ajax event="change" render="next_trainingdate_out trainingDay_table trainingDayListbox" />
                 </rich:calendar>
-            </h:panelGrid>
-            <h:panelGrid columnClasses="label,component" columns="2">
                 <h:outputLabel value="Training am:"/>
                 <h:outputText id="next_trainingdate_out" value="#{trainingController.nextTrainingDateAsFormattedString}"/>
-            </h:panelGrid>
 
-            <h:panelGrid id="trainingDay_time_panel" columnClasses="label,component" columns="2">
                 <h:outputLabel value="Zeit: "/>
                 <h:selectOneListbox id="trainingDayListbox" 
                                     valueChangeListener="#{trainingController.trainingDayChanged}" 
@@ -97,9 +92,7 @@
                                    itemLabel="#{selectedTrainingDay.timeFromTemplate}-#{selectedTrainingDay.timeToTemplate}, #{selectedTrainingDay.comment}" />
                     <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
                 </h:selectOneListbox>
-            </h:panelGrid>
 
-            <h:panelGrid columnClasses="label,component,required" columns="3">
                 <h:outputLabel value="Gruppe:"/>
                 <h:selectOneListbox id="participationGroupListbox" 
                                     valueChangeListener="#{trainingController.participationGroupChanged}" 
@@ -111,12 +104,12 @@
                                    itemValue="#{selectedParticipationGroup.id}" />
                     <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
                 </h:selectOneListbox>
-                <h:link outcome="/admin/participationGroup/view">
+                <h:outputLabel value=""/>
+                <h:link outcome="/admin/participationGroup/view" >
                     <f:param name="id" value="#{trainingController.selectedParticipationGroup.id}"/>
-                    <h:outputText id="itemName" value="Ändern"/>
+                    <h:outputText id="itemName"  value="Ändern"/>
                 </h:link>
-            </h:panelGrid>
-            <h:panelGrid columnClasses="label,component" columns="2">
+
                 <h:outputLabel value="Teilnehmer:"/>
                 <h:dataTable 
                     var="_member" value="#{trainingController.selectedParticipationGroup.members}"

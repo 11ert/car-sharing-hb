@@ -10,21 +10,24 @@
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
 
-     <div id="team_select_checkBox">
-    <h:panelGrid columnClasses="label,component" columns="2">
-        <h:outputLabel value="Training für:"/>
-        <h:selectManyCheckbox id="teamsCheckBox"  
-                              value="#{trainingController.selectedTeamIds}" 
-                              valueChangeListener="#{trainingController.teamChanged}"
-                              layout="pageDirection"
-                              style="background-color: #F2F2F2"
-                              >
-            <f:selectItems value="#{teams}" 
-                           var="selectedTeam" 
-                           itemLabel="#{selectedTeam.shortName}"
-                           itemValue="#{selectedTeam.id}"
-                           />
-        </h:selectManyCheckbox> 
-    </h:panelGrid>
-     </div>
+    <div id="team_select_checkBox">
+        <h:panelGrid columnClasses="label,component" columns="2">
+            <rich:panel header="SelectBox Example">
+                <h:selectOneListbox id="listbox_example" valueChangeListener="#{testBean.itemChanged}" size="1" >
+                    <f:selectItems  value="#{myList}" 
+                                    var="myItem" 
+                                    itemLabel="#{myItem.letter}"
+                                    itemValue="#{myItem.number}"
+                                    />
+                    <a4j:ajax event="change" render="selectedItem_outbox" />
+                </h:selectOneListbox>
+
+            </rich:panel>
+
+            <rich:panel id="selectedItem_outbox" header="SelectBox Output">
+                <h:outputText value="#{testBean.selectedItem.letter} / #{testBean.selectedItem.number}"/>
+            </rich:panel>
+
+        </h:panelGrid>
+    </div>
 </ui:composition>
