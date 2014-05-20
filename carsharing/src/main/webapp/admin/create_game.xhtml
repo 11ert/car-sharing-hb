@@ -6,6 +6,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/WEB-INF/templates/default.xhtml"
                 xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:rich="http://richfaces.org/rich">
 
     <ui:define name="content">
@@ -106,22 +107,20 @@
 
             </rich:panel>
 
-            <rich:dataTable var="_member" value="#{gameController.initialMembers}"
-                            iterationStatusVar="it"
-                            id="member_table"
-                            rowClasses="odd-row, even-row"
-                            styleClass="stable">
-                <rich:column>
-                    <f:facet name="header">Spieler</f:facet>
-                    #{_member.name}, #{_member.firstname}
-                </rich:column> 
-                <rich:column>
-                    <a4j:commandLink styleClass="no-decor" 
-                                     render="member_table" execute="@this">
-                        <h:graphicImage value="/resources/icons/delete.gif" alt="delete" />
-                    </a4j:commandLink>
-                </rich:column>
-            </rich:dataTable>
+            <h:outputLabel value="Gruppe:"/>
+                <te:participationgroup_selector listOfParticipationGroups="#{participationGroups}"
+                                                valueChangeListener="#{participationGroupView.participationGroupChanged}">
+                </te:participationgroup_selector>
+
+                <h:outputLabel value=""/>
+                <h:link outcome="/admin/participationGroup/view" >
+                    <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
+                    <h:outputText id="itemName"  value="Ändern"/>
+                </h:link>
+
+                <h:outputLabel value="Teilnehmer: "></h:outputLabel>
+                <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
+
         </h:form>
     </ui:define>
 </ui:composition>

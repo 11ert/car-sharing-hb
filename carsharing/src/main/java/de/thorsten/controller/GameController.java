@@ -6,6 +6,7 @@ import de.thorsten.data.TeamRepository;
 import de.thorsten.model.Game;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
+import de.thorsten.model.ParticipationGroup;
 import de.thorsten.model.Team;
 import de.thorsten.service.GameService;
 import de.thorsten.service.ParticipationService;
@@ -49,32 +50,29 @@ public class GameController implements Serializable {
 
     private Date nextDate;
 
-    private List<Member> initialMembers;
-    
     private Team teamForGame;
-    
+
     private List<Team> listOfTeamsForTheGame = new ArrayList();
 
     @Inject
     private TeamRepository teamRepository;
-    
+
     @Inject
     private TeamListProducer teamListProducer;
-  
+
     @Produces
     @Named
     private Game newGame;
+
+    @Inject
+    @Current
+    private ParticipationGroup selectedParticipationGroup;
 
     @PostConstruct
     public void load() {
         newGame = new Game();
         teamForGame = teamListProducer.getTeams().get(0);
         listOfTeamsForTheGame.add(teamForGame);
-        initialMembers = memberRepository.findAllOrderedByName();
-        if (initialMembers != null) {
-            log.info(initialMembers.size() + " initial Members loaded.");
-        }
-
     }
 
     /**
@@ -104,7 +102,10 @@ public class GameController implements Serializable {
 
             Game game = gameService.update(newGame);
 
-            for (final Iterator it = initialMembers.iterator(); it.hasNext();) {
+            List<Member> members = null;
+            members = selectedParticipationGroup.getMembers();
+
+            for (final Iterator it = members.iterator(); it.hasNext();) {
                 Participation newParticipation = new Participation();
                 newParticipation.setPlayer((Member) it.next());
                 newParticipation.setTraining(game);
@@ -144,20 +145,6 @@ public class GameController implements Serializable {
         log.info("removeMemberFromList called");
     }
 
-    /**
-     * @return the members
-     */
-    public List<Member> getInitialMembers() {
-        return initialMembers;
-    }
-
-    /**
-     * @param initialMembers the members to set
-     */
-    public void setInitialMembers(List<Member> initialMembers) {
-        this.initialMembers = initialMembers;
-    }
-    
     public void teamChanged(ValueChangeEvent event) {
         log.info("teamChanged()");
         listOfTeamsForTheGame.clear();
@@ -168,6 +155,5 @@ public class GameController implements Serializable {
             log.info("...to new Team = " + teamForGame.toString());
         }
     }
-    
- 
+
 }
