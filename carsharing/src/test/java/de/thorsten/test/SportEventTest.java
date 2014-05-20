@@ -1,6 +1,6 @@
 package de.thorsten.test;
 
-import de.thorsten.controller.CreateNewTrainingController;
+import de.thorsten.controller.TrainingController;
 import de.thorsten.data.MemberRepository;
 import de.thorsten.data.ParticipationRepository;
 import de.thorsten.data.TeamRepository;
@@ -27,14 +27,12 @@ import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import junit.framework.Assert;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,7 +43,7 @@ public class SportEventTest {
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test.war")
                 .addClasses(SportsEvent.class,
-                        CreateNewTrainingController.class,
+                        TrainingController.class,
                         Resources.class,
                         Training.class,
                         Team.class,
@@ -63,9 +61,31 @@ public class SportEventTest {
                         Game.class,
                         ParticipationRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
                 // Deploy our test datasource
-                .addAsWebInfResource("test-ds.xml");
+//ShrinkWrap.create(WebArchive.class, "test.war")
+//                .addClasses(SportsEvent.class,
+//                        TrainingController.class,
+//                        Resources.class,
+//                        Training.class,
+//                        Team.class,
+//                        TrainingRepository.class,
+//                        TrainingDay.class,
+//                        TrainingDayRepository.class,
+//                        MemberRepository.class,
+//                        MemberRegistration.class,
+//                        ParticipationService.class,
+//                        TeamRepository.class,
+//                        Participation.class,
+//                        TrainingService.class,
+//                        TeamService.class,
+//                        Member.class,
+//                        Game.class,
+//                        ParticipationRepository.class)
+//                .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
+//                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+//                // Deploy our test datasource
+//                .addAsWebInfResource("test-ds.xml");
     }
 
     @Inject

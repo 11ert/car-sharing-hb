@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -34,7 +35,7 @@ import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
  */
 @Named("trainingController")
 @ViewAccessScoped
-public class CreateNewTrainingController implements Serializable {
+public class TrainingController implements Serializable {
 
     @Inject
     private Logger log;
@@ -63,6 +64,7 @@ public class CreateNewTrainingController implements Serializable {
 
     private List<Team> selectedTeams;
 
+    @Inject @Current 
     private ParticipationGroup selectedParticipationGroup;
     
     // TrainingDay Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
@@ -80,11 +82,6 @@ public class CreateNewTrainingController implements Serializable {
     public void init() {
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
-         // initial einfach erste laden
-
-        if (participationGroups != null && participationGroups.size() != 0) {
-            selectedParticipationGroup = participationGroups.get(0);
-        }
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
@@ -178,35 +175,24 @@ public class CreateNewTrainingController implements Serializable {
     }
 
 
-    public void participationGroupChanged(ValueChangeEvent event) {
-        log.fine("participationGroupChanged ");
-        if (event.getNewValue() != null) {
-            Long tmpId = Long.valueOf((String) event.getNewValue());
-            selectedParticipationGroup = participationGroupListProducer.getParticipationGroupById(tmpId);
-            log.fine("...to new participationGroup = " + selectedParticipationGroup.toString());
-        }
-    }
-
      public void trainingDayChanged(ValueChangeEvent event) {
         log.fine("trainingDayChanged ");
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTrainingDay = trainingDayRepository.findById(tmpId);
-            log.info("...to new trainingDay = " + selectedTrainingDay.toString());
+            log.fine("...to new trainingDay = " + selectedTrainingDay.toString());
         }
     }
      
     public void teamChanged(ValueChangeEvent event) {
-        log.info("teamChanged");
+        log.fine("teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();
         for (int x = 0; x < selectedTeamIds.length; x++) {
             Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
-            log.info("CurrentTeam = " + currentTeam.toString());
+            log.fine("CurrentTeam = " + currentTeam.toString());
             selectedTeams.add(currentTeam);
-            log.info("..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
+            log.fine("..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
         }
-        log.info("teamChanged - selectedTeams)");
-
     }
 
     public void createErrorMessage(String msg) {
@@ -235,20 +221,6 @@ public class CreateNewTrainingController implements Serializable {
     }
 
     /**
-     * @return the selectedParticipationGroup
-     */
-    public ParticipationGroup getSelectedParticipationGroup() {
-        return selectedParticipationGroup;
-    }
-
-    /**
-     * @param selectedParticipationGroup the selectedParticipationGroup to set
-     */
-    public void setSelectedParticipationGroup(ParticipationGroup selectedParticipationGroup) {
-        this.selectedParticipationGroup = selectedParticipationGroup;
-    }
-
-    /**
      * @return the trDayList
      */
     public List<TrainingDay> getTrDayList() {
@@ -262,11 +234,5 @@ public class CreateNewTrainingController implements Serializable {
         return selectedTrainingDay;
     }
 
-    /**
-     * @param selectedTrainingDay the selectedTrainingDay to set
-     */
-    public void setSelectedTrainingDay(TrainingDay selectedTrainingDay) {
-        this.selectedTrainingDay = selectedTrainingDay;
-    }
 
 }

@@ -87,7 +87,8 @@ textarea {
 }
 
 button,
-input {
+input
+{
   *overflow: visible;
   line-height: normal;
 }

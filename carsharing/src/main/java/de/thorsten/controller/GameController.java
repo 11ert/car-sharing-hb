@@ -60,8 +60,7 @@ public class GameController implements Serializable {
     
     @Inject
     private TeamListProducer teamListProducer;
-            
-    
+  
     @Produces
     @Named
     private Game newGame;
@@ -169,4 +168,6 @@ public class GameController implements Serializable {
             log.info("...to new Team = " + teamForGame.toString());
         }
     }
+    
+ 
 }

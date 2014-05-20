@@ -5,11 +5,9 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
                 template="/WEB-INF/templates/admin_template.xhtml"
+                xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
-
-
-
 
     <ui:param name="pageTitle" value="Neue Trainings"/>
 
@@ -47,18 +45,21 @@
             }
         </h:outputStylesheet>
         <h:form id="training_creation_form">
-            <h:panelGrid columnClasses="label,component" columns="2">
+
+            <h:panelGrid columnClasses="label, component" columns="2">
                 <h:outputLabel value="Training für:"/>
                 <h:selectManyCheckbox id="teamsCheckBox"  
                                       value="#{trainingController.selectedTeamIds}" 
                                       valueChangeListener="#{trainingController.teamChanged}"
                                       layout="pageDirection"
-                                      style="background-color: #F2F2F2"
+                                      styleClass="checkbox"
+
                                       >
                     <f:selectItems value="#{teams}" 
                                    var="selectedTeam" 
                                    itemLabel="#{selectedTeam.shortName}"
                                    itemValue="#{selectedTeam.id}"
+
                                    />
                 </h:selectManyCheckbox> 
 
@@ -78,10 +79,11 @@
 
                     <a4j:ajax event="change" render="next_trainingdate_out trainingDay_table trainingDayListbox" />
                 </rich:calendar>
+
                 <h:outputLabel value="Training am:"/>
                 <h:outputText id="next_trainingdate_out" value="#{trainingController.nextTrainingDateAsFormattedString}"/>
 
-                <h:outputLabel value="Zeit: "/>
+                <h:outputLabel value="Zeit:"/>
                 <h:selectOneListbox id="trainingDayListbox" 
                                     valueChangeListener="#{trainingController.trainingDayChanged}" 
                                     size="1"
@@ -90,45 +92,27 @@
                                    var="selectedTrainingDay" 
                                    itemValue="#{selectedTrainingDay.id}"
                                    itemLabel="#{selectedTrainingDay.timeFromTemplate}-#{selectedTrainingDay.timeToTemplate}, #{selectedTrainingDay.comment}" />
-                    <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
+                    <a4j:ajax event="change" render="member_table" />
                 </h:selectOneListbox>
 
                 <h:outputLabel value="Gruppe:"/>
-                <h:selectOneListbox id="participationGroupListbox" 
-                                    valueChangeListener="#{trainingController.participationGroupChanged}" 
-                                    size="1"
-                                    >
-                    <f:selectItems value="#{participationGroups}" 
-                                   var="selectedParticipationGroup" 
-                                   itemLabel="#{selectedParticipationGroup.description}"
-                                   itemValue="#{selectedParticipationGroup.id}" />
-                    <a4j:ajax event="change" render="member_table participationGroupLinkPanel" />
-                </h:selectOneListbox>
+                <te:participationgroup_selector listOfParticipationGroups="#{participationGroups}"
+                                                valueChangeListener="#{participationGroupView.participationGroupChanged}">
+                </te:participationgroup_selector>
+
                 <h:outputLabel value=""/>
                 <h:link outcome="/admin/participationGroup/view" >
-                    <f:param name="id" value="#{trainingController.selectedParticipationGroup.id}"/>
+                    <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
                     <h:outputText id="itemName"  value="Ändern"/>
                 </h:link>
 
-                <h:outputLabel value="Teilnehmer:"/>
-                <h:dataTable 
-                    var="_member" value="#{trainingController.selectedParticipationGroup.members}"
-                    id="member_table"
-                    styleClass="data-table">
-                    <h:column>
-                        #{_member.name}, #{_member.firstname}
-                    </h:column> 
-                    <h:column>
-                        <a4j:commandLink styleClass="no-decor" 
-                                         render="member_table" execute="@this">
-                        </a4j:commandLink>
-                    </h:column>
-                </h:dataTable>
-            </h:panelGrid>
+                <h:outputLabel value="Teilnehmer: "></h:outputLabel>
+                <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
 
+            </h:panelGrid>
             <a4j:commandButton value="Teilnehmer hinzufügen" action="#{trainingController.createParticipationsForNextTrainingDate()}" render="trainingCalendar member_table participationGroupListbox"/>
             <rich:notifyMessages stayTime="2000" nonblocking="true" />
         </h:form>
-        <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
+        <a href="/carsharing/overview.jsf" style="alignment-baseline: central">Zurück zur Übersicht</a>
     </ui:define>
 </ui:composition>
