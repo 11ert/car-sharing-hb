@@ -4,12 +4,24 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/WEB-INF/templates/default.xhtml"
+                template="/WEB-INF/templates/admin_template.xhtml"
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:rich="http://richfaces.org/rich">
 
-    <ui:define name="content">
+    <ui:param name="pageTitle" value="Neues Spiel"/>
+
+    <ui:define name="header">
+        Spiel
+    </ui:define>
+
+    <ui:define name="subheader">
+        Neues Spiel eintragen
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
         <h:outputStylesheet>
             .tdc {
             background-color: green;
@@ -32,9 +44,12 @@
             cursor: pointer;
             }
         </h:outputStylesheet>
+
         <h:form id="game_creation_date_calendar">
-            <rich:panel styleClass="stable" header="Nächstes Spiel">
+            <h:panelGrid columnClasses="label, component" columns="2">
+                <h:outputLabel value="Nächstes Spiel:"/>
                 <rich:calendar id="gameCalendar"
+                               style="background-color: #F2F2F2"
                                mode="ajax" 
                                buttonLabel="Heute"
                                locale="de"
@@ -46,73 +61,79 @@
 
                     <a4j:ajax event="change" render="next_game_date_output" />
                 </rich:calendar>
-            </rich:panel>
-            <rich:panel id="gamedata">
-                <h:outputText id="next_game_date_output" value="Nächstes Spiel = #{gameController.nextDate}"/>
-                <p></p>
-                <a4j:commandButton value="Spiel speichern" action="#{gameController.createParticipationsForNextDate()}" render="gameCalendar"/>
-                <rich:notifyMessages stayTime="2000" nonblocking="true" />
-                <a href="/carsharing/overview.jsf">Zurück zur Übersicht</a>
-                <h:panelGrid columns="3" columnClasses="titleCell">
 
-                    <h:outputLabel for="team" value="Team:" />
-                    <h:selectOneListbox id="teamListbox" valueChangeListener="#{gameController.teamChanged}" size="1" >
-                        <f:selectItems value="#{teams}" 
-                                       var="teamForGame" 
-                                       itemLabel="#{teamForGame.shortName}"
-                                       itemValue="#{teamForGame.id}"
-                                       />
-                    </h:selectOneListbox>
-                    <h:message for="team" errorClass="invalid" />
+                <h:outputLabel />
+                <h:outputText id="next_game_date_output" value="#{gameController.nextDate}" />
+                
+                <h:outputLabel for="team" value="Team:" />
+                <h:selectOneListbox id="teamListbox" valueChangeListener="#{gameController.teamChanged}" size="1" >
+                    <f:selectItems value="#{teams}" 
+                                   var="teamForGame" 
+                                   itemLabel="#{teamForGame.shortName}"
+                                   itemValue="#{teamForGame.id}"
+                                   />
+                </h:selectOneListbox>
 
-                    <h:outputLabel for="opponent" value="Gegner:" />
-                    <h:inputText id="opponent" value="#{newGame.opponent}" />
+                <h:outputLabel for="opponent" value="Gegner:" />
+                <h:panelGroup>
+
+                    <h:inputText id="opponent" value="#{newGame.opponent}"/>
                     <h:message for="opponent" errorClass="invalid" />
-
-                    <h:outputLabel for="location" value="Spielort:" />
+                </h:panelGroup>
+                
+                <h:outputLabel for="location" value="Spielort:" />
+                <h:panelGroup>
                     <h:inputText id="firstname"
                                  value="#{newGame.location}" />
                     <h:message for="location" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="timeFrom" value="Von:" />
+                <h:outputLabel for="timeFrom" value="Von:" />
+                <h:panelGroup>
                     <h:inputText id="timeFrom"
                                  value="#{newGame.timeFrom}" />
                     <h:message for="timeFrom" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="timeTo" value="Bis:" />
+                <h:outputLabel for="timeTo" value="Bis:" />
+                <h:panelGroup>
                     <h:inputText id="timeTo"
                                  value="#{newGame.timeTo}" />
                     <h:message for="timeTo" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="pickUpLocationSource" value="Abfahrtsort:" />
+                <h:outputLabel for="pickUpLocationSource" value="Abfahrtsort:" />
+                <h:panelGroup>
                     <h:inputText id="pickUpLocationSource" value="#{newGame.pickUpLocationSource}" />
                     <h:message for="pickUpLocationSource" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="pickUpTimeSource" value="Abfahrtszeit:" />
-                    <h:inputText id="pickUpTimeSource"
-                                 value="#{newGame.pickUpTimeSource}" />
+                <h:outputLabel for="pickUpTimeSource" value="Abfahrtszeit:" />
+                <h:panelGroup>
+                    <h:inputText id="pickUpTimeSource" value="#{newGame.pickUpTimeSource}" />
                     <h:message for="pickUpTimeSource" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="pickUpTimeTarget" value="Abholzeit:" />
+                <h:outputLabel for="pickUpTimeTarget" value="Abholzeit:" />
+                <h:panelGroup>
                     <h:inputText id="pickUpTimeTarget"
                                  value="#{newGame.pickUpTimeTarget}" />
                     <h:message for="pickUpTimeTarget" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="pickUpLocationTarget" value="Abholort:" />
+                <h:outputLabel for="pickUpLocationTarget" value="Abholort:" />
+                <h:panelGroup>
                     <h:inputText id="pickUpLocationTarget"
                                  value="#{newGame.pickUpLocationTarget}" />
                     <h:message for="pickUpLocationTarget" errorClass="invalid" />
-                </h:panelGrid>
+                </h:panelGroup>
 
-
-            </rich:panel>
-
-            <h:outputLabel value="Gruppe:"/>
+                <h:outputLabel value="Gruppe:"/>
                 <te:participationgroup_selector listOfParticipationGroups="#{participationGroups}"
                                                 valueChangeListener="#{participationGroupView.participationGroupChanged}">
                 </te:participationgroup_selector>
 
-                <h:outputLabel value=""/>
+                <h:outputText />
                 <h:link outcome="/admin/participationGroup/view" >
                     <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
                     <h:outputText id="itemName"  value="Ändern"/>
@@ -120,7 +141,12 @@
 
                 <h:outputLabel value="Teilnehmer: "></h:outputLabel>
                 <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
+            </h:panelGrid>
+            <a4j:commandButton value="Spiel speichern" action="#{gameController.createParticipationsForNextDate()}" render="gameCalendar"/>
+            <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
         </h:form>
+        <a href="/carsharing/overview.jsf" style="alignment-baseline: central">Zurück zur Übersicht</a>
+
     </ui:define>
 </ui:composition>
