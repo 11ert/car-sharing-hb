@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -25,9 +27,9 @@ public class Member implements Serializable {
     @GeneratedValue( strategy = GenerationType.SEQUENCE )
     private Long id;
 
-    @NotNull
+    @NotNull 
     @Size(min = 1, max = 25)
-    @Pattern(regexp = "[^0-9]*", message = "Must not contain numbers")
+    @Pattern(regexp = "[^0-9]*", message = "Darf keine Zahlen enthalten")
     private String name;
 
     //@NotNull
@@ -41,6 +43,7 @@ public class Member implements Serializable {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Min(value = 0) @Max(value = 10)
     @Column(name = "carsize")
     private int carsize = 0;
 

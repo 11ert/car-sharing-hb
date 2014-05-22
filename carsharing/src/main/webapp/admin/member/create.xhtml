@@ -37,24 +37,24 @@
             <h:messages globalOnly="true" styleClass="error"/>
 
             <h:panelGrid columnClasses="label,component,required" columns="3">
-                <h:outputLabel for="memberBeanMemberName" value="Name:"/>
+                <h:outputLabel for="Name" value="Name:"/>
                 <h:panelGroup>
-                    <h:inputText id="memberBeanMemberName" maxlength="25" required="true" value="#{memberBean.member.name}"/>
-                    <h:message for="memberBeanMemberName" styleClass="error"/>
+                    <h:inputText id="Name" required="true" maxlength="25"  value="#{memberBean.member.name}"/>
+                    <h:message for="Name" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText value="*"/>
-                <h:outputLabel for="memberBeanMemberFirstname" value="Vorname:"/>
+                <h:outputLabel for="Vorname" value="Vorname:"/>
                 <h:panelGroup>
-                    <h:inputText id="memberBeanMemberFirstname" maxlength="25" value="#{memberBean.member.firstname}"/>
-                    <h:message for="memberBeanMemberFirstname" styleClass="error"/>
+                    <h:inputText id="Vorname" maxlength="25" value="#{memberBean.member.firstname}"/>
+                    <h:message for="Vorname" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText value="*"/>
+                <h:outputText/>
                 <h:outputLabel for="memberBeanMemberCity" value="Wohnort:"/>
                 <h:panelGroup>
                     <h:inputText id="memberBeanMemberCity" maxlength="25" value="#{memberBean.member.city}"/>
                     <h:message for="memberBeanMemberCity" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText value="*"/>
+                <h:outputText/>
                 <h:outputLabel for="memberBeanMemberEmail" value="Email:"/>
                 <h:panelGroup>
                     <h:inputText id="memberBeanMemberEmail" value="#{memberBean.member.email}"/>
@@ -69,11 +69,10 @@
                 <h:outputText/>
                 <h:outputLabel for="memberBeanMemberCarsize" value="Anzahl Sitzplätze:"/>
                 <h:panelGroup>
-                    <rich:inputNumberSpinner cycled="false" id="memberBeanMemberCarsize" maxValue="999999999" value="#{memberBean.member.carsize}"/>
+                    <rich:inputNumberSpinner cycled="false" id="memberBeanMemberCarsize" maxValue="10" value="#{memberBean.member.carsize}"/>
                     <h:message for="memberBeanMemberCarsize" styleClass="error"/>
                 </h:panelGroup>
-
-                <h:outputText/>
+                <h:outputText value="*"/>
             </h:panelGrid>
 
             <div class="buttons">
