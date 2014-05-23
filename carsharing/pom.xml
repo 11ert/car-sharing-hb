@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.thorsten</groupId>
     <artifactId>carsharing</artifactId>
-    <version>1.4.1-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>CarSharing</name>
     <description>Eine Applikation zum Verwalten von Mitfahrgelegenheiten</description>
@@ -180,7 +180,7 @@
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <scope>provided</scope>
         </dependency>
-    </dependencies>
+     </dependencies>
     <repositories>
         <repository>
             <id>os890</id>
@@ -215,6 +215,24 @@
                     <force>true</force>
                 </configuration>
             </plugin>
+            <!-- Plugin um Abhängigkeiten zu visualisieren -->
+            <plugin>
+                <groupId>de.struller-baumann</groupId>
+                <artifactId>visualee</artifactId>
+                <version>0.26</version>
+                <configuration>
+                    <outputdirectory>visualee</outputdirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>visualize</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
         </plugins>
     </build>
     <profiles>
