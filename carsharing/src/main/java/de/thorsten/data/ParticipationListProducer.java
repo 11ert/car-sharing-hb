@@ -1,5 +1,6 @@
 package de.thorsten.data;
 
+import de.thorsten.controller.Current;
 import de.thorsten.model.Game;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -14,11 +15,14 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.event.Event;
 
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.faces.event.ValueChangeEvent;
+import org.omnifaces.cdi.Param;
+import org.omnifaces.cdi.param.ParamValue;
 
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
 import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
@@ -29,6 +33,10 @@ public class ParticipationListProducer implements Serializable {
 
     private static String TRAINING = "Training";
     private static String GAME = "Spiel";
+
+    @Inject
+    @Param
+    private ParamValue<Long> paramTeamID;
 
     private String sportEventType;
 
@@ -43,6 +51,12 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     private Logger log;
+
+    @Inject
+    private Event<Team> teamChangedEvent;
+
+    @Inject
+    private List<Team> teams;
 
     private List<Participation> participations;
 
@@ -93,7 +107,7 @@ public class ParticipationListProducer implements Serializable {
         if (event.getNewValue() != null) {
             this.sportEventDate = ((Date) event.getNewValue());
             log.fine("...to " + sportEventDate);
-            this.recalculateParticipationDeendencies();
+            this.recalculateParticipationDependencies();
         }
     }
 
@@ -103,7 +117,8 @@ public class ParticipationListProducer implements Serializable {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTeam = teamRepository.findById(tmpId);
             log.fine("...to new Team = " + selectedTeam.toString());
-            this.recalculateParticipationDeendencies();
+            teamChangedEvent.fire(selectedTeam);
+            this.recalculateParticipationDependencies();
         }
     }
 
@@ -111,27 +126,31 @@ public class ParticipationListProducer implements Serializable {
         return DateUtil.getSelectedDateAsFormattedString(getSportEventDate());
     }
 
-    public void retrieveAllParticipatorsForSelectedDateAndTeam() {
-        log.fine("retrieveAllParticipatorsForSelectedDateAndTeam()");
+    public void retrieveAllRelevantParticipators() {
+        log.fine("ParticipationListProducer.retrieveAllRelevantParticipators()");
 
         if ((getSportEventDate() != null) && (this.selectedTeam != null)) {
-            log.fine("... for Team = " + selectedTeam.toString());
-            log.fine("... and sportEventDate = " + getSportEventDate());
+            log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() * ... for Team = " + selectedTeam.toString());
+            log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() *... and sportEventDate = " + getSportEventDate());
             participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(getSportEventDate(), selectedTeam);
-            log.fine("found " + participations.size() + " Participations");
+        } else if (this.selectedTeam == null) {
+            participations = participationRepository.getAllForSpecificDateAndTeamOrderedByName(getSportEventDate(), selectedTeam);
+        } else {
+            log.warning("ParticipationListProducer.retrieveAllRelevantParticipators() * sportEventDate is null");
+        }
 
-            // todo zum testen schleife durc participations und daranhängende Teams anzeigen!
+        if (participations != null) {
+            log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() * Found " + participations.size() + " Participations:");
+
             for (Participation p : participations) {
-                log.fine(p.toString());
-                log.fine("SportEvent - teams");
+                log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() * " + p.toString());
+                log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() * Teams: ");
                 for (Team t : p.getTrainingItem().getTeams()) {
-                    log.fine("Team: " + t.toString());
+                    log.fine("ParticipationListProducer.retrieveAllRelevantParticipators() * Team: " + t.toString());
                 }
             }
-        } else {
-            log.warning("sportEventDate or selectedTeam is null");
+            calculateParticipationAttributes();
         }
-        calculateParticipationAttributes();
     }
 
     /**
@@ -140,10 +159,13 @@ public class ParticipationListProducer implements Serializable {
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
         log.fine("onParticipationListChanged() called");
-        retrieveAllParticipatorsForSelectedDateAndTeam();
+        retrieveAllRelevantParticipators();
     }
 
     private void calculateParticipationAttributes() {
+
+        log.fine("calculateParticipationAttributes");
+
         numberOfParticipators = 0;
         numberOfSeatsBackAvailable = 0;
         numberOfSeatsBackRequired = 0;
@@ -151,18 +173,26 @@ public class ParticipationListProducer implements Serializable {
         numberOfSeatsForthAvailable = 0;
         int numberOfBicycleDrivers = 0;
 
-        for (Participation p : participations) {
-            if (p.isParticipating()) {
-                numberOfParticipators++;
-            }
-            if (p.isDrivingBack()) {
-                numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
-            }
-            if (p.isDrivingForth()) {
-                numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
-            }
-            if (p.isDrivingBicycle()) {
-                numberOfBicycleDrivers++;
+        if (participations == null) {
+            log.warning("Participations = null");
+        } else {
+            for (Participation p : participations) {
+                if (p == null) {
+                    log.severe("participation is null : " + p);
+
+                }
+                if (p.isParticipating()) {
+                    numberOfParticipators++;
+                }
+                if (p.isDrivingBack()) {
+                    numberOfSeatsBackAvailable = numberOfSeatsBackAvailable + p.getPlayer().getCarsize();
+                }
+                if (p.isDrivingForth()) {
+                    numberOfSeatsForthAvailable = numberOfSeatsForthAvailable + p.getPlayer().getCarsize();
+                }
+                if (p.isDrivingBicycle()) {
+                    numberOfBicycleDrivers++;
+                }
             }
         }
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable - numberOfBicycleDrivers;
@@ -194,27 +224,41 @@ public class ParticipationListProducer implements Serializable {
 
     @PostConstruct
     public void initialize() {
-   
-        // Initial einfach erste Team nehmen        
-        // todo: funktioniert nicht, wenn keine Teams vorhanden
-        selectedTeam = teamRepository.findAll().get(0);
 
-        if (selectedTeam != null) {
-            log.fine("Selected Team in PostConstruct = " + selectedTeam.toString());
+        // Selected Team via URL Parameter hat Vorrang
+        if (getParamTeamID() != null) {
+            // Wenn Übergabeparameter in URL vorhanden, dieses Team nehmen
+            if (getParamTeamID().getValue() != null) {
+                selectedTeam = teamRepository.findById(getParamTeamID().getValue());
+                teamChangedEvent.fire(selectedTeam);
+                log.fine("ParticipationListProducer.initialize() * Selected Team " + selectedTeam + " via URL Parameter");
+            }
         }
         // Als Datum das aktuelle datum verwenden
         List<SportsEvent> sportEvents;
-        sportEvents = sportsEventRepository.findAllGeDateAndForSpecificTeam(new Date(), selectedTeam);
-        if (sportEvents == null) {
-            log.fine("initializte() - Training null");
-        } else if (sportEvents.size() == 0) {
-            log.fine("initialize() - Training null");
+
+        if (selectedTeam == null) {
+            // Wenn kein Team, dann erstes in der Liste
+            selectedTeam = teams.get(0);
+            log.fine("ParticipationListProducer.initialize() * Selected Team = Erstes Team aus Liste:" + selectedTeam);
         } else {
-            // 1. SportEvent nehmen
+            log.fine("ParticipationListProducer.initialize() * Selected Team " + selectedTeam);
+        }
+        sportEvents = sportsEventRepository.findAllGeDateAndForSpecificTeam(new Date(), selectedTeam);
+
+        if (sportEvents == null) {
+            log.warning("ParticipationListProducer.initialize() *  SporEvents null");
+        } else if (sportEvents.size() == 0) {
+            log.warning("ParticipationListProducer.initialize() *  SportEvents null");
+        } else {
+            // 1. SportEvent nehmen (nächstes Datum)
             selectedSportsEvent = sportEvents.get(0);
             sportEventDate = selectedSportsEvent.getEventDate();
-            this.recalculateParticipationDeendencies();
+            this.recalculateParticipationDependencies();
         }
+        log.fine("ParticipationListProducer.initialize() * final selectedTeam = " + selectedTeam);
+        log.fine("ParticipationListProducer.initialize() * final sportEventDate = " + sportEventDate);
+        log.fine("ParticipationListProducer.initialize() * final selectedSportsEvent = " + selectedSportsEvent);
     }
 
     /**
@@ -244,6 +288,9 @@ public class ParticipationListProducer implements Serializable {
     /**
      * @return the selectedTeam
      */
+    @Produces
+    @Current
+    @Named
     public Team getSelectedTeam() {
         return selectedTeam;
     }
@@ -252,20 +299,22 @@ public class ParticipationListProducer implements Serializable {
      * @param selectedTeam the selectedTeam to set
      */
     public void setSelectedTeam(Team selectedTeam) {
+        teamChangedEvent.fire(selectedTeam);
         this.selectedTeam = selectedTeam;
     }
 
     private void updateSelectedSportsEvent() {
         log.fine("updateSelectedSportsEvent() with " + sportEventDate + " and " + this.selectedTeam);
-        List<SportsEvent> events;
-        events = sportsEventRepository.findByDateAndTeam(sportEventDate, selectedTeam);
-        if (events != null) {
-            if (events.size() != 0) {
-                selectedSportsEvent = events.get(0);
+        List<SportsEvent> sportEvents;
+        sportEvents = sportsEventRepository.findByDateAndTeam(sportEventDate, selectedTeam);
+        if (sportEvents != null) {
+            if (sportEvents.size() != 0) {
+                selectedSportsEvent = sportEvents.get(0);
                 determineSportEventType(); // todo: käse
                 log.fine("found selected Sport Event " + selectedSportsEvent.toString());
             }
         }
+        // 
     }
 
     /**
@@ -282,9 +331,18 @@ public class ParticipationListProducer implements Serializable {
         this.sportEventDate = sportEventDate;
     }
 
-    public void recalculateParticipationDeendencies() {
-        retrieveAllParticipatorsForSelectedDateAndTeam();
-        calculateParticipationAttributes();
-        updateSelectedSportsEvent();
+    public void recalculateParticipationDependencies() {
+        if (selectedTeam != null) {
+            retrieveAllRelevantParticipators();
+            calculateParticipationAttributes();
+            updateSelectedSportsEvent();
+        }
+    }
+
+    /**
+     * @return the paramTeamID
+     */
+    public ParamValue<Long> getParamTeamID() {
+        return paramTeamID;
     }
 }

@@ -33,8 +33,8 @@ public class TrainingCalendarModel implements CalendarDataModel {
     private Date selectedDate;
 
     private boolean defaultModeEditable = false;
-
-    public String getSelectedDateAsFormattedString() {
+    
+   public String getSelectedDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(selectedDate);
     }
 
@@ -68,7 +68,7 @@ public class TrainingCalendarModel implements CalendarDataModel {
     protected Date[] getDatesToBeHighlighted() {
 
         SortedSet<Date> sportEventDates = trainingListProducer.getTrainingDates();
-
+ 
         Date[] dates = new Date[sportEventDates.size()];
 
         int i = 0;

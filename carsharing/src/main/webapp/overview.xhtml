@@ -53,27 +53,31 @@
                                    value="#{participationListProducer.sportEventDate}"
                                    valueChangeListener="#{participationListProducer.sportEventDateChanged}">
 
-                        <a4j:ajax event="change" render="trainingDate_output participation_table" />
+                        <a4j:ajax event="change" render="trainingDate_output participation_table no_participations_panel"/>
 
                     </rich:calendar>
-                    <h:panelGrid columns="3" columnClasses="titleCell">
-                        <table>
-                            <tr>
-                                <td align="center" width="45" height="18" style="background-color: green; color: white">Training</td>
-                                <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
-                                <td>                    
-                                    <h:selectOneListbox id="teamListbox" valueChangeListener="#{participationListProducer.teamChanged}" size="1" >
-                                        <f:selectItems value="#{teams}" 
-                                                       var="selectedTeam" 
-                                                       itemLabel="#{selectedTeam.shortName}"
-                                                       itemValue="#{selectedTeam.id}"
-                                                       />
-                                        <a4j:ajax event="change" render="trainingDate_output participation_table" />
-                                    </h:selectOneListbox>
-                                </td>
-                            </tr>
-                        </table>
-                    </h:panelGrid>
+                    <!--         <h:panelGrid columns="3" columnClasses="titleCell">-->
+                    <table>
+                        <tr>
+                            <td align="center"  width="45" height="18" style="background-color: green; color: white">Training</td>
+                            <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
+                            <td>                    
+                                <h:selectOneListbox id="teamListbox" 
+                                                    valueChangeListener="#{participationListProducer.teamChanged}" 
+                                                    size="1" 
+                                                    rendered="#{empty param.paramTeamID}">
+                                    <f:selectItems value="#{teams}" 
+                                                   var="theTeam" 
+                                                   itemLabel="#{theTeam.longName}"
+                                                   itemValue="#{theTeam.id}"
+                                                   />
+                                    <a4j:ajax event="change" render="trainingDate_output participation_table no_participations_panel trainingCalendar" />
+                                </h:selectOneListbox>
+                                <h:outputText value="#{selectedTeam.longName}" rendered="#{not empty param.paramTeamID}" style="background-color: white"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <!--             </h:panelGrid>-->
                     <p/>
                 </rich:panel>
 
@@ -113,15 +117,19 @@
                     <h:outputText style="color:red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired > 0}"/>
+                    <h:outputText value="Selected Team = #{selectedTeam.longName}"/>
                 </rich:panel>
             </h:panelGrid>
-            <rich:panel id="participation_table" styleClass="stable" header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString}">
+            <rich:panel id="participation_table" 
+                        styleClass="stable" 
+                        header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString}">
 
                 <rich:dataTable var="_participation" value="#{participations}"
                                 iterationStatusVar="it"
                                 rowClasses="odd-row, even-row"
                                 styleClass="stable"
-                                >
+                                rendered="#{not empty participations}">
+
                     <rich:column>
                         <f:facet name="header">Spieler</f:facet>
                         #{_participation.player.firstname}, #{_participation.player.name}
@@ -165,6 +173,10 @@
 
                     </rich:column>
                 </rich:dataTable>
+            </rich:panel>
+
+            <rich:panel id="no_participations_panel" rendered="#{empty participations}">
+                <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName}"/>
             </rich:panel>
 
             <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />

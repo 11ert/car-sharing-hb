@@ -24,6 +24,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 @ApplicationScoped
 public class TeamRepository {
@@ -35,14 +37,21 @@ public class TeamRepository {
         return em.find(Team.class, id);
     }
 
-
     public List<Team> findAll() {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Team> criteria = cb.createQuery(Team.class);
-        Root<Team> team = criteria.from(Team.class);
-        criteria.select(team);
-        return em.createQuery(criteria).getResultList();
+        Query q = em.createQuery("SELECT t FROM Team t order by shortName");
+        return q.getResultList();
+
+//        CriteriaBuilder cb = em.getCriteriaBuilder();
+//        CriteriaQuery<Team> criteria = cb.createQuery(Team.class);
+//        Root<Team> team = criteria.from(Team.class);
+//        criteria.select(team);
+//        return em.createQuery(criteria).getResultList();
     }
     
-   
+    public Team findByShortName(String shortName) {
+        Query q = em.createQuery("SELECT t FROM Team t where t.shortName = :shortName order by shortName");
+        q.setParameter("shortName", shortName);
+        return (Team)q.getSingleResult();
+    }
+
 }

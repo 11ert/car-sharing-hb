@@ -5,6 +5,7 @@ package de.thorsten.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
@@ -62,6 +63,10 @@ public class TrainingDay implements Serializable {
 
     private String comment;
 
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+//    private List<Team> teams;
+
+    
      /**
      * @return the weekday
      */
@@ -202,6 +207,7 @@ public class TrainingDay implements Serializable {
     public String toString() {
         return "TrainingDay{" + "id=" + id + ", timeFromTemplate=" + timeFromTemplate + ", timeToTemplate=" + timeToTemplate + ", pickUpTimeSourceTemplate=" + pickUpTimeSourceTemplate + ", pickUpTimeTargetTemplate=" + pickUpTimeTargetTemplate + ", locationTemplate=" + locationTemplate + ", pickUpLocationSourceTemplate=" + pickUpLocationSourceTemplate + ", pickUpLocationTargetTemplate=" + pickUpLocationTargetTemplate + ", weekday=" + weekday + ", comment=" + comment + '}';
     }
+
 
    
 }

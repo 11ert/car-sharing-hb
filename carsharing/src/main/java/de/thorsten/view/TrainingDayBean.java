@@ -25,7 +25,6 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import de.thorsten.model.TrainingDay;
-import static de.thorsten.model.TrainingDay_.weekday;
 import de.thorsten.util.DateUtil;
 import java.util.Calendar;
 import java.util.Date;

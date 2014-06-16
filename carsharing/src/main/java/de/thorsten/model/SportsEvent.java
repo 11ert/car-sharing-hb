@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;

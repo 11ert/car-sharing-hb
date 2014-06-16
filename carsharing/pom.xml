@@ -223,7 +223,7 @@
                 </configuration>
             </plugin>
             <!-- Plugin um Abhängigkeiten zu visualisieren -->
-            <plugin>
+<!--            <plugin>
                 <groupId>de.struller-baumann</groupId>
                 <artifactId>visualee</artifactId>
                 <version>0.26</version>
@@ -238,7 +238,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             
         </plugins>
     </build>

@@ -16,6 +16,7 @@
  */
 package de.thorsten.data;
 
+import de.thorsten.model.Team;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -49,6 +50,12 @@ public class TrainingDayRepository {
     public List<TrainingDay> findByWeekday(int weekday) {
         Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE t.weekday = :weekday");
         q.setParameter("weekday", weekday);
+        return q.getResultList();
+    }
+    
+    public List<TrainingDay> findAllForTeam(Team team) {
+        Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE WHERE :team MEMBER OF t.teams");
+        q.setParameter("team", team);
         return q.getResultList();
     }
     

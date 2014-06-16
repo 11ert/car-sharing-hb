@@ -30,6 +30,9 @@ public class TrainingDataModel extends TrainingCalendarModel {
     public void TrainingDataModel() {
         super.setDefaultModeEditable(true);
     }
+    
+   // @Inject
+   // private Team selectedTeam;
 
     public CalendarDataModelItem[] getData(Date[] datesInCalendar) {
         CalendarDataModelItem[] modelItems = new CalendarDataModelItemImpl[datesInCalendar.length];

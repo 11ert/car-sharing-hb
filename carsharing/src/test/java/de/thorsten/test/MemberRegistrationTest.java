@@ -28,18 +28,18 @@ import de.thorsten.model.Member;
 import de.thorsten.model.Team;
 import de.thorsten.service.MemberRegistration;
 import de.thorsten.util.Resources;
+import java.util.ArrayList;
+import java.util.List;
 import junit.framework.Assert;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
-//@RunWith(Arquillian.class)
+@RunWith(Arquillian.class)
 public class MemberRegistrationTest {
 
     @Deployment
@@ -61,7 +61,7 @@ public class MemberRegistrationTest {
     @Inject
     Logger log;
 
-   // @Before
+    @Before
     public void testRegister() throws Exception {
         Member newMember = new Member();
         newMember.setName("Jane");
@@ -72,7 +72,7 @@ public class MemberRegistrationTest {
         newTeam.setLongName("First team");
         newTeam.setShortName("1. Team");
         memberRegistration.register(newMember);
-        log.info(newMember.getName() + " was persisted with id " + newMember.getId());
+        log.info("**TEST** " + newMember.getName() + " was persisted");
 
         Member newMember2 = new Member();
         newMember2.setName("Tarzan");
@@ -83,20 +83,22 @@ public class MemberRegistrationTest {
         newTeam.setLongName("Second team");
         newTeam.setShortName("2. Team");
         memberRegistration.register(newMember2);
-        log.info(newMember2.getName() + " was persisted with id " + newMember2.getId());
+        log.info("**TEST** " + newMember2.getName() + " was persisted");
 
     }
 
- //   @Test
+    @Test()
     public void testFindAll() throws Exception {
-        Assert.assertEquals(2, memberRepository.findAllOrderedByName().size());
-    }
+        List<Member> allMembers = new ArrayList();
+        allMembers = memberRepository.findAllOrderedByName();
+        log.info("**TEST** MemberRegistration.testFindAll()");
+        for (Member m : allMembers) {
+            log.info("**TEST** Member: " + m.toString());
+        }
+        Assert.assertEquals(2, allMembers.size());
 
- //   @Test
-    public void testFindbyEMail() throws Exception {
         Member member = memberRepository.findByEmail("jane@mailinator.com");
         Assert.assertEquals("Jane", member.getName());
     }
-    
-    
+
 }

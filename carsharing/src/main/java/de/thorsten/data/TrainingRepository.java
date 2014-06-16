@@ -1,5 +1,6 @@
 package de.thorsten.data;
 
+import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
@@ -48,4 +49,9 @@ public class TrainingRepository {
         return q.getResultList();
     }
 
+    public List<Training> findAllOfTeam(Team team) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE :team MEMBER OF t.teams");
+        q.setParameter("team", team);
+        return q.getResultList();
+    }
 }

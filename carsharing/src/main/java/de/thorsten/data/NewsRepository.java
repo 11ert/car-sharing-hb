@@ -1,7 +1,6 @@
 package de.thorsten.data;
 
 import de.thorsten.model.News;
-import de.thorsten.model.News_;
 import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -30,7 +29,6 @@ public class NewsRepository {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<News> criteria = cb.createQuery(News.class);
         Root<News> news = criteria.from(News.class);
-        criteria.orderBy(cb.desc(news.get(News_.creationDate)));
         return em.createQuery(criteria).getResultList();
     }
 

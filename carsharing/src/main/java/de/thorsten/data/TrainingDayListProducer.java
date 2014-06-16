@@ -16,6 +16,7 @@
  */
 package de.thorsten.data;
 
+import de.thorsten.model.Team;
 import de.thorsten.model.TrainingDay;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
@@ -49,4 +50,5 @@ public class TrainingDayListProducer {
     public void retrieveAllTrainingDays() {
         trainingDays = trainingDayRepository.findAll();
     }
+ 
 }
