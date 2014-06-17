@@ -50,7 +50,7 @@ public class SportsEventCalendarModel implements CalendarDataModel {
 
             
             // Trainings ermitteln
-            for (Training element : trainingListProducer.getTrainings()) {
+            for (Training element : trainingListProducer.getTrainingsOfSelectedTeam()) {
                 if (element != null) {
                     if (DateUtil.getDatePortion(element.getEventDate()).compareTo(
                             DateUtil.getDatePortion(datesInCalendar[i])) == 0) {

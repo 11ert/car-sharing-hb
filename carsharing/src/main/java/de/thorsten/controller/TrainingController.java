@@ -21,20 +21,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
+import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
 /**
  *
  * @author Thorsten
  */
 @Named("trainingController")
-@RequestScoped
+@ViewAccessScoped
 public class TrainingController implements Serializable {
 
     @Inject
@@ -85,8 +85,6 @@ public class TrainingController implements Serializable {
     @PostConstruct
     public void init() {
         log.fine("TrainingController @PostConstruct");
-        // workaround...todo-selectedTea auf null gesetzt, um alle Teams zu erhalten
-       teamChangedEvent.fire(null);
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
     }

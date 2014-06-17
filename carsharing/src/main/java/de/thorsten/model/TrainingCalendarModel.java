@@ -67,7 +67,7 @@ public class TrainingCalendarModel implements CalendarDataModel {
 
     protected Date[] getDatesToBeHighlighted() {
 
-        SortedSet<Date> sportEventDates = trainingListProducer.getTrainingDates();
+        SortedSet<Date> sportEventDates = trainingListProducer.getAllTrainingDates();
  
         Date[] dates = new Date[sportEventDates.size()];
 
