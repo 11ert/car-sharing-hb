@@ -53,7 +53,7 @@
                                    value="#{participationListProducer.sportEventDate}"
                                    valueChangeListener="#{participationListProducer.sportEventDateChanged}">
 
-                        <a4j:ajax event="change" render="trainingDate_output participation_table no_participations_panel"/>
+                        <a4j:ajax event="change" render="trainingDate_output participation_table"/>
 
                     </rich:calendar>
                     <!--         <h:panelGrid columns="3" columnClasses="titleCell">-->
@@ -71,7 +71,7 @@
                                                    itemLabel="#{theTeam.longName}"
                                                    itemValue="#{theTeam.id}"
                                                    />
-                                    <a4j:ajax event="change" render="trainingDate_output participation_table no_participations_panel trainingCalendar" />
+                                    <a4j:ajax event="change" render="trainingDate_output participation_table trainingCalendar" />
                                 </h:selectOneListbox>
                                 <h:outputText value="#{selectedTeam.longName}" rendered="#{not empty param.paramTeamID}" style="background-color: white"/>
                             </td>
@@ -117,7 +117,6 @@
                     <h:outputText style="color:red; font-size: smaller;font-weight: normal;" 
                                   value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
                                   rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired > 0}"/>
-                    <h:outputText value="Selected Team = #{selectedTeam.longName}"/>
                 </rich:panel>
             </h:panelGrid>
             <rich:panel id="participation_table" 
@@ -129,7 +128,6 @@
                                 rowClasses="odd-row, even-row"
                                 styleClass="stable"
                                 rendered="#{not empty participations}">
-
                     <rich:column>
                         <f:facet name="header">Spieler</f:facet>
                         #{_participation.player.firstname}, #{_participation.player.name}
@@ -173,10 +171,6 @@
 
                     </rich:column>
                 </rich:dataTable>
-            </rich:panel>
-
-            <rich:panel id="no_participations_panel" rendered="#{empty participations}">
-                <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName}"/>
             </rich:panel>
 
             <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />

@@ -33,6 +33,7 @@ public class ParticipationListProducer implements Serializable {
 
     private static String TRAINING = "Training";
     private static String GAME = "Spiel";
+    private static String UNKNOWN = "Handball";
 
     @Inject
     @Param
@@ -224,7 +225,8 @@ public class ParticipationListProducer implements Serializable {
 
     @PostConstruct
     public void initialize() {
-
+        sportEventType = UNKNOWN;
+        sportEventDate = new Date();
         // Selected Team via URL Parameter hat Vorrang
         if (getParamTeamID() != null) {
             // Wenn Übergabeparameter in URL vorhanden, dieses Team nehmen
@@ -259,6 +261,7 @@ public class ParticipationListProducer implements Serializable {
         log.fine("ParticipationListProducer.initialize() * final selectedTeam = " + selectedTeam);
         log.fine("ParticipationListProducer.initialize() * final sportEventDate = " + sportEventDate);
         log.fine("ParticipationListProducer.initialize() * final selectedSportsEvent = " + selectedSportsEvent);
+        determineSportEventType();
     }
 
     /**
