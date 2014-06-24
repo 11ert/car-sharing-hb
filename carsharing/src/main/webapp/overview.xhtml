@@ -39,7 +39,7 @@
 <!--        <f:event listener="#{participationListProducer.initialize()}" type="preRenderView" />-->
 
         <h:form id="calendar_form">
-            <h:panelGrid columns="2" >
+            <h:panelGrid columns="2">
                 <rich:panel styleClass="stable" header="Traingsdatum">
                     <rich:calendar id="trainingCalendar"
                                    mode="ajax" 
@@ -52,11 +52,9 @@
                                    dataModel="#{sportsEventsCalendarModelReadOnly}" 
                                    value="#{participationListProducer.sportEventDate}"
                                    valueChangeListener="#{participationListProducer.sportEventDateChanged}">
-
                         <a4j:ajax event="change" render="trainingDate_output participation_table"/>
-
                     </rich:calendar>
-                    <!--         <h:panelGrid columns="3" columnClasses="titleCell">-->
+
                     <table>
                         <tr>
                             <td align="center"  width="45" height="18" style="background-color: green; color: white">Training</td>
@@ -65,7 +63,7 @@
                                 <h:selectOneListbox id="teamListbox" 
                                                     valueChangeListener="#{participationListProducer.teamChanged}" 
                                                     size="1" 
-                                                    rendered="#{empty param.paramTeamID}">
+                                                    rendered="#{empty param.paramTeamShortName}">
                                     <f:selectItems value="#{teams}" 
                                                    var="theTeam" 
                                                    itemLabel="#{theTeam.longName}"
@@ -73,56 +71,62 @@
                                                    />
                                     <a4j:ajax event="change" render="trainingDate_output participation_table trainingCalendar" />
                                 </h:selectOneListbox>
-                                <h:outputText value="#{selectedTeam.longName}" rendered="#{not empty param.paramTeamID}" style="background-color: white"/>
+                                <h:outputText value="#{selectedTeam.longName}" rendered="#{not empty param.paramTeamShortName}" style="background-color: white"/>
                             </td>
                         </tr>
                     </table>
-                    <!--             </h:panelGrid>-->
+
                     <p/>
                 </rich:panel>
-
-                <rich:panel id="trainingDate_output">
-                    <h:outputText style="font-size: small;font-weight: bold;"
-                                  value="#{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString}:" /><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedSportsEvent.timeFrom} bis #{selectedSportsEvent.timeTo} Uhr in #{selectedSportsEvent.location}"/><br/>
-                    <p/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Teams: #{selectedSportsEvent.teamsAsFormattedString}"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem #{participationListProducer.sportEventType}"/>                
-                    <p></p>
-                    <h:outputText style="font-size: smaller;font-weight: bold;"
-                                  value="Hinfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedSportsEvent.pickUpTimeSource}"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedSportsEvent.pickUpLocationSource}"/><br/>
-                    <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
-                                  value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
-                                  rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
-                    <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
-                                  value="Genügend Plätze auf der Hinfahrt vorhanden!" 
-                                  rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired le 0}"/><br/>
-                    <p></p>
-                    <h:outputText style="font-size: smaller;font-weight: bold;" 
-                                  value="Rückfahrt"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="Abfahrt: #{selectedSportsEvent.pickUpTimeTarget}"/><br/>
-                    <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                  value="#{selectedSportsEvent.pickUpLocationTarget}"/><br/>
-                    <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
-                                  value="Genügend Plätze auf der Rückfahrt vorhanden!"
-                                  rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>
-                    <h:outputText style="color:red; font-size: smaller;font-weight: normal;" 
-                                  value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
-                                  rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired > 0}"/>
+                <rich:panel 
+                    header="#{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString}:" 
+                    id="trainingDate_output">
+                    <h:panelGroup rendered="#{empty participations}">
+                        <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName} !" />
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not empty participations}">
+                         <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="#{participationListProducer.sportEventType} von #{selectedSportsEvent.timeFrom} bis #{selectedSportsEvent.timeTo} Uhr in #{selectedSportsEvent.location}"/><br/>
+                        <p/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="Teams: #{selectedSportsEvent.teamsAsFormattedString}"/><br/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="#{participationListProducer.numberOfParticipators} Teilnehmer bei diesem #{participationListProducer.sportEventType}"/>                
+                        <p></p>
+                        <h:outputText style="font-size: smaller;font-weight: bold;"
+                                      value="Hinfahrt"/><br/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="Abfahrt: #{selectedSportsEvent.pickUpTimeSource}"/><br/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="#{selectedSportsEvent.pickUpLocationSource}"/><br/>
+                        <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
+                                      value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
+                                      rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
+                        <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
+                                      value="Genügend Plätze auf der Hinfahrt vorhanden!" 
+                                      rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired le 0}"/><br/>
+                        <p></p>
+                        <h:outputText style="font-size: smaller;font-weight: bold;" 
+                                      value="Rückfahrt"/><br/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="Abfahrt: #{selectedSportsEvent.pickUpTimeTarget}"/><br/>
+                        <h:outputText style="font-size: smaller;font-weight: normal;" 
+                                      value="#{selectedSportsEvent.pickUpLocationTarget}"/><br/>
+                        <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
+                                      value="Genügend Plätze auf der Rückfahrt vorhanden!"
+                                      rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>
+                        <h:outputText style="color:red; font-size: smaller;font-weight: normal;" 
+                                      value="Noch #{participationListProducer.numberOfSeatsBackRequired} Plätze auf der Rückfahrt nötig!"
+                                      rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired > 0}"/>
+                    </h:panelGroup>
                 </rich:panel>
             </h:panelGrid>
             <rich:panel id="participation_table" 
                         styleClass="stable" 
                         header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString}">
-
+                <h:panelGroup rendered="#{empty participations}">
+                    <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName} !" />
+                </h:panelGroup>
                 <rich:dataTable var="_participation" value="#{participations}"
                                 iterationStatusVar="it"
                                 rowClasses="odd-row, even-row"
@@ -166,9 +170,7 @@
                             <h:graphicImage value="/resources/icons/edit.gif" alt="edit" />
                             <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
                             <f:setPropertyActionListener target="#{participationController.editedParticipation}" value="#{_participation}" />
-
                         </a4j:commandLink>
-
                     </rich:column>
                 </rich:dataTable>
             </rich:panel>
@@ -228,5 +230,4 @@
             </rich:column>
         </rich:dataTable>
     </ui:define>
-
 </ui:composition>

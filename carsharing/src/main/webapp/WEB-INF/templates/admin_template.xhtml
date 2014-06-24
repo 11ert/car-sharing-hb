@@ -1,66 +1,66 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:h="http://java.sun.com/jsf/html"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
-<h:head>
-	<title>#{empty pageTitle ? 'Page Title' : pageTitle}</title>
-	<link rel="icon" href="#{resource['favicon.ico']}" />
-	<h:outputStylesheet name="bootstrap.css" />
-	<h:outputStylesheet name="forge-style.css" />
-</h:head>
+    <h:head>
+        <title>#{empty pageTitle ? 'Page Title' : pageTitle}</title>
+        <link rel="icon" href="#{resource['favicon.ico']}" />
+        <h:outputStylesheet name="bootstrap.css" />
+        <h:outputStylesheet name="forge-style.css" />
+    </h:head>
 
-<h:body>
+    <h:body>
 
 
-	<div class="container forgecontainer">
-            
-		<div id="navigation">
-   			<ul>
-				<li>
-					<h:link outcome="/overview" value="Übersicht"/>
-				</li>
-				<li>
-					<h:link outcome="/admin/create_news" value="News"/>
-				</li>
-				<li>
-					<h:link outcome="/admin/member/search" value="Spieler"/>
-				</li>
-                                <li>
-					<h:link outcome="/admin/mailingList/search" value="Mailverteiler"/>
-				</li>
-				<li>
-					<h:link outcome="/admin/participationGroup/search" value="Teilnehmergruppen"/>
-				</li>
-				<li>
-					<h:link outcome="/admin/create_trainingsdate" value="Training"/>
-				</li>			
-				<li>
-					<h:link outcome="/admin/trainingDay/search" value="Trainingszeiten"/>
-				</li>			
-				<li>
-					<h:link outcome="/admin/create_game" value="Spiele"/>
-				</li>			
-                        </ul>
-		</div>
+        <div class="container forgecontainer">
 
-		<div id="content">
-			<h1>
-				<ui:insert name="header" />
-			</h1>
-			<h2>
-				<ui:insert name="subheader" />
-			</h2>
+            <div id="navigation">
+                <ul>
+                    <li>
+                        <h:link outcome="/overview" value="Übersicht"/>
+                    </li>
+                    <li>
+                        <h:link outcome="/admin/create_news" value="News"/>
+                    </li>
+                    <li>
+                        <h:link outcome="/admin/member/search" value="Spieler"/>
+                    </li>
+                    <li>
+                        <h:link outcome="/admin/mailingList/search" value="Mailverteiler"/>
+                    </li>
+                    <li>
+                        <h:link outcome="/admin/participationGroup/search" value="Teilnehmergruppen"/>
+                    </li>
+                    <li>
+                        <h:link outcome="/admin/create_trainingsdate" value="Training"/>
+                    </li>			
+                    <li>
+                        <h:link outcome="/admin/trainingDay/search" value="Trainingszeiten"/>
+                    </li>			
+                    <li>
+                        <h:link outcome="/admin/create_game" value="Spiele"/>
+                    </li>			
+                </ul>
+            </div>
 
-			<ui:insert name="main" />
-		</div>
-	</div>
+            <div id="content">
+                <h1>
+                    <ui:insert name="header" />
+                </h1>
+                <h2>
+                    <ui:insert name="subheader" />
+                </h2>
 
-	<footer>
-		<div id="footer-wrapper">
-	    	<p>thorsten.elfert@gmail.com - 24.05.2014 - v1.5</p>
-	    </div>
-	</footer>
+                <ui:insert name="main" />
+            </div>
+        </div>
 
-</h:body>
+        <footer>
+            <div id="footer-wrapper">
+                <p>thorsten.elfert@gmail.com - 23.06.2014 - v1.6</p>
+            </div>
+        </footer>
+
+    </h:body>
 </html>

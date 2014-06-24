@@ -37,7 +37,7 @@ public class ParticipationListProducer implements Serializable {
 
     @Inject
     @Param
-    private ParamValue<Long> paramTeamID;
+    private ParamValue<String> paramTeamShortName;
 
     private String sportEventType;
 
@@ -228,10 +228,10 @@ public class ParticipationListProducer implements Serializable {
         sportEventType = UNKNOWN;
         sportEventDate = new Date();
         // Selected Team via URL Parameter hat Vorrang
-        if (getParamTeamID() != null) {
+        if (getParamTeamShortName() != null) {
             // Wenn Übergabeparameter in URL vorhanden, dieses Team nehmen
-            if (getParamTeamID().getValue() != null) {
-                selectedTeam = teamRepository.findById(getParamTeamID().getValue());
+            if (getParamTeamShortName().getValue() != null) {
+                selectedTeam = teamRepository.findByShortName(getParamTeamShortName().getValue());
                 teamChangedEvent.fire(selectedTeam);
                 log.fine("ParticipationListProducer.initialize() * Selected Team " + selectedTeam + " via URL Parameter");
             }
@@ -343,9 +343,9 @@ public class ParticipationListProducer implements Serializable {
     }
 
     /**
-     * @return the paramTeamID
+     * @return the paramTeamShortName
      */
-    public ParamValue<Long> getParamTeamID() {
-        return paramTeamID;
+    public ParamValue<String> getParamTeamShortName() {
+        return paramTeamShortName;
     }
 }
