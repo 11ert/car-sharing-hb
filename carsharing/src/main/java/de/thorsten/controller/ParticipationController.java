@@ -9,10 +9,10 @@ import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
 @Named
-@ViewAccessScoped
+@ViewScoped
 public class ParticipationController implements Serializable {
 
     private static final long serialVersionUID = -3832235132261771583L;
@@ -26,7 +26,7 @@ public class ParticipationController implements Serializable {
 
     private int currentParticipationIndex;
 
-   private Participation currentParticipation;
+    private Participation currentParticipation;
 
     private Participation editedParticipation;
 
@@ -44,7 +44,7 @@ public class ParticipationController implements Serializable {
     }
 
     /**
-     * @param drivingBack the drivesBack to set
+     * @param drivesBack the drivesBack to set
      */
     public void setDrivingBack(boolean drivesBack) {
         this.drivingBack = drivesBack;
@@ -58,7 +58,7 @@ public class ParticipationController implements Serializable {
     }
 
     /**
-     * @param drivesForth the drivesForth to set
+     * @param drivingForth the drivesForth to set
      */
     public void setDrivingForth(boolean drivingForth) {
         this.drivingForth = drivingForth;
@@ -72,13 +72,12 @@ public class ParticipationController implements Serializable {
     }
 
     /*
-    neu - nur zum testen, ob einfacher als via Property Action Listener
-    */
+     neu - nur zum testen, ob einfacher als via Property Action Listener
+     */
     public void editParticipation(Participation editParticipation) {
         this.editedParticipation = editParticipation;
     }
-    
-    
+
     /**
      * @param currentParticipation the currentParticipation to set
      */
@@ -108,14 +107,14 @@ public class ParticipationController implements Serializable {
     }
 
     /**
-     * @param editedParticipation the editedParticipation to set
+     * @param changedParticipation the changedParticipation to set
      */
     public void setEditedParticipation(Participation changedParticipation) {
         this.editedParticipation = changedParticipation;
     }
 
     public void updateParticipation() {
-        log.info("updateParticipation called for participation: " + editedParticipation);
+        log.fine("ParticipationController.updateParticipation() * called for participation: " + editedParticipation);
         try {
             participationService.update(editedParticipation);
             FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_INFO, editedParticipation.getPlayer().getFirstname() + " aktualisiert!", "Update of Participationdetails successful");
@@ -146,5 +145,4 @@ public class ParticipationController implements Serializable {
         return errorMessage;
     }
 
-    
 }

@@ -46,24 +46,22 @@
         </h:outputStylesheet>
 
         <h:form id="game_creation_date_calendar">
-            <rich:panel header="Datum auswählen">
-                <h:panelGrid columnClasses="label, component" columns="2">
-                    <h:outputLabel value="Nächstes Spiel:"/>
-                    <rich:calendar id="gameCalendar"
-                                   style="background-color: #F2F2F2"
-                                   mode="ajax" 
-                                   buttonLabel="Heute"
-                                   locale="de"
-                                   popup="false"
-                                   boundaryDatesMode="scroll" 
-                                   datePattern="dd.MM.yyyy"  
-                                   dataModel="#{gameCalendarModel}" 
-                                   value="#{gameController.nextDate}">
+            <h:panelGrid columnClasses="label, component" columns="2">
+                <h:outputLabel value="Nächstes Spiel:"/>
+                <rich:calendar id="gameCalendar"
+                               style="background-color: #F2F2F2"
+                               mode="ajax" 
+                               buttonLabel="Heute"
+                               locale="de"
+                               popup="false"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               dataModel="#{gameCalendarModel}" 
+                               value="#{gameController.nextDate}">
 
-                        <a4j:ajax event="change" render="next_game_date_output" />
-                    </rich:calendar>
-                </h:panelGrid>
-            </rich:panel>
+                    <a4j:ajax event="change" render="next_game_date_output" />
+                </rich:calendar>
+            </h:panelGrid>
             <h:panelGrid columnClasses="label, component" columns="2">
                 <h:outputLabel />
                 <h:outputText id="next_game_date_output" value="#{gameController.nextDate}" />
@@ -104,17 +102,17 @@
                                  value="#{newGame.timeTo}" />
                     <h:message for="timeTo" errorClass="invalid" />
                 </h:panelGroup>
-                    <h:outputLabel for="pickUpLocationSource" value="Abfahrtsort:" />
-                    <h:panelGroup>
-                        <h:inputText id="pickUpLocationSource" value="#{newGame.pickUpLocationSource}" />
-                        <h:message for="pickUpLocationSource" errorClass="invalid" />
-                    </h:panelGroup>
+                <h:outputLabel for="pickUpLocationSource" value="Abfahrtsort:" />
+                <h:panelGroup>
+                    <h:inputText id="pickUpLocationSource" value="#{newGame.pickUpLocationSource}" />
+                    <h:message for="pickUpLocationSource" errorClass="invalid" />
+                </h:panelGroup>
 
-                    <h:outputLabel for="pickUpTimeSource" value="Abfahrtszeit:" />
-                    <h:panelGroup>
-                        <h:inputText id="pickUpTimeSource" value="#{newGame.pickUpTimeSource}" />
-                        <h:message for="pickUpTimeSource" errorClass="invalid" />
-                    </h:panelGroup>
+                <h:outputLabel for="pickUpTimeSource" value="Abfahrtszeit:" />
+                <h:panelGroup>
+                    <h:inputText id="pickUpTimeSource" value="#{newGame.pickUpTimeSource}" />
+                    <h:message for="pickUpTimeSource" errorClass="invalid" />
+                </h:panelGroup>
                 <h:outputLabel for="pickUpTimeTarget" value="Abholzeit:" />
                 <h:panelGroup>
                     <h:inputText id="pickUpTimeTarget"

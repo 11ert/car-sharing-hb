@@ -226,7 +226,7 @@
                 <h:outputText value="von #{_news.author}" rendered="#{not empty _news.author}" style="color: #666666; font-size: 0.85em;"/>
                 <h:outputText value=":" style="color: #666666; font-size: 0.85em;"/>
                 <br/>
-                <h:outputText style="color:#243446;" value="#{_news.text}"/>
+                <h:outputText style="color:#243446;" value="#{_news.text}" escape="false"/>
             </rich:column>
         </rich:dataTable>
     </ui:define>

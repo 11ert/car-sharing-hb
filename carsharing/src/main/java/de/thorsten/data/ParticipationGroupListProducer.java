@@ -24,10 +24,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
 import java.util.logging.Logger;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
 
-@ViewAccessScoped
+@ViewScoped
 public class ParticipationGroupListProducer implements Serializable {
 
     public ParticipationGroupListProducer() {

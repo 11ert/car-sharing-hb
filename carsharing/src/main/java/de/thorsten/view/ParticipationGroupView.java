@@ -17,13 +17,13 @@ import javax.enterprise.inject.Produces;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
 /**
  *
  * @author Thorsten
  */
-@ViewAccessScoped
+@ViewScoped
 @Named
 public class ParticipationGroupView implements Serializable {
 

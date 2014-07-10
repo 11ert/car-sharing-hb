@@ -317,6 +317,7 @@ footer p {
 	margin-bottom: 7px;
 }
 
+
 #content .data-table thead th {
 	background-color: #dddddd;
 	border-bottom: 1px solid #cccccc;
@@ -359,6 +360,11 @@ footer p {
 	background-image: url('#{request.contextPath}/resources/remove.png');
 }
 
+
+#content .fixed-column-width {
+    width: 50px;
+}
+        
 #content .data-table-footer {
 	width: 50%;
 	margin-left: 50%;

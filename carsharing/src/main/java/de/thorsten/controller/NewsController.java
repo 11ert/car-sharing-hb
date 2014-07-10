@@ -14,9 +14,9 @@ import de.thorsten.service.NewsService;
 import java.io.Serializable;
 import java.util.logging.Logger;
 import javax.faces.event.ValueChangeEvent;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
-@ViewAccessScoped
+@ViewScoped
 @Named
 public class NewsController implements Serializable{
 

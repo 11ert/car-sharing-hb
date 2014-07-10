@@ -1,6 +1,5 @@
 package de.thorsten.controller;
 
-import de.thorsten.data.MemberRepository;
 import de.thorsten.data.ParticipationGroupListProducer;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingDayRepository;
@@ -27,14 +26,14 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
 /**
  *
  * @author Thorsten
  */
 @Named("trainingController")
-@ViewAccessScoped
+@ViewScoped
 public class TrainingController implements Serializable {
 
     @Inject
@@ -45,9 +44,6 @@ public class TrainingController implements Serializable {
 
     @Inject
     private TrainingDayRepository trainingDayRepository;
-
-    @Inject
-    private MemberRepository memberRepository;
 
     @Inject
     private FacesContext facesContext;
@@ -84,22 +80,21 @@ public class TrainingController implements Serializable {
 
     @PostConstruct
     public void init() {
-        log.fine("TrainingController @PostConstruct");
+        log.fine("TrainingController.init() * @PostConstruct");
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
-        log.info("trainingDateChanged ");
+        log.fine("TrainingController.trainingDateChanged() ");
         int weekday = -1;
         Calendar cal = Calendar.getInstance();
         if (event.getNewValue() != null) {
             nextTrainingDate = ((Date) event.getNewValue());
-            log.fine("...to " + nextTrainingDate);
+            log.fine("TrainingController.trainingDateChanged() * ...to " + nextTrainingDate);
             cal.setTime(nextTrainingDate);
             weekday = cal.get(Calendar.DAY_OF_WEEK);
             trDayList = trainingDayRepository.findByWeekday(weekday);
-            log.info("trDayList.size() = " + getTrDayList().size());
         }
 
     }
@@ -152,7 +147,6 @@ public class TrainingController implements Serializable {
                 "Neues Training hinzugefügt!", "Neues Training gespeichert!");
 
         try {
-
             Training tr = trainingService.update(newTraining);
             List<Member> members = null;
             members = selectedParticipationGroup.getMembers();
@@ -164,13 +158,13 @@ public class TrainingController implements Serializable {
                     participationService.update(newParticipation);
                 } catch (Exception e) {
                     facesContext.addMessage(null, errorMsg);
-                    log.info("Participation could not be stored");
+                    log.warning("TrainingController.createParticipationsForNextTrainingDate() * Participation could not be stored");
                     e.printStackTrace();
                 }
             };
         } catch (Exception e) {
             facesContext.addMessage(null, errorMsg);
-            log.info("Training konnte nicht persistiert werden");
+            log.warning("TrainingController.createParticipationsForNextTrainingDate() * Training konnte nicht persistiert werden");
             e.printStackTrace();
         }
 
@@ -180,22 +174,22 @@ public class TrainingController implements Serializable {
     }
 
     public void trainingDayChanged(ValueChangeEvent event) {
-        log.fine("trainingDayChanged ");
+        log.fine("TrainingController.trainingDayChanged()");
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTrainingDay = trainingDayRepository.findById(tmpId);
-            log.fine("...to new trainingDay = " + selectedTrainingDay.toString());
+            log.fine("TrainingController.trainingDayChanged() * ...to new trainingDay = " + selectedTrainingDay.toString());
         }
     }
 
     public void teamChanged(ValueChangeEvent event) {
-        log.fine("teamChanged");
+        log.fine("TrainingController.teamChanged() * teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();
         for (int x = 0; x < selectedTeamIds.length; x++) {
             Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
-            log.fine("CurrentTeam = " + currentTeam.toString());
+            log.fine("log.fine(\"TrainingController.teamChanged() * CurrentTeam = " + currentTeam.toString());
             selectedTeams.add(currentTeam);
-            log.fine("..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
+            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
         }
     }
 

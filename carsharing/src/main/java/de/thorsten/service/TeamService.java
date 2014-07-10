@@ -20,11 +20,8 @@ public class TeamService {
     private EntityManager em;
 
     public Team update(Team team) throws Exception {
-        log.info("Updating " + team);
-        
+        log.info("TeamService.update() * Team = " + team);
         return em.merge(team);
-        
-        
     }
         
 }

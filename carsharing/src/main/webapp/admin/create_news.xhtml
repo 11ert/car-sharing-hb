@@ -6,31 +6,43 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:h="http://java.sun.com/jsf/html"
-                template="/WEB-INF/templates/default.xhtml"
+                template="/WEB-INF/templates/admin_template.xhtml"
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:rich="http://richfaces.org/rich">
 
 
 
 
-    <ui:define name="content">
-        <h2>Bitte neue News hier eintragen:</h2>
+    <ui:param name="pageTitle" value="News erstellen"/>
+
+    <ui:define name="header">
+        News
+    </ui:define>
+
+    <ui:define name="subheader">
+        News anlegen
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
         <h:form id="reg_news">
             <h:panelGrid id="reg_news_content" columns="2" columnClasses="titleCell">
                 <h:outputLabel for="text" value="Text:" />
-                <h:inputTextarea rows="4" cols="50" id="text" value="#{newNews.text}" >
-                    <rich:placeholder value="Neuigkeiten hier eintragen..." />
-                </h:inputTextarea>
+                <rich:editor id="text" value="#{newNews.text}"/>
                 <h:outputLabel for="author" value="Autor:" />
                 <h:inputText id="author" value="#{newNews.author}" />            
-<!--
-                <h:outputLabel id="mailSent" value="Mailversand:" />
-
-                <h:selectBooleanCheckbox  id="mailCheckbox" value="#{newNews.mail}">
-                    <f:ajax event="click" render="mailingListPanel" execute="mailingListPanel" />
-                </h:selectBooleanCheckbox>
--->
+                <!--
+                                <h:outputLabel id="mailSent" value="Mailversand:" />
+                
+                                <h:selectBooleanCheckbox  id="mailCheckbox" value="#{newNews.mail}">
+                                    <f:ajax event="click" render="mailingListPanel" execute="mailingListPanel" />
+                                </h:selectBooleanCheckbox>
+                -->
+                
+                
             </h:panelGrid>
+
 
             <h:panelGrid id="mailingListPanel" columns="2" columnClasses="titleCell">
                 <h:outputLabel id="mail_distributionlist" value="Mailverteiler:" rendered="#{newNews.mail}"/>
@@ -45,10 +57,13 @@
 
             </h:panelGrid>
             <p></p>
-            <h:commandButton id="register"
-                             action="#{newsController.register()}"
-                             value="Speichern" />
 
+            <h:panelGroup styleClass="buttons">
+                <h:commandLink id="register"
+                               action="#{newsController.register()}"
+                               value="Speichern" 
+                               styleClass="btn btn-primary"/>
+            </h:panelGroup>
         </h:form>
 
 
@@ -59,7 +74,7 @@
         <h:form id="news_list">
             <h:dataTable var="_news" value="#{allNews}"
                          rendered="#{not empty allNews}"
-                         styleClass="simpletablestyle"
+                         styleClass="data-table" columnClasses="fixed-column-width" 
                          id="news_table"
                          >
                 <h:column>
@@ -72,7 +87,8 @@
                 </h:column>
                 <h:column>
                     <f:facet name="header">Text</f:facet>
-                        #{_news.text}
+                    <h:outputText escape="false" value="#{_news.text}"/>
+                       
                 </h:column>
                 <h:column>
                     <f:facet name="header">Autor</f:facet>
@@ -89,7 +105,7 @@
                     </h:link>
                 </h:column>
                 <h:column>
-                    <h:commandLink value="Sichtbarkeit ändern" action="#{newsController.setInactive(_news)}"/>
+                    <h:commandLink value="Aktivieren" style="color: #0088cc" action="#{newsController.setInactive(_news)}"/>
                 </h:column>            
             </h:dataTable>
             <p>

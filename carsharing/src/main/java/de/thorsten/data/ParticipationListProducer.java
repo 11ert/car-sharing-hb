@@ -7,6 +7,7 @@ import javax.inject.Named;
 import java.util.List;
 
 import de.thorsten.model.Participation;
+import de.thorsten.model.SportEventTypeConstants;
 import de.thorsten.model.SportsEvent;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
@@ -22,18 +23,15 @@ import javax.enterprise.event.Reception;
 import javax.enterprise.inject.Produces;
 import javax.faces.event.ValueChangeEvent;
 import org.omnifaces.cdi.Param;
+import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.cdi.param.ParamValue;
 
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
 
-@ViewAccessScoped
+
+@ViewScoped
 @Named
-public class ParticipationListProducer implements Serializable {
-
-    private static String TRAINING = "Training";
-    private static String GAME = "Spiel";
-    private static String UNKNOWN = "Handball";
+public class ParticipationListProducer implements Serializable, SportEventTypeConstants {
 
     @Inject
     @Param
@@ -104,20 +102,20 @@ public class ParticipationListProducer implements Serializable {
     }
 
     public void sportEventDateChanged(ValueChangeEvent event) {
-        log.fine("sportEventDateChanged ");
+        log.fine("ParticipationListProducer.sportEventDateChanged()");
         if (event.getNewValue() != null) {
             this.sportEventDate = ((Date) event.getNewValue());
-            log.fine("...to " + sportEventDate);
+            log.fine("ParticipationListProducer.sportEventDateChanged() * ...to " + sportEventDate);
             this.recalculateParticipationDependencies();
         }
     }
 
     public void teamChanged(ValueChangeEvent event) {
-        log.fine("teamChanged ");
+        log.fine("ParticipationListProducer.teamChanged()");
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTeam = teamRepository.findById(tmpId);
-            log.fine("...to new Team = " + selectedTeam.toString());
+            log.fine("ParticipationListProducer.teamChanged() * ...to new Team = " + selectedTeam.toString());
             teamChangedEvent.fire(selectedTeam);
             this.recalculateParticipationDependencies();
         }
@@ -159,13 +157,13 @@ public class ParticipationListProducer implements Serializable {
      * @param participation
      */
     public void onParticipationListChanged(@Observes(notifyObserver = Reception.IF_EXISTS) final Participation participation) {
-        log.fine("onParticipationListChanged() called");
+        log.fine("ParticipationListProducer.onParticipationListChanged()");
         retrieveAllRelevantParticipators();
     }
 
     private void calculateParticipationAttributes() {
 
-        log.fine("calculateParticipationAttributes");
+        log.fine("ParticipationListProducer.calculateParticipationAttributes()");
 
         numberOfParticipators = 0;
         numberOfSeatsBackAvailable = 0;
@@ -175,11 +173,11 @@ public class ParticipationListProducer implements Serializable {
         int numberOfBicycleDrivers = 0;
 
         if (participations == null) {
-            log.warning("Participations = null");
+            log.warning("ParticipationListProducer.calculateParticipationAttributes() * Participations = null");
         } else {
             for (Participation p : participations) {
                 if (p == null) {
-                    log.severe("participation is null : " + p);
+                    log.severe("ParticipationListProducer.calculateParticipationAttributes() * participation is null : " + p);
 
                 }
                 if (p.isParticipating()) {
@@ -199,11 +197,11 @@ public class ParticipationListProducer implements Serializable {
         numberOfSeatsBackRequired = numberOfParticipators - numberOfSeatsBackAvailable - numberOfBicycleDrivers;
         numberOfSeatsForthRequired = numberOfParticipators - numberOfSeatsForthAvailable - numberOfBicycleDrivers;
 
-        log.fine("Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
-        log.fine("Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
-        log.fine("Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
-        log.fine("Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
-        log.fine("Calculated NumberOfParticipators = " + numberOfParticipators);
+        log.fine("ParticipationListProducer.calculateParticipationAttributes() * Calculated numberOfSeatsBackAvailable = " + numberOfSeatsBackAvailable);
+        log.fine("ParticipationListProducer.calculateParticipationAttributes() * Calculated numberOfSeatsForthAvailable = " + numberOfSeatsForthAvailable);
+        log.fine("ParticipationListProducer.calculateParticipationAttributes() * Calculated NumberOfSeatsBackRequired = " + numberOfSeatsBackRequired);
+        log.fine("ParticipationListProducer.calculateParticipationAttributes() * Calculated NumberOfSeatsForthRequired = " + numberOfSeatsForthRequired);
+        log.fine("ParticipationListProducer.calculateParticipationAttributes() * Calculated NumberOfParticipators = " + numberOfParticipators);
 
     }
 
@@ -284,6 +282,8 @@ public class ParticipationListProducer implements Serializable {
             sportEventType = TRAINING;
         } else if (selectedSportsEvent instanceof Game) {
             sportEventType = GAME;
+        } else {
+            sportEventType = UNKNOWN;
         }
 
     }
@@ -307,14 +307,14 @@ public class ParticipationListProducer implements Serializable {
     }
 
     private void updateSelectedSportsEvent() {
-        log.fine("updateSelectedSportsEvent() with " + sportEventDate + " and " + this.selectedTeam);
+        log.fine("ParticipationListProducer.updateSelectedSportsEvent() * with " + sportEventDate + " and " + this.selectedTeam);
         List<SportsEvent> sportEvents;
         sportEvents = sportsEventRepository.findByDateAndTeam(sportEventDate, selectedTeam);
         if (sportEvents != null) {
-            if (sportEvents.size() != 0) {
+            if (!sportEvents.isEmpty()) {
                 selectedSportsEvent = sportEvents.get(0);
                 determineSportEventType(); // todo: käse
-                log.fine("found selected Sport Event " + selectedSportsEvent.toString());
+                log.fine("ParticipationListProducer.updateSelectedSportsEvent() * found selected Sport Event " + selectedSportsEvent.toString());
             }
         }
         // 

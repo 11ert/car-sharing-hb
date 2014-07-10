@@ -161,12 +161,13 @@
             <scope>runtime</scope>
         </dependency>
         <!-- wg. ViewScope -->
-        <dependency>
+        <!-- unnötig, da in omnifaces enthalten -->
+<!--        <dependency>
             <groupId>org.os890.cdi.ext.scope.modules</groupId>
             <artifactId>os890-cdi-ext-jsf2-module-impl</artifactId>
             <version>1.0.5_0.4_01</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
         <!-- wg. JSF Utilities -->
         <dependency>
             <groupId>org.omnifaces</groupId>

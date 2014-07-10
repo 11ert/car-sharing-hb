@@ -23,21 +23,18 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
 import javax.inject.Inject;
 import javax.inject.Named;
-import org.os890.cdi.ext.scope.api.scope.conversation.ViewAccessScoped;
+import org.omnifaces.cdi.ViewScoped;
 
 /**
  *
  * @author Thorsten
  */
 @Named("gameController")
-@ViewAccessScoped
+@ViewScoped
 public class GameController implements Serializable {
 
     @Inject
     private Logger log;
-
-    @Inject
-    private MemberRepository memberRepository;
 
     @Inject
     private FacesContext facesContext;
@@ -114,13 +111,13 @@ public class GameController implements Serializable {
                     participationService.update(newParticipation);
                 } catch (Exception e) {
                     facesContext.addMessage(null, errorMsg);
-                    log.info("Participation could not be stored");
+                    log.warning("GameController.createParticipationsForNextDate() * Participation could not be stored");
                     e.printStackTrace();
                 }
             };
         } catch (Exception e) {
             facesContext.addMessage(null, errorMsg);
-            log.info("Spiel konnte nicht persistiert werden");
+            log.warning("createParticipationsForNextDate.createParticipationsForNextDate() * Spiel konnte nicht persistiert werden");
             e.printStackTrace();
         }
         facesContext.addMessage(null, successMsg);
@@ -141,18 +138,14 @@ public class GameController implements Serializable {
         facesContext.addMessage(null, m);
     }
 
-    public void removeMemberFromList(Member member) {
-        log.info("removeMemberFromList called");
-    }
-
     public void teamChanged(ValueChangeEvent event) {
-        log.info("teamChanged()");
+        log.fine("createParticipationsForNextDate.teamChanged()");
         listOfTeamsForTheGame.clear();
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             teamForGame = teamRepository.findById(tmpId);
             listOfTeamsForTheGame.add(teamForGame);
-            log.info("...to new Team = " + teamForGame.toString());
+            log.fine("GameController.createParticipationsForNextDate() * ...to new Team = " + teamForGame.toString());
         }
     }
 
