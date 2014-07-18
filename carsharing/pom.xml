@@ -3,6 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.thorsten</groupId>
+    <developers>
+        <developer>
+            <email>thorsten.elfert@gmail.com</email>
+            <name>Thorsten Elfert</name>
+        </developer>
+    </developers>
     <artifactId>carsharing</artifactId>
     <version>1.6-SNAPSHOT</version>
     <packaging>war</packaging>
@@ -13,14 +19,7 @@
         <connection>scm:git:https://thorsten.elfert@code.google.com/p/car-sharing-hb/</connection>
         <developerConnection>scm:git:https://thorsten.elfert@code.google.com/p/car-sharing-hb/</developerConnection>
     </scm>
-    <!--    <url>http://jboss.org/jbossas</url>
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>-->
+    
     <properties>
         <deltaspike.version>1.0.0</deltaspike.version>
         <version.jboss.bom>1.0.4.Final</version.jboss.bom>
@@ -33,7 +32,7 @@
         <version.surefire.plugin>2.4.3</version.surefire.plugin>
         <maven.compiler.source>1.6</maven.compiler.source>
         <org.richfaces.bom.version>4.3.4.Final</org.richfaces.bom.version>
-        
+        <user.name>Thorsten.Elfert@gmail.com</user.name>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -221,32 +220,17 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                     <archive>
                         <manifest>
-                          <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                          <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <Implementation-Build>${buildNumber}</Implementation-Build>
+                            <Implementation-Timestamp>${timestamp}</Implementation-Timestamp>
+                            <Developer>${user.name}</Developer>
                         </manifestEntries>
                     </archive>
                 </configuration>
             </plugin>
-<!--            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>2.1</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            
-                        </manifest>
-                         will put the entries into META-INF/MANIFEST.MF file 
-                        <manifestentries>
-                            <implementation-version>${project.version}</implementation-version>
-                            <Implementation-Build>$\{buildNumber}</Implementation-Build>
-                        </manifestentries>
-                    </archive>
-                </configuration>
-            </plugin>-->
+
             <plugin>
                 <groupId>org.jboss.as.plugins</groupId>
                 <artifactId>jboss-as-maven-plugin</artifactId>
@@ -283,6 +267,7 @@
                     <execution>
                         <phase>generate-resources</phase>
                         <goals>
+                            <goal>create-timestamp</goal>
                             <goal>create</goal>
                         </goals>
                     </execution>
@@ -294,6 +279,10 @@
                      This ensures that even if we are not connected to scm than also
                      take the version from local .svn file
                     -->
+                    <format>{0,date,yyyy-MM-dd HH:mm:ss}</format>
+                    <items>
+                        <item>timestamp</item>
+                    </items>
                     <revisiononscmfailure>
                         <!--
                          Generate sequence build number based on:

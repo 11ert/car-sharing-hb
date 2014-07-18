@@ -11,6 +11,7 @@ import de.thorsten.model.SportEventTypeConstants;
 import de.thorsten.model.SportsEvent;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
+import de.thorsten.util.ApplicationConfiguration;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.Date;
@@ -27,11 +28,12 @@ import org.omnifaces.cdi.ViewScoped;
 import org.omnifaces.cdi.param.ParamValue;
 
 // Nur solange ViewAccessScoped nicht von DeltaSpike unterstützt wird
-
-
 @ViewScoped
 @Named
 public class ParticipationListProducer implements Serializable, SportEventTypeConstants {
+
+    @Inject
+    private ApplicationConfiguration appConfig;
 
     @Inject
     @Param
