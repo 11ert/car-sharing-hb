@@ -71,7 +71,7 @@
                                                    />
                                     <a4j:ajax event="change" render="trainingDate_output participation_table trainingCalendar" />
                                 </h:selectOneListbox>
-                                <h:outputText value="#{selectedTeam.longName}" rendered="#{not empty param.paramTeamShortName}" style="background-color: white"/>
+                                <h:outputText value="#{selectedTeam.alias}" rendered="#{not empty param.paramTeamShortName}" style="background-color: white"/>
                             </td>
                         </tr>
                     </table>

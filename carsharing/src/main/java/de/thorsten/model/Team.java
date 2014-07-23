@@ -14,7 +14,7 @@ import javax.persistence.Id;
 
 /**
  *
- * @author QTK100
+ * @author thorsten.elfert@gmail.com
  */
 @Entity
 public class Team implements Serializable {
@@ -27,6 +27,7 @@ public class Team implements Serializable {
     
     private String shortName;
     
+    private String alias;
 
     public Long getId() {
         return id;
@@ -58,7 +59,7 @@ public class Team implements Serializable {
 
     @Override
     public String toString() {
-        return "Team{" + "id=" + id + ", longName=" + longName + ", shortName=" + shortName + '}';
+        return "Team{" + "id=" + id + ", longName=" + longName + ", shortName=" + shortName + ", alias=" + alias + '}';
     }
 
 
@@ -88,6 +89,20 @@ public class Team implements Serializable {
      */
     public void setShortName(String shortName) {
         this.shortName = shortName;
+    }
+
+    /**
+     * @return the alias
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    /**
+     * @param alias the alias to set
+     */
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
     
 }
