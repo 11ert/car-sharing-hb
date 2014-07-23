@@ -57,7 +57,7 @@
 
                     <table>
                         <tr>
-                            <td align="center"  width="45" height="18" style="background-color: green; color: white">Training</td>
+                            <td align="center" width="45" height="18" style="background-color: green; color: white; border-color: white">Training</td>
                             <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
                             <td>                    
                                 <h:selectOneListbox id="teamListbox" 
@@ -71,7 +71,7 @@
                                                    />
                                     <a4j:ajax event="change" render="trainingDate_output participation_table trainingCalendar" />
                                 </h:selectOneListbox>
-                                <h:outputText value="#{selectedTeam.alias}" rendered="#{not empty param.paramTeamShortName}" style="background-color: white"/>
+<!--                                <h:outputText value="#{selectedTeam.alias}" rendered="#{not empty param.paramTeamShortName}" style="background-color: white"/>-->
                             </td>
                         </tr>
                     </table>
@@ -82,7 +82,7 @@
                     header="#{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString}:" 
                     id="trainingDate_output">
                     <h:panelGroup rendered="#{empty participations}">
-                        <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName} !" />
+                        <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.alias} !" />
                     </h:panelGroup>
                     <h:panelGroup rendered="#{not empty participations}">
                          <h:outputText style="font-size: smaller;font-weight: normal;" 
@@ -123,9 +123,9 @@
             </h:panelGrid>
             <rich:panel id="participation_table" 
                         styleClass="stable" 
-                        header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString}">
+                        header="Teilnahme am Training #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.alias}">
                 <h:panelGroup rendered="#{empty participations}">
-                    <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.longName} !" />
+                    <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.alias} !" />
                 </h:panelGroup>
                 <rich:dataTable var="_participation" value="#{participations}"
                                 iterationStatusVar="it"
