@@ -51,62 +51,64 @@
 
                     </h:selectOneListbox>
                 </h:panelGroup>
-
                 <h:outputText value="*"/>
-                <h:outputLabel for="trainingDayBeanTrainingDayId" value="Id:"/>
-                <h:panelGroup>
-                    <h:inputText id="trainingDayBeanTrainingDayId" value="#{trainingDayBean.trainingDay.id}"/>
-                    <h:message for="trainingDayBeanTrainingDayId" styleClass="error"/>
-                </h:panelGroup>
-                <h:outputText/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayTimeFromTemplate" value="Trainingszeit von:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayTimeFromTemplate" value="#{trainingDayBean.trainingDay.timeFromTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayTimeFromTemplate" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText/>
+                <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayTimeToTemplate" value="Trainingszeit bis:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayTimeToTemplate" required="true" value="#{trainingDayBean.trainingDay.timeToTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayTimeToTemplate" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayPickUpTimeSourceTemplate" value="Abholzeit Heimatort:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayPickUpTimeSourceTemplate" required="true" value="#{trainingDayBean.trainingDay.pickUpTimeSourceTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayPickUpTimeSourceTemplate" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayPickUpTimeTargetTemplate" value="Abholzeit Trainingsort:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayPickUpTimeTargetTemplate" required="true" value="#{trainingDayBean.trainingDay.pickUpTimeTargetTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayPickUpTimeTargetTemplate" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayLocationTemplate" value="Trainingsort:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayLocationTemplate" required="true" value="#{trainingDayBean.trainingDay.locationTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayLocationTemplate" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayPickUpLocationSourceTemplate" value="Abholort Heimatort:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayPickUpLocationSourceTemplate" value="#{trainingDayBean.trainingDay.pickUpLocationSourceTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayPickUpLocationSourceTemplate" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText/>
+                <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayPickUpLocationTargetTemplate" value="Abholort Trainingsort:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayPickUpLocationTargetTemplate" value="#{trainingDayBean.trainingDay.pickUpLocationTargetTemplate}"/>
                     <h:message for="trainingDayBeanTrainingDayPickUpLocationTargetTemplate" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText/>
+                <h:outputText value="*"/>
+
                 <h:outputLabel for="trainingDayBeanTrainingDayComment" value="Trainingsbezeichnung:"/>
                 <h:panelGroup>
                     <h:inputText id="trainingDayBeanTrainingDayComment" value="#{trainingDayBean.trainingDay.comment}"/>
                     <h:message for="trainingDayBeanTrainingDayComment" styleClass="error"/>
                 </h:panelGroup>
-                <h:outputText/>
+                <h:outputText value="*"/>
+
             </h:panelGrid>
 
             <div class="buttons">

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+
+    <h:dataTable id="trainingDayBeanPageItems" styleClass="data-table" value="#{trainingDayBean.pageItems}" var="_item">
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Wochentag"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemWeekday" value="#{_item.weekdayAsString}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Von"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemTimeFromTemplate" value="#{_item.timeFromTemplate}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Bis"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemTimeToTemplate" value="#{_item.timeToTemplate}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Abfahrtszeit-Heimatort"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemPickUpTimeSourceTemplate" value="#{_item.pickUpTimeSourceTemplate}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Abholzeit-Zielort"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemPickUpTimeTargetTemplate" value="#{_item.pickUpTimeTargetTemplate}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Zielort"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemLocationTemplate" value="#{_item.locationTemplate}"/>
+            </h:link>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Bezeichnung"/>
+            </f:facet>
+            <h:link outcome="/admin/trainingDay/view">
+                <f:param name="id" value="#{_item.id}"/>
+                <h:outputText id="itemComment" value="#{_item.comment}"/>
+            </h:link>
+        </h:column>
+    </h:dataTable>
+
+</ui:composition>

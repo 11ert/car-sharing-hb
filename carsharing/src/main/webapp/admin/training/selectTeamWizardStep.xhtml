@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <div style="position: relative; height: auto">
+        <table border="0" width="100%" class="data-table">
+            <tr >
+                <td width="20%" style="background-color: darkgray; font-size: 13px; text-shadow: none;"><b>Mannschaft</b></td>
+                <td width="20%" style="background-color: lightgray; color: white">Trainingszeit</td>
+                <td width="20%" style="background-color: lightgray; color: white">Datum</td>
+                <td width="20%" style="background-color: lightgray; color: white">Teilnehmergruppen</td>
+                <td width="20%" style="background-color: lightgray; color: white">Zusammenfassung</td>
+            </tr>
+        </table>
+
+        <h:outputText value="Bitte die Mannschaften auswählen, für die dieses Training gedacht sind."></h:outputText>
+        <h:panelGrid rowClasses="s1row" columns="3" columnClasses="wfcol1,wfcol2,wfcol3">
+            <ui:include src="/admin/team/selectTeam.xhtml"/>
+        </h:panelGrid>
+
+        <div class="navPanel" style="width: 100%;">
+            <a4j:commandButton style="float:right" value="Next &gt;&gt;">
+                <rich:toggleControl targetItem="@next" event="click" />
+            </a4j:commandButton>
+        </div>
+    </div>
+</ui:composition>

@@ -56,7 +56,7 @@
                     </rich:calendar>
 
                     <table>
-                        <tr>
+                        <tr style="background-color: white">
                             <td align="center" width="45" height="18" style="background-color: green; color: white; border-color: white">Training</td>
                             <td align="center" width="45" height="18" style="background-color: blue; color: white">Spiel</td>
                             <td>                    
@@ -80,7 +80,8 @@
                 </rich:panel>
                 <rich:panel 
                     header="#{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString}:" 
-                    id="trainingDate_output">
+                    id="trainingDate_output" style=""
+                    >
                     <h:panelGroup rendered="#{empty participations}">
                         <h:outputText value="Kein #{participationListProducer.sportEventType} am #{participationListProducer.sportEventDateAsFormattedString} für #{selectedTeam.alias} !" />
                     </h:panelGroup>

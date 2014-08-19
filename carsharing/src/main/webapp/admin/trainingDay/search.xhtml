@@ -51,13 +51,13 @@
                         <h:outputText/>
                     </h:panelGrid>
                     <h:panelGroup styleClass="buttons">
-                        <h:commandLink value="Search" action="#{trainingDayBean.search}" styleClass="btn btn-primary"/>
-                        <h:commandLink value="Create New" action="#{trainingDayBean.create}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Suchen" action="#{trainingDayBean.search}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Erstellen" action="#{trainingDayBean.create}" styleClass="btn btn-primary"/>
                     </h:panelGroup>
                 </h:panelGroup>
             </f:validateBean>
 
-            <h:dataTable id="trainingDayBeanPageItems" styleClass="data-table" value="#{trainingDayBean.pageItems}" var="_item">
+<!--            <h:dataTable id="trainingDayBeanPageItems" styleClass="data-table" value="#{trainingDayBean.pageItems}" var="_item">
                 <h:column>
                     <f:facet name="header">
                         <h:outputText value="Wochentag"/>
@@ -121,7 +121,10 @@
                         <h:outputText id="itemComment" value="#{_item.comment}"/>
                     </h:link>
                 </h:column>
-            </h:dataTable>
+            </h:dataTable>-->
+
+            <ui:include src="/admin/trainingDay/trainingDayDataTable.xhtml"/>
+
             <ui:include src="/resources/scaffold/paginator.xhtml">
                 <ui:param name="paginatorBean" value="#{trainingDayBean}"/>
             </ui:include>

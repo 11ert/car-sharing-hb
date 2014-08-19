@@ -926,7 +926,8 @@ input[type="checkbox"]:focus {
 .radio input[type="radio"],
 .checkbox input[type="checkbox"] {
   float: left;
-  margin-left: -18px;
+  margin-left: 1px;
+    
 }
 
 .controls > .radio:first-child,

@@ -1,17 +1,14 @@
 /*
- * Die verschiedenen Trainingstage in der Woche
+ * Die verschiedenen Trainingstage/-zeiten in der Woche
  */
 package de.thorsten.model;
 
+import de.thorsten.util.DateUtil;
 import java.io.Serializable;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
@@ -63,15 +60,15 @@ public class TrainingDay implements Serializable {
 
     private String comment;
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
-//    private List<Team> teams;
-
-    
      /**
      * @return the weekday
      */
     public int getWeekday() {
         return weekday;
+    }
+    
+    public String getWeekdayAsString() {
+        return DateUtil.getWeekdayAsString(weekday);
     }
 
     /**
@@ -207,7 +204,5 @@ public class TrainingDay implements Serializable {
     public String toString() {
         return "TrainingDay{" + "id=" + id + ", timeFromTemplate=" + timeFromTemplate + ", timeToTemplate=" + timeToTemplate + ", pickUpTimeSourceTemplate=" + pickUpTimeSourceTemplate + ", pickUpTimeTargetTemplate=" + pickUpTimeTargetTemplate + ", locationTemplate=" + locationTemplate + ", pickUpLocationSourceTemplate=" + pickUpLocationSourceTemplate + ", pickUpLocationTargetTemplate=" + pickUpLocationTargetTemplate + ", weekday=" + weekday + ", comment=" + comment + '}';
     }
-
-
    
 }

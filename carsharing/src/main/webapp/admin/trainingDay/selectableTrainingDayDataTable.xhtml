@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+xmlns:a4j="http://richfaces.org/a4j"
+xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:rich="http://richfaces.org/rich">
+    <h:outputStylesheet>
+        .even-row {
+        background-color: #FCFFFE;
+        }
+
+        .odd-row {
+        background-color: #ECF3FE;
+        }
+
+        .active-row {
+        background-color: #FFEBDA !important;
+        cursor: pointer;
+        }
+    </h:outputStylesheet>
+
+    <h:dataTable id="trainingDayBeanPageItems" styleClass="data-table" value="#{trainingDayBean.pageItems}" var="_item" rowClasses="odd-row, even-row">
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Wochentag"/>
+            </f:facet>
+            <h:outputText value="#{_item.weekdayAsString}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Von"/>
+            </f:facet>
+            <h:outputText value="#{_item.timeFromTemplate}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Bis"/>
+            </f:facet>
+            <h:outputText value="#{_item.timeToTemplate}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Abfahrtszeit-Heimatort"/>
+            </f:facet>
+            <h:outputText value="#{_item.pickUpTimeSourceTemplate}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Abholzeit-Zielort"/>
+            </f:facet>
+            <h:outputText value="#{_item.pickUpTimeTargetTemplate}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Zielort"/>
+            </f:facet>
+            <h:outputText value="#{_item.locationTemplate}"/>
+        </h:column>
+        <h:column>
+            <f:facet name="header">
+                <h:outputText value="Bezeichnung"/>
+            </f:facet>
+<a4j:commandLink styleClass="no-decor" 
+                 actionListener=""
+                                         render="trainingDayDetailsGrid" execute="@this"
+                                         onclick="#{rich:component('TrainingDayDetailsPanel')}.show()">
+
+    <h:outputText value="#{_item.comment}"/>
+                            <a4j:param value="#{it.index}" assignTo="#{participationController.currentParticipationIndex}" />
+                            <f:setPropertyActionListener target="#{trainingController.}" value="#{_participation}" />
+                        </a4j:commandLink>
+
+        </h:column>
+    </h:dataTable>
+    
+    <rich:jQuery selector=".stable tr:odd" query="addClass('odd-row')" />
+    <rich:jQuery selector=".stable tr:even" query="addClass('even-row')" />
+    <rich:jQuery selector=".stable tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+    <rich:jQuery selector=".stable tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
+
+</ui:composition>

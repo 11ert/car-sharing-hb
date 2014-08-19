@@ -22,6 +22,10 @@
 */
 /* Core styles for the page */
 
+.panel {
+        vertical-align: top;
+        }
+        
 body {
    	margin: 0;
    	padding: 0;

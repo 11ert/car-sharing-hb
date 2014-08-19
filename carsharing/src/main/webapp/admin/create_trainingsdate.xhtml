@@ -48,20 +48,7 @@
 
             <h:panelGrid columnClasses="label, component" columns="2">
                 <h:outputLabel value="Training für:"/>
-                <h:selectManyCheckbox id="teamsCheckBox"  
-                                      value="#{trainingController.selectedTeamIds}" 
-                                      valueChangeListener="#{trainingController.teamChanged}"
-                                      layout="pageDirection"
-                                      styleClass="checkbox"
-
-                                      >
-                    <f:selectItems value="#{teams}" 
-                                   var="theTeam" 
-                                   itemLabel="#{theTeam.shortName}"
-                                   itemValue="#{theTeam.id}"
-
-                                   />
-                </h:selectManyCheckbox> 
+                <ui:include src="/admin/team/selectTeam.xhtml"/>
 
                 <h:outputLabel value="Trainingstage:"/>
                 <rich:calendar id="trainingCalendar"

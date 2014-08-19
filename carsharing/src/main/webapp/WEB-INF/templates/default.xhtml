@@ -12,7 +12,7 @@
         <div id="container">
 
             <div class="dualbrand">
-               <img src="resources/gfx/tvg-logo.png" />
+                <img src="resources/gfx/tvg-logo.png" />
             </div>
 
             <div id="content">
@@ -22,13 +22,19 @@
             </div>
             <div id="aside">
                 <p>Diese Plattform soll die Administration der Spieler erleichtern,
-                    sowie Eltern die Möglichkeit geben Mitfahrgelegenheiten besser
+                    sowie die Möglichkeit geben Mitfahrgelegenheiten besser
                     organisieren zu können.</p>
             </div>
-        <div id="news_side">
-            <ui:insert name="news_side">
-            </ui:insert>
-        </div>
+
+<!--            <div id="links">
+                <a href="http://www.tagesschau.de/">ARD</a>
+                <a href="http://www.tagesschau.de/">ZDF</a>
+            </div>-->
+
+            <div id="news_side">
+                <ui:insert name="news_side">
+                </ui:insert>
+            </div>
 
             <div id="footer">
                 <h:outputText style="font-size: smaller;font-weight: inherit;" value="#{developer} - #{applicationBuildVersion}"/><br/>
