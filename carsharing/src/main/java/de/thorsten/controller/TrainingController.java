@@ -62,6 +62,8 @@ public class TrainingController implements Serializable {
     private Long[] selectedTeamIds;
 
     private List<Team> selectedTeams;
+    
+    private List<TrainingDay> allTrainingDays;
 
     @Inject
     @Current
@@ -83,6 +85,7 @@ public class TrainingController implements Serializable {
         log.fine("TrainingController.init() * @PostConstruct");
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
+        allTrainingDays = trainingDayRepository.findAll();
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
@@ -230,6 +233,20 @@ public class TrainingController implements Serializable {
      */
     public TrainingDay getSelectedTrainingDay() {
         return selectedTrainingDay;
+    }
+
+    /**
+     * @return the allTrainingDays
+     */
+    public List<TrainingDay> getAllTrainingDays() {
+        return allTrainingDays;
+    }
+
+    /**
+     * @param allTrainingDays the allTrainingDays to set
+     */
+    public void setAllTrainingDays(List<TrainingDay> allTrainingDays) {
+        this.allTrainingDays = allTrainingDays;
     }
 
 }

@@ -3,11 +3,12 @@
                 xmlns:h="http://java.sun.com/jsf/html" 
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:rich="http://richfaces.org/rich">
 
-    
-    
-    
+
+
+
     <f:metadata>
         <f:viewParam name="page" value="#{trainingDayBean.page}"/>
         <f:event type="preRenderView" listener="#{trainingDayBean.paginate}"/>
@@ -22,14 +23,30 @@
                 <td width="25%" style="background-color: lightgray; color: white">Teilnehmergruppen</td>
             </tr>
         </table>
-        <h:panelGrid columns="3" >
-            <ui:include src="/admin/trainingDay/selectableTrainingDayDataTable.xhtml"/>
+        <h:panelGrid columns="2" styleClass="panelColumns" cellpadding="5" cellspacing="5">
+            <h:panelGroup>
+                <h:selectOneListbox id="trainingDayListbox" 
+                                    valueChangeListener="#{trainingController.trainingDayChanged}" 
+                                    size="10"
+                                    >
+                    <f:selectItems value="#{trainingController.allTrainingDays}" 
+                                   var="currentTrainingDay" 
+                                   itemValue="#{currentTrainingDay.id}"
+                                   itemLabel="#{currentTrainingDay.weekdayAsString}: #{currentTrainingDay.timeFromTemplate}-#{currentTrainingDay.timeToTemplate}, #{currentTrainingDay.comment}" />
+                    <a4j:ajax event="change" render="trainingDayDetails" />
+                </h:selectOneListbox>
+            </h:panelGroup>
+            <h:panelGroup id="trainingDayDetails">
+                <te:trainingDayDetails trainingDay="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"/>
+            </h:panelGroup>
         </h:panelGrid>
+
         <div class="navPanel" style="width: 100%;">
             <a4j:commandButton value="&lt;&lt;Previous" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
             <a4j:commandButton value="Next &gt;&gt;" style="float:right">
+                Weiter &gt;
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
         </div>
