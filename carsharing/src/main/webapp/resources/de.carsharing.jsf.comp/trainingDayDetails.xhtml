@@ -9,7 +9,8 @@
     </composite:interface>
 
     <composite:implementation>
-        <h:panelGrid columns="2" styleClass="panelColumns">
+        <!-- Formatierung mit css classes funktioniert hier irgendwie nicht... -->
+        <h:panelGrid columns="2">
             <h:outputLabel value="Wochentag:"/>
             <h:outputText value="#{cc.attrs.trainingDay.weekdayAsString}"/>
             <h:outputLabel value="Trainingszeit von:"/>

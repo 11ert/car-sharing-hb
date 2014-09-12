@@ -19,30 +19,34 @@
         <table border="0" width="100%" cellpadding="5">
             <tr>
                 <td width="20%" class="colHeader"><b>Mannschaft</b></td>
-                <td width="20%" class="colHeaderHighlighted">Trainingszeit</td>
-                <td width="20%" class="colHeader">Datum</td>
+                <td width="20%" class="colHeader">Trainingszeit</td>
+                <td width="20%" class="colHeaderHighlighted">Datum</td>
                 <td width="20%" class="colHeader">Teilnehmergruppen</td>
                 <td width="20%" class="colHeader">Zusammenfassung</td>
             </tr>
         </table>
         
-        <h:outputText value="Bitte die Trainingszeit auswählen, die für dieses Training angedacht ist."></h:outputText>
+        <h:outputText value="Bitte die Trainingsdaten auswählen, welche hinzugefügt werden sollen."></h:outputText>
    
         <h:panelGrid columns="2" styleClass="panelColumns">
             <h:panelGroup>
-                <h:selectOneListbox id="trainingDayListbox" 
-                                    valueChangeListener="#{trainingController.trainingDayChanged}" 
-                                    size="10"
-                                    >
-                    <f:selectItems value="#{trainingController.allTrainingDays}" 
-                                   var="currentTrainingDay" 
-                                   itemValue="#{currentTrainingDay.id}"
-                                   itemLabel="#{currentTrainingDay.weekdayAsString}: #{currentTrainingDay.timeFromTemplate}-#{currentTrainingDay.timeToTemplate}, #{currentTrainingDay.comment}" />
-                    <a4j:ajax event="change" render="trainingDayDetails" />
-                </h:selectOneListbox>
+                <rich:calendar id="fromTrainingsdate"
+                               style="background-color: #F2F2F2"
+                               mode="ajax" 
+                               buttonLabel="Heute"
+                               locale="de"
+                               popup="false"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               value="#{trainingController.nextTrainingDateFromTemp}"
+                               valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
+                               >
+
+                    <a4j:ajax event="change" render="xyz" />
+                </rich:calendar>
             </h:panelGroup>
-            <h:panelGroup id="trainingDayDetails"  styleClass="detailsContent, detailsLabel" >
-                <te:trainingDayDetails trainingDay="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
+            <h:panelGroup>
+
             </h:panelGroup>
         </h:panelGrid>
 

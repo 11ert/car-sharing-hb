@@ -30,26 +30,32 @@
             <f:validateBean disabled="true">
                 <h:panelGroup styleClass="search">
 
-                    <h:panelGrid columnClasses="label,component,required" columns="3">
+                    <h:panelGrid columnClasses="label,component" columns="2">
                         <h:outputLabel for="trainingDayBeanExampleWeekday" value="Wochentag:"/>
                         <h:panelGroup>
-                            <rich:inputNumberSpinner cycled="false" id="trainingDayBeanExampleWeekday" maxValue="6"/>
+                            <h:selectOneListbox id="trainingDayBeanExampleWeekday" size="1" valueChangeListener="#{trainingDayBean.weekdayChanged}" >
+                                <f:selectItems value="#{weekdays}" 
+                                               var="selectedWeekday" 
+                                               itemLabel="#{selectedWeekday.key}"
+                                               itemValue="#{selectedWeekday.value}"
+                                               />
+                            </h:selectOneListbox>
                             <h:message for="trainingDayBeanExampleWeekday" styleClass="error"/>
                         </h:panelGroup>
-                        <h:outputText/>
+
                         <h:outputLabel for="trainingDayBeanExampleTimeFromTemplate" value="Uhrzeit von:"/>
                         <h:panelGroup>
                             <h:inputText id="trainingDayBeanExampleTimeFromTemplate" value="#{trainingDayBean.example.timeFromTemplate}"/>
                             <h:message for="trainingDayBeanExampleTimeFromTemplate" styleClass="error"/>
                         </h:panelGroup>
-                        <h:outputText/>
+
                         <h:outputLabel for="trainingDayBeanExampleTimeToTemplate" value="Uhrzeit bis:"/>
                         <h:panelGroup>
                             <h:inputText id="trainingDayBeanExampleTimeToTemplate" value="#{trainingDayBean.example.timeToTemplate}"/>
                             <h:message for="trainingDayBeanExampleTimeToTemplate" styleClass="error"/>
                         </h:panelGroup>
-                        <h:outputText/>
                     </h:panelGrid>
+
                     <h:panelGroup styleClass="buttons">
                         <h:commandLink value="Suchen" action="#{trainingDayBean.search}" styleClass="btn btn-primary"/>
                         <h:commandLink value="Erstellen" action="#{trainingDayBean.create}" styleClass="btn btn-primary"/>

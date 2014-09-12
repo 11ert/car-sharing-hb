@@ -1,0 +1,39 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 25.08.2014, 07:39:25
+    Author     : thorsten.elfert@gmail.com
+*/
+
+.colHeaderHighlighted {
+    background-color: darkgray; 
+    text-shadow: none;
+    font-size: 14px;
+}
+.colHeader {
+    background-color: lightgray; 
+    color: white; 
+    text-shadow: none;
+    font-size: 14px;
+}
+.detailsLabel label{
+    line-height:12px;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 11px;
+    color: black;
+}
+
+.detailsContent {
+    line-height:12px;
+    font-size:  11px;
+    color: black;
+}
+
+.panelColumns td {
+    vertical-align: top; 
+    font-size: 11px;
+}

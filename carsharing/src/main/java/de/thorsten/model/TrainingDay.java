@@ -8,10 +8,13 @@ import java.io.Serializable;
 import javax.persistence.Column;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -25,24 +28,31 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class TrainingDay implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotNull
+    @NotEmpty
     @Column(name = "timeFrom")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
     private String timeFromTemplate;
 
     @NotNull
     @NotEmpty
     @Column(name = "timeTo")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
     private String timeToTemplate;
 
     @NotNull
     @NotEmpty
     @Column(name = "pickUpTimeSource")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
     private String pickUpTimeSourceTemplate;
 
     @NotNull
     @NotEmpty
     @Column(name = "pickUpTimeTarget")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
     private String pickUpTimeTargetTemplate;
 
     @NotNull
@@ -60,13 +70,13 @@ public class TrainingDay implements Serializable {
 
     private String comment;
 
-     /**
+    /**
      * @return the weekday
      */
     public int getWeekday() {
         return weekday;
     }
-    
+
     public String getWeekdayAsString() {
         return DateUtil.getWeekdayAsString(weekday);
     }
@@ -204,5 +214,5 @@ public class TrainingDay implements Serializable {
     public String toString() {
         return "TrainingDay{" + "id=" + id + ", timeFromTemplate=" + timeFromTemplate + ", timeToTemplate=" + timeToTemplate + ", pickUpTimeSourceTemplate=" + pickUpTimeSourceTemplate + ", pickUpTimeTargetTemplate=" + pickUpTimeTargetTemplate + ", locationTemplate=" + locationTemplate + ", pickUpLocationSourceTemplate=" + pickUpLocationSourceTemplate + ", pickUpLocationTargetTemplate=" + pickUpLocationTargetTemplate + ", weekday=" + weekday + ", comment=" + comment + '}';
     }
-   
+
 }
