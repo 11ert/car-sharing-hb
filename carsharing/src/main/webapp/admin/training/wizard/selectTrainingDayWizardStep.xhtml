@@ -14,7 +14,7 @@
         <f:event type="preRenderView" listener="#{trainingDayBean.paginate}"/>
     </f:metadata>
 
-   
+
     <div style="position: relative; height: auto">
         <table border="0" width="100%" cellpadding="5">
             <tr>
@@ -25,9 +25,9 @@
                 <td width="20%" class="colHeader">Zusammenfassung</td>
             </tr>
         </table>
-        
+
         <h:outputText value="Bitte die Trainingszeit auswählen, die für dieses Training angedacht ist."></h:outputText>
-   
+
         <h:panelGrid columns="2" styleClass="panelColumns">
             <h:panelGroup>
                 <h:selectOneListbox id="trainingDayListbox" 
@@ -50,9 +50,11 @@
             <a4j:commandButton value="&lt;&lt;Previous" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
-            <a4j:commandButton value="Next &gt;&gt;" style="float:right">
+
+            <a4j:commandButton style="float:right" styleClass="btn btn-primary" value="Weiter">
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
+  
         </div>
     </div>
 </ui:composition>

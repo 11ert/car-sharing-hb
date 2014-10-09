@@ -21,10 +21,12 @@ public class TrainingService {
 
     public Training update(Training training) throws Exception {
         log.info("Updating " + training);
-        
         return em.merge(training);
-        
-        
+    }
+    
+    public void delete(Training training) throws Exception {
+        log.info("Deleting " + training);
+        em.remove(training);
     }
         
 }

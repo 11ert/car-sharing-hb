@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/templates/admin_template.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="id" value="#{trainingBean.id}"/>
+        <f:event type="preRenderView" listener="#{trainingBean.retrieve}"/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="Trainingseintrag ansehen"/>
+
+    <ui:define name="header">
+        Training
+    </ui:define>
+
+    <ui:define name="subheader">
+        Existierendes Training ansehen
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
+        <h:panelGrid columnClasses="label,component,required" columns="3">
+            <h:outputLabel for="trainingBeanTrainingTrainingDayWeekday" value="Trainingstag:"/>
+            <h:outputText id="trainingBeanTrainingTimeFrom" value="#{trainingBean.training.weekdayOfTrainingDay}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingTimeFrom" value="Von:"/>
+            <h:outputText id="trainingBeanTrainingTimeFrom" value="#{trainingBean.training.timeFrom}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingTimeTo" value="Bis:"/>
+            <h:outputText id="trainingBeanTrainingTimeTo" value="#{trainingBean.training.timeTo}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingPickUpTimeSource" value="Abholzeit Heimatort:"/>
+            <h:outputText id="trainingBeanTrainingPickUpTimeSource" value="#{trainingBean.training.pickUpTimeSource}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingPickUpTimeTarget" value="Abholzeit Zielort:"/>
+            <h:outputText id="trainingBeanTrainingPickUpTimeTarget" value="#{trainingBean.training.pickUpTimeTarget}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingLocation" value="Trainingsort:"/>
+            <h:outputText id="trainingBeanTrainingLocation" value="#{trainingBean.training.location}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingPickUpLocationSource" value="Abholort Heimatort:"/>
+            <h:outputText id="trainingBeanTrainingPickUpLocationSource" value="#{trainingBean.training.pickUpLocationSource}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingPickUpLocationTarget" value="Abholort Trainingsort:"/>
+            <h:outputText id="trainingBeanTrainingPickUpLocationTarget" value="#{trainingBean.training.pickUpLocationTarget}"/>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingEventDate" value="Trainingsdatum:"/>
+            <h:outputText id="trainingBeanTrainingEventDate" value="#{trainingBean.training.eventDate}">
+                <f:convertDateTime/>
+            </h:outputText>
+            <h:outputText/>
+            <h:outputLabel for="trainingBeanTrainingTeams" value="Teams:"/>
+            <h:dataTable id="trainingBeanTrainingTeams" styleClass="data-table" value="#{trainingBean.training.teams}" var="_item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Team"/>
+                    </f:facet>
+                    <h:link outcome="/team/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemLongName" value="#{_item.longName}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Kurzname"/>
+                    </f:facet>
+                    <h:link outcome="/team/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemShortName" value="#{_item.shortName}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Alias"/>
+                    </f:facet>
+                    <h:link outcome="/team/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemAlias" value="#{_item.alias}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
+            <h:outputText/>
+        </h:panelGrid>
+
+        <div class="buttons">
+            <h:link value="Alle ansehen" outcome="searchTraining" styleClass="btn btn-primary"/> 
+            <!--<h:link value="Ändern" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>-->
+            <h:link value="Neu" outcome="createTraining" styleClass="btn btn-primary"/>
+        </div>
+    </ui:define>
+
+</ui:composition>

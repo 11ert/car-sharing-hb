@@ -1,55 +1,66 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         version="3.0" 
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-    <display-name>carsharing</display-name>
-    <session-config>
-        <session-timeout>30</session-timeout>
-    </session-config>
-    <context-param>
-        <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
-        <param-value>true</param-value>
-    </context-param>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/faces/error.xhtml</location>
-    </error-page>
-    <error-page>
-        <error-code>500</error-code>
-        <location>/faces/error.xhtml</location>
-    </error-page>
-    <!-- TE Security hinzu -->
-    <!-- Roles -->  
-    <security-role>  
-        <description>Administrators</description>  
-        <role-name>admin</role-name>  
-    </security-role>  
-    <security-role>  
-        <description>Management</description>  
-        <role-name>mgmt</role-name>  
-    </security-role>  
-    
-    <!-- Resource / Role Mapping -->  
-    <security-constraint>  
-        <display-name>Admin Area</display-name>  
-        <web-resource-collection>  
-            <web-resource-name>admin_resources</web-resource-name>  
-            <url-pattern>/admin/*</url-pattern>  
-            <http-method>GET</http-method>  
-            <http-method>POST</http-method>  
-        </web-resource-collection>  
-        <auth-constraint>  
-            <description>For admin role only</description>  
-            <role-name>admin</role-name>  
-        </auth-constraint>  
-        <user-data-constraint>  
-            <transport-guarantee>NONE</transport-guarantee>  
-        </user-data-constraint>  
-    </security-constraint>  
-    
-    <!-- Login Prompt -->  
-    <login-config>  
-          <auth-method>BASIC</auth-method>
-    </login-config>  
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name>carsharing</display-name>
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+  <context-param>
+    <param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
+  <!-- TE Security hinzu -->
+  <!-- Roles -->
+  <security-role>
+    <description>Administrators</description>
+    <role-name>admin</role-name>
+  </security-role>
+  <security-role>
+    <description>Management</description>
+    <role-name>mgmt</role-name>
+  </security-role>
+  <!-- Resource / Role Mapping -->
+  <security-constraint>
+    <display-name>Admin Area</display-name>
+    <web-resource-collection>
+      <web-resource-name>admin_resources</web-resource-name>
+      <url-pattern>/admin/*</url-pattern>
+      <http-method>GET</http-method>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+      <description>For admin role only</description>
+      <role-name>admin</role-name>
+    </auth-constraint>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+  <!-- Login Prompt -->
+  <login-config>
+    <auth-method>BASIC</auth-method>
+  </login-config>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/faces/error.xhtml</location>
+  </error-page>
 </web-app>

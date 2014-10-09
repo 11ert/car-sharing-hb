@@ -3,6 +3,7 @@ package de.thorsten.data;
 import de.thorsten.controller.Current;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
+import de.thorsten.model.TrainingDay;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
@@ -14,7 +15,6 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
-import javax.enterprise.event.Reception;
 
 @RequestScoped
 public class TrainingListProducer {
@@ -29,9 +29,16 @@ public class TrainingListProducer {
     @Current
     private Team selectedTeam;
 
+    // todo ungenutzt, nur wieder wenn TrainingWizard fortgeführt wird.
+    //@Inject
+    //@Current
+    private TrainingDay selectedTrainingDay;
+    
     private List<Training> trainings;
 
     private List<Training> trainingsOfSelectedTeam;
+    
+    private List<Training> trainingsOfSelectedTrainingDay;
 
     private SortedSet<Date> trainingDates;
 
@@ -62,6 +69,12 @@ public class TrainingListProducer {
     public SortedSet<Date> getTrainingDatesOfSelectedTeam() {
         return trainingDatesOfSelectedTeam;
     }
+    
+    @Produces
+    @Named
+    public List<Training> getTrainingsOfSelectedTrainingDay() {
+        return trainingsOfSelectedTrainingDay;
+    }
 
     public void onSelectedTeamChanged(@Observes Team team) {
         log.fine("onSelectedTeamChanged() called, Team old=" + selectedTeam + " , Team new=" + team.toString());
@@ -71,14 +84,29 @@ public class TrainingListProducer {
             log.fine(" to ALL Teams, because selectedTeam = null");
         }
         selectedTeam = team;
+        
+        // todo - herauslösen...
         this.loadTrainings();
     }
 
+
+        public void onSelectedTrainingDayChanged(@Observes TrainingDay trainingDay) {
+        log.fine("onSelectedTrainingDayChanged() called, TrainingDay old=" + selectedTrainingDay + " , TrainingDay new=" + trainingDay.toString());
+        if (trainingDay != null) {
+            log.fine(" , TrainingDay new=" + trainingDay.toString());
+        } else {
+            log.fine(" to ALL TrainingDays, because selectedTrainingDay = null");
+        }
+        this.loadTrainings();
+    }
+
+    
     @PostConstruct
     public void loadTrainings() {
         log.fine("TrainingListProducer.loadTrainings()");
         this.retrieveAllTrainings();
         this.retrieveTrainingsOfSelectedTeam();
+        this.retrieveTrainingsOfSelectedTrainingDay();
     }
 
     private void retrieveAllTrainings() {
@@ -108,4 +136,18 @@ public class TrainingListProducer {
         }
     }
 
+    // todo ungetestet und nicht im Einsatz
+    private void retrieveTrainingsOfSelectedTrainingDay() {
+        if (selectedTrainingDay != null) {
+            trainingsOfSelectedTrainingDay = trainingRepository.findAllOfTrainingDay(selectedTrainingDay);
+        
+            trainingDates = new TreeSet<Date>();
+
+            for (Training t : trainings) {
+                trainingDates.add(t.getEventDate());
+            }
+        } else {
+            log.warning("TrainingListProducer.retrieveAllTrainings() * selectedTeam is null");
+        }        
+    }
 }

@@ -6,15 +6,6 @@
                 xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:rich="http://richfaces.org/rich">
 
-
-
-
-    <f:metadata>
-        <f:viewParam name="page" value="#{trainingDayBean.page}"/>
-        <f:event type="preRenderView" listener="#{trainingDayBean.paginate}"/>
-    </f:metadata>
-
-   
     <div style="position: relative; height: auto">
         <table border="0" width="100%" cellpadding="5">
             <tr>
@@ -42,7 +33,7 @@
                                valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
                                >
 
-                    <a4j:ajax event="change" render="xyz" />
+                    <a4j:ajax event="change"/>
                 </rich:calendar>
             </h:panelGroup>
             <h:panelGroup>

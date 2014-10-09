@@ -11,13 +11,13 @@
 
     <h:outputStylesheet>
         .colHeaderHighlighted {
-            background-color: darkgray; 
-            text-shadow: none;
+        background-color: darkgray; 
+        text-shadow: none;
         }
         .colHeader {
-            background-color: lightgray; 
-            color: white; 
-            text-shadow: none;
+        background-color: lightgray; 
+        color: white; 
+        text-shadow: none;
         }
         .col1 { vertical-align:top; }
         .col2 { vertical-align:top; width:450px; }
@@ -61,19 +61,22 @@
 
             <h:panelGrid width="100%" columns="2" columnClasses="col1,col2">
                 <rich:panel styleClass="wizard" style="background-color: transparent">
-                    <!--                    <f:facet name="header">
-                                            <h:outputText value="Using rich:togglePanel for Wizard-like behaviour" />
-                                        </f:facet>-->
                     <h:form>
                         <rich:togglePanel switchType="ajax">
                             <rich:togglePanelItem>
-                                <ui:include src="/admin/training/selectTeamWizardStep.xhtml" />
+                                <ui:include src="/admin/training/wizard/selectTeamWizardStep.xhtml" />
                             </rich:togglePanelItem>
                             <rich:togglePanelItem>
-                                <ui:include src="/admin/training/selectTrainingDayWizardStep.xhtml" />
+                                <ui:include src="/admin/training/wizard/selectTrainingDayWizardStep.xhtml" />
                             </rich:togglePanelItem>
                             <rich:togglePanelItem>
-                                <ui:include src="/admin/training/createTrainingFinalWizardStep.xhtml" />
+                                <ui:include src="/admin/training/wizard/selectTrainingDates.xhtml" />
+                            </rich:togglePanelItem>
+                            <rich:togglePanelItem>
+                                <ui:include src="/admin/training/wizard/selectParticipationGroupWizardStep.xhtml" />
+                            </rich:togglePanelItem>
+                            <rich:togglePanelItem>
+                                <ui:include src="/admin/training/wizard/createTrainingFinalWizardStep.xhtml" />
                             </rich:togglePanelItem>
                         </rich:togglePanel>
                     </h:form>

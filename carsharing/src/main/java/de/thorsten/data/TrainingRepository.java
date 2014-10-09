@@ -2,6 +2,7 @@ package de.thorsten.data;
 
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
+import de.thorsten.model.TrainingDay;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -52,6 +53,13 @@ public class TrainingRepository {
     public List<Training> findAllOfTeam(Team team) {
         Query q = em.createQuery("SELECT t FROM Training t WHERE :team MEMBER OF t.teams");
         q.setParameter("team", team);
+        return q.getResultList();
+    }
+    
+    // todo ungetestet und nicht im Einsatz
+    public List<Training> findAllOfTrainingDay(TrainingDay trainingDay) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.trainingDay = :trainingDay");
+        q.setParameter("trainingDay", trainingDay);
         return q.getResultList();
     }
 }

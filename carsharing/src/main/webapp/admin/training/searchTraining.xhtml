@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="/WEB-INF/templates/admin_template.xhtml">
+
+    <f:metadata>
+        <f:viewParam name="page" value="#{trainingBean.page}"/>
+        <f:event type="preRenderView" listener="#{trainingBean.paginate}"/>
+    </f:metadata>
+
+    <ui:param name="pageTitle" value="Suche Trainingseinträge"/>
+
+    <ui:define name="header">
+        Training
+    </ui:define>
+
+    <ui:define name="subheader">
+        Suche Trainingseinträge
+    </ui:define>
+
+    <ui:define name="footer"/>
+
+    <ui:define name="main">
+        <h:form id="search">
+            <f:validateBean disabled="true">
+                <h:panelGroup styleClass="search">
+
+                    <h:panelGrid columnClasses="label,component,required" columns="3">
+                        <h:outputLabel for="trainingBeanExampleLocation" value="Trainingsort:"/>
+                        <h:panelGroup>
+                            <h:inputText id="trainingBeanExampleLocation" value="#{trainingBean.example.location}"/>
+                            <h:message for="trainingBeanExampleLocation" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        <h:outputLabel for="trainingBeanExampleTimeFrom" value="Von:"/>
+                        <h:panelGroup>
+                            <h:inputText id="trainingBeanExampleTimeFrom" value="#{trainingBean.example.timeFrom}"/>
+                            <h:message for="trainingBeanExampleTimeFrom" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                        <h:outputLabel for="trainingBeanExampleTimeTo" value="Bis:"/>
+                        <h:panelGroup>
+                            <h:inputText id="trainingBeanExampleTimeTo" value="#{trainingBean.example.timeTo}"/>
+                            <h:message for="trainingBeanExampleTimeTo" styleClass="error"/>
+                        </h:panelGroup>
+                        <h:outputText/>
+                    </h:panelGrid>
+                    <h:panelGroup styleClass="buttons">
+                        <h:commandLink value="Suchen" action="#{trainingBean.search}" styleClass="btn btn-primary"/>
+                        <h:commandLink value="Neu" action="#{trainingBean.create}" styleClass="btn btn-primary"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </f:validateBean>
+
+            <h:dataTable id="trainingBeanPageItems" styleClass="data-table" value="#{trainingBean.pageItems}" var="_item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Datum"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemEventDate" value="#{_item.dateAsString}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Trainingstag"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTrainingDay" value="#{_item.weekdayOfTrainingDay}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Von"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTimeFrom" value="#{_item.timeFrom}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Bis"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTimeTo" value="#{_item.timeTo}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Teams"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemTeamsa" value="#{_item.teamsAsFormattedString}"/>
+                    </h:link>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Trainingsort"/>
+                    </f:facet>
+                    <h:link outcome="/admin/training/viewTraining">
+                        <f:param name="id" value="#{_item.id}"/>
+                        <h:outputText id="itemLocation" value="#{_item.location}"/>
+                    </h:link>
+                </h:column>
+            </h:dataTable>
+            <ui:include src="/WEB-INF/templates/paginator.xhtml">
+                <ui:param name="paginatorBean" value="#{trainingBean}"/>
+            </ui:include>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
