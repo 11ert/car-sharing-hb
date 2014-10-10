@@ -31,19 +31,19 @@
                     <h:panelGrid columnClasses="label,component,required" columns="3">
                         <h:outputLabel for="trainingBeanExampleLocation" value="Trainingsort:"/>
                         <h:panelGroup>
-                            <h:inputText id="trainingBeanExampleLocation" value="#{trainingBean.example.sportsEventDetails.location}"/>
+                            <h:inputText id="trainingBeanExampleLocation" value="#{trainingBean.example.sportsEventDetail.location}"/>
                             <h:message for="trainingBeanExampleLocation" styleClass="error"/>
                         </h:panelGroup>
                         <h:outputText/>
                         <h:outputLabel for="trainingBeanExampleTimeFrom" value="Von:"/>
                         <h:panelGroup>
-                            <h:inputText id="trainingBeanExampleTimeFrom" value="#{trainingBean.example.sportsEventDetails.timeFrom}"/>
+                            <h:inputText id="trainingBeanExampleTimeFrom" value="#{trainingBean.example.sportsEventDetail.timeFrom}"/>
                             <h:message for="trainingBeanExampleTimeFrom" styleClass="error"/>
                         </h:panelGroup>
                         <h:outputText/>
                         <h:outputLabel for="trainingBeanExampleTimeTo" value="Bis:"/>
                         <h:panelGroup>
-                            <h:inputText id="trainingBeanExampleTimeTo" value="#{trainingBean.example.sportsEventDetails.timeTo}"/>
+                            <h:inputText id="trainingBeanExampleTimeTo" value="#{trainingBean.example.sportsEventDetail.timeTo}"/>
                             <h:message for="trainingBeanExampleTimeTo" styleClass="error"/>
                         </h:panelGroup>
                         <h:outputText/>
@@ -80,7 +80,7 @@
                     </f:facet>
                     <h:link outcome="/admin/training/viewTraining">
                         <f:param name="id" value="#{_item.id}"/>
-                        <h:outputText id="itemTimeFrom" value="#{_item.sportsEventDetails.timeFrom}"/>
+                        <h:outputText id="itemTimeFrom" value="#{_item.sportsEventDetail.timeFrom}"/>
                     </h:link>
                 </h:column>
                 <h:column>
@@ -89,7 +89,7 @@
                     </f:facet>
                     <h:link outcome="/admin/training/viewTraining">
                         <f:param name="id" value="#{_item.id}"/>
-                        <h:outputText id="itemTimeTo" value="#{_item.sportsEventDetails.timeTo}"/>
+                        <h:outputText id="itemTimeTo" value="#{_item.sportsEventDetail.timeTo}"/>
                     </h:link>
                 </h:column>
                 <h:column>
@@ -107,7 +107,7 @@
                     </f:facet>
                     <h:link outcome="/admin/training/viewTraining">
                         <f:param name="id" value="#{_item.id}"/>
-                        <h:outputText id="itemLocation" value="#{_item.sportsEventDetails.location}"/>
+                        <h:outputText id="itemLocation" value="#{_item.sportsEventDetail.location}"/>
                     </h:link>
                 </h:column>
             </h:dataTable>
