@@ -37,7 +37,7 @@
                     <f:selectItems value="#{trainingController.allTrainingDays}" 
                                    var="currentTrainingDay" 
                                    itemValue="#{currentTrainingDay.id}"
-                                   itemLabel="#{currentTrainingDay.weekdayAsString}: #{currentTrainingDay.timeFromTemplate}-#{currentTrainingDay.timeToTemplate}, #{currentTrainingDay.comment}" />
+                                   itemLabel="#{currentTrainingDay.weekdayAsString}: #{currentTrainingDay.timeFrom}-#{currentTrainingDay.timeTo}, #{currentTrainingDay.comment}" />
                     <a4j:ajax event="change" render="trainingDayDetails" />
                 </h:selectOneListbox>
             </h:panelGroup>

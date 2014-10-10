@@ -16,28 +16,40 @@
                 <td width="20%" class="colHeader">Zusammenfassung</td>
             </tr>
         </table>
-        
+
         <h:outputText value="Bitte die Trainingsdaten auswählen, welche hinzugefügt werden sollen."></h:outputText>
-   
+
         <h:panelGrid columns="2" styleClass="panelColumns">
             <h:panelGroup>
+                <h:outputText value="Von:"/>
                 <rich:calendar id="fromTrainingsdate"
                                style="background-color: #F2F2F2"
                                mode="ajax" 
-                               buttonLabel="Heute"
                                locale="de"
-                               popup="false"
+                               popup="true"
                                boundaryDatesMode="scroll" 
                                datePattern="dd.MM.yyyy"  
                                value="#{trainingController.nextTrainingDateFromTemp}"
                                valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
                                >
-
-                    <a4j:ajax event="change"/>
+                    <a4j:ajax event="change" render="trainingDatesSelectParams_output"/>
                 </rich:calendar>
             </h:panelGroup>
-            <h:panelGroup>
 
+            <h:panelGroup>
+                <h:outputText value="Bis:"/>
+                <rich:calendar id="toTrainingsdate"
+                               style="background-color: #F2F2F2"
+                               mode="ajax" 
+                               locale="de"
+                               popup="true"
+                               boundaryDatesMode="scroll" 
+                               datePattern="dd.MM.yyyy"  
+                               value="#{trainingController.nextTrainingDateToTemp}"
+                               valueChangeListener="#{trainingController.trainingDate}"
+                               >
+                    <a4j:ajax event="change" render="trainingDatesSelectParams_output"/>
+                </rich:calendar>
             </h:panelGroup>
         </h:panelGrid>
 

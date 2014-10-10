@@ -24,7 +24,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import de.thorsten.util.DateUtil;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,10 +32,10 @@ import java.util.logging.Logger;
 import javax.faces.event.ValueChangeEvent;
 
 /**
- * Backing bean for TrainingDay entities.
+ * Backing bean for SportsEventDetails entities.
  * <p>
- * This class provides CRUD functionality for all TrainingDay entities. It
- * focuses purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt>
+ This class provides CRUD functionality for all SportsEventDetails entities. It
+ focuses purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt>
  * for state management, <tt>PersistenceContext</tt> for persistence,
  * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD
  * framework or custom base class.
@@ -48,7 +48,7 @@ public class TrainingDayBean implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /*
-     * Support creating and retrieving TrainingDay entities
+     * Support creating and retrieving SportsEventDetails entities
      */
     private Long id;
 
@@ -65,9 +65,9 @@ public class TrainingDayBean implements Serializable {
         this.id = id;
     }
 
-    private TrainingDay trainingDay;
+    private SportsEventDetails trainingDay;
 
-    public TrainingDay getTrainingDay() {
+    public SportsEventDetails getTrainingDay() {
         return this.trainingDay;
     }
 
@@ -100,13 +100,13 @@ public class TrainingDayBean implements Serializable {
         }
     }
 
-    public TrainingDay findById(Long id) {
+    public SportsEventDetails findById(Long id) {
 
-        return this.entityManager.find(TrainingDay.class, id);
+        return this.entityManager.find(SportsEventDetails.class, id);
     }
 
     /*
-     * Support updating and deleting TrainingDay entities
+     * Support updating and deleting SportsEventDetails entities
      */
     public String update() {
         this.conversation.end();
@@ -129,7 +129,7 @@ public class TrainingDayBean implements Serializable {
         this.conversation.end();
 
         try {
-            TrainingDay deletableEntity = findById(getId());
+            SportsEventDetails deletableEntity = findById(getId());
 
             this.entityManager.remove(deletableEntity);
             this.entityManager.flush();
@@ -141,13 +141,13 @@ public class TrainingDayBean implements Serializable {
     }
 
     /*
-     * Support searching TrainingDay entities with pagination
+     * Support searching SportsEventDetails entities with pagination
      */
     private int page;
     private long count;
-    private List<TrainingDay> pageItems;
+    private List<SportsEventDetails> pageItems;
 
-    private TrainingDay example = new TrainingDay();
+    private SportsEventDetails example = new SportsEventDetails();
 
     public int getPage() {
         return this.page;
@@ -161,11 +161,11 @@ public class TrainingDayBean implements Serializable {
         return 10;
     }
 
-    public TrainingDay getExample() {
+    public SportsEventDetails getExample() {
         return this.example;
     }
 
-    public void setExample(TrainingDay example) {
+    public void setExample(SportsEventDetails example) {
         this.example = example;
     }
 
@@ -179,23 +179,23 @@ public class TrainingDayBean implements Serializable {
 
         // Populate this.count
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-        Root<TrainingDay> root = countCriteria.from(TrainingDay.class);
+        Root<SportsEventDetails> root = countCriteria.from(SportsEventDetails.class);
         countCriteria = countCriteria.select(builder.count(root)).where(
                 getSearchPredicates(root));
         this.count = this.entityManager.createQuery(countCriteria)
                 .getSingleResult();
 
         // Populate this.pageItems
-        CriteriaQuery<TrainingDay> criteria = builder.createQuery(TrainingDay.class);
-        root = criteria.from(TrainingDay.class);
-        TypedQuery<TrainingDay> query = this.entityManager.createQuery(criteria
+        CriteriaQuery<SportsEventDetails> criteria = builder.createQuery(SportsEventDetails.class);
+        root = criteria.from(SportsEventDetails.class);
+        TypedQuery<SportsEventDetails> query = this.entityManager.createQuery(criteria
                 .select(root).where(getSearchPredicates(root)));
         query.setFirstResult(this.page * getPageSize()).setMaxResults(
                 getPageSize());
         this.pageItems = query.getResultList();
     }
 
-    private Predicate[] getSearchPredicates(Root<TrainingDay> root) {
+    private Predicate[] getSearchPredicates(Root<SportsEventDetails> root) {
 
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
         List<Predicate> predicatesList = new ArrayList<Predicate>();
@@ -208,15 +208,15 @@ public class TrainingDayBean implements Serializable {
         if (id != null && id.intValue() != 0) {
             predicatesList.add(builder.equal(root.get("id"), id));
         }
-        String timeFromTemplate = this.example.getTimeFromTemplate();
+        String timeFromTemplate = this.example.getTimeFrom();
         if (timeFromTemplate != null && !"".equals(timeFromTemplate)) {
             predicatesList.add(builder.like(root.<String>get("timeFromTemplate"), '%' + timeFromTemplate + '%'));
         }
-        String timeToTemplate = this.example.getTimeToTemplate();
+        String timeToTemplate = this.example.getTimeTo();
         if (timeToTemplate != null && !"".equals(timeToTemplate)) {
             predicatesList.add(builder.like(root.<String>get("timeToTemplate"), '%' + timeToTemplate + '%'));
         }
-        String pickUpTimeSourceTemplate = this.example.getPickUpTimeSourceTemplate();
+        String pickUpTimeSourceTemplate = this.example.getPickUpTimeSource();
         if (pickUpTimeSourceTemplate != null && !"".equals(pickUpTimeSourceTemplate)) {
             predicatesList.add(builder.like(root.<String>get("pickUpTimeSourceTemplate"), '%' + pickUpTimeSourceTemplate + '%'));
         }
@@ -224,7 +224,7 @@ public class TrainingDayBean implements Serializable {
         return predicatesList.toArray(new Predicate[predicatesList.size()]);
     }
 
-    public List<TrainingDay> getPageItems() {
+    public List<SportsEventDetails> getPageItems() {
         return this.pageItems;
     }
 
@@ -233,15 +233,14 @@ public class TrainingDayBean implements Serializable {
     }
 
     /*
-     * Support listing and POSTing back TrainingDay entities (e.g. from inside an
+     * Support listing and POSTing back SportsEventDetails entities (e.g. from inside an
      * HtmlSelectOneMenu)
      */
-    public List<TrainingDay> getAll() {
+    public List<SportsEventDetails> getAll() {
 
-        CriteriaQuery<TrainingDay> criteria = this.entityManager
-                .getCriteriaBuilder().createQuery(TrainingDay.class);
-        return this.entityManager.createQuery(
-                criteria.select(criteria.from(TrainingDay.class))).getResultList();
+        CriteriaQuery<SportsEventDetails> criteria = this.entityManager
+                .getCriteriaBuilder().createQuery(SportsEventDetails.class);
+        return this.entityManager.createQuery(criteria.select(criteria.from(SportsEventDetails.class))).getResultList();
     }
 
     @Resource
@@ -268,7 +267,7 @@ public class TrainingDayBean implements Serializable {
                     return "";
                 }
 
-                return String.valueOf(((TrainingDay) value).getId());
+                return String.valueOf(((SportsEventDetails) value).getId());
             }
         };
     }
@@ -276,15 +275,15 @@ public class TrainingDayBean implements Serializable {
     /*
      * Support adding children to bidirectional, one-to-many tables
      */
-    private TrainingDay add = new TrainingDay();
+    private SportsEventDetails add = new SportsEventDetails();
 
-    public TrainingDay getAdd() {
+    public SportsEventDetails getAdd() {
         return this.add;
     }
 
-    public TrainingDay getAdded() {
-        TrainingDay added = this.add;
-        this.add = new TrainingDay();
+    public SportsEventDetails getAdded() {
+        SportsEventDetails added = this.add;
+        this.add = new SportsEventDetails();
         return added;
     }
 

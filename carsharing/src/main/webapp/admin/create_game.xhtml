@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- todo / Attribute verlagert nach "TrainingDay" -> neue Instanz erzeugen und übertragen -->
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
@@ -85,45 +87,45 @@
                 <h:outputLabel for="location" value="Spielort:" />
                 <h:panelGroup>
                     <h:inputText id="location"
-                                 value="#{newGame.location}" />
+                                 value="#{newEventDay.location}" />
                     <h:message for="location" errorClass="invalid" />
                 </h:panelGroup>
 
                 <h:outputLabel for="timeFrom" value="Von:" />
                 <h:panelGroup>
                     <h:inputText id="timeFrom"
-                                 value="#{newGame.timeFrom}" />
+                                 value="#{newEventDay.timeFrom}" />
                     <h:message for="timeFrom" errorClass="invalid" />
                 </h:panelGroup>
 
                 <h:outputLabel for="timeTo" value="Bis:" />
                 <h:panelGroup>
                     <h:inputText id="timeTo"
-                                 value="#{newGame.timeTo}" />
+                                 value="#{newEventDay.timeTo}" />
                     <h:message for="timeTo" errorClass="invalid" />
                 </h:panelGroup>
                 <h:outputLabel for="pickUpLocationSource" value="Abfahrtsort:" />
                 <h:panelGroup>
-                    <h:inputText id="pickUpLocationSource" value="#{newGame.pickUpLocationSource}" />
+                    <h:inputText id="pickUpLocationSource" value="#{newEventDay.pickUpLocationSource}" />
                     <h:message for="pickUpLocationSource" errorClass="invalid" />
                 </h:panelGroup>
 
                 <h:outputLabel for="pickUpTimeSource" value="Abfahrtszeit:" />
                 <h:panelGroup>
-                    <h:inputText id="pickUpTimeSource" value="#{newGame.pickUpTimeSource}" />
+                    <h:inputText id="pickUpTimeSource" value="#{newEventDay.pickUpTimeSource}" />
                     <h:message for="pickUpTimeSource" errorClass="invalid" />
                 </h:panelGroup>
                 <h:outputLabel for="pickUpTimeTarget" value="Abholzeit:" />
                 <h:panelGroup>
                     <h:inputText id="pickUpTimeTarget"
-                                 value="#{newGame.pickUpTimeTarget}" />
+                                 value="#{newEventDay.pickUpTimeTarget}" />
                     <h:message for="pickUpTimeTarget" errorClass="invalid" />
                 </h:panelGroup>
 
                 <h:outputLabel for="pickUpLocationTarget" value="Abholort:" />
                 <h:panelGroup>
                     <h:inputText id="pickUpLocationTarget"
-                                 value="#{newGame.pickUpLocationTarget}" />
+                                 value="#{newEventDay.pickUpLocationTarget}" />
                     <h:message for="pickUpLocationTarget" errorClass="invalid" />
                 </h:panelGroup>
 

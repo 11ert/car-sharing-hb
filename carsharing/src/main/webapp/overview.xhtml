@@ -87,7 +87,7 @@
                     </h:panelGroup>
                     <h:panelGroup rendered="#{not empty participations}">
                          <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                      value="#{participationListProducer.sportEventType} von #{selectedSportsEvent.timeFrom} bis #{selectedSportsEvent.timeTo} Uhr in #{selectedSportsEvent.location}"/><br/>
+                                      value="#{participationListProducer.sportEventType} von #{selectedSportsEvent.sportsEventDetail.timeFrom} bis #{selectedSportsEvent.sportsEventDetail.timeTo} Uhr in #{selectedSportsEvent.sportsEventDetail.location}"/><br/>
                         <p/>
                         <h:outputText style="font-size: smaller;font-weight: normal;" 
                                       value="Teams: #{selectedSportsEvent.teamsAsFormattedString}"/><br/>
@@ -97,9 +97,9 @@
                         <h:outputText style="font-size: smaller;font-weight: bold;"
                                       value="Hinfahrt"/><br/>
                         <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                      value="Abfahrt: #{selectedSportsEvent.pickUpTimeSource}"/><br/>
+                                      value="Abfahrt: #{selectedSportsEvent.sportsEventDetail.pickUpTimeSource}"/><br/>
                         <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                      value="#{selectedSportsEvent.pickUpLocationSource}"/><br/>
+                                      value="#{selectedSportsEvent.sportsEventDetail.pickUpLocationSource}"/><br/>
                         <h:outputText style="color: red; font-size: smaller;font-weight: normal;" 
                                       value="Noch #{participationListProducer.numberOfSeatsForthRequired} Plätze auf der Hinfahrt nötig!" 
                                       rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsForthRequired > 0}"/>
@@ -110,9 +110,9 @@
                         <h:outputText style="font-size: smaller;font-weight: bold;" 
                                       value="Rückfahrt"/><br/>
                         <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                      value="Abfahrt: #{selectedSportsEvent.pickUpTimeTarget}"/><br/>
+                                      value="Abfahrt: #{selectedSportsEvent.sportsEventDetail.pickUpTimeTarget}"/><br/>
                         <h:outputText style="font-size: smaller;font-weight: normal;" 
-                                      value="#{selectedSportsEvent.pickUpLocationTarget}"/><br/>
+                                      value="#{selectedSportsEvent.sportsEventDetail.pickUpLocationTarget}"/><br/>
                         <h:outputText style="color: forestgreen; font-size: smaller;font-weight: normal;"  
                                       value="Genügend Plätze auf der Rückfahrt vorhanden!"
                                       rendered="#{participationListProducer.numberOfParticipators gt 0 and participationListProducer.numberOfSeatsBackRequired le 0}"/>

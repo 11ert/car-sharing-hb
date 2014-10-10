@@ -24,8 +24,8 @@ public class TrainingCalendarModel implements CalendarDataModel {
     @Inject
     private TrainingListProducer trainingListProducer;
 
-    @Inject
-    private GameListProducer gameListProducer;
+//    @Inject
+//    private GameListProducer gameListProducer;
 
     @Inject
     protected Logger log;

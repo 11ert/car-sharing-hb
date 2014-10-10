@@ -17,7 +17,7 @@
 package de.thorsten.data;
 
 import de.thorsten.model.Team;
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -33,7 +33,7 @@ public class TrainingDayListProducer {
     @Inject
     private TrainingDayRepository trainingDayRepository;
 
-    private List<TrainingDay> trainingDays;
+    private List<SportsEventDetails> trainingDays;
 
     // @Named provides access the return value via the EL variable name "trainingDays" in the UI (e.g.
     // Facelets or JSP view)
@@ -41,7 +41,7 @@ public class TrainingDayListProducer {
    
     @Produces
     @Named
-    public List<TrainingDay> getTrainingDays() {
+    public List<SportsEventDetails> getTrainingDays() {
         return trainingDays;
     }
 

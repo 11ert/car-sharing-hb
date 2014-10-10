@@ -1,6 +1,5 @@
 package de.thorsten.controller;
 
-import de.thorsten.data.MemberRepository;
 import de.thorsten.data.TeamListProducer;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.model.Game;
@@ -8,6 +7,7 @@ import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
 import de.thorsten.model.ParticipationGroup;
 import de.thorsten.model.Team;
+import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.GameService;
 import de.thorsten.service.ParticipationService;
 import java.io.Serializable;
@@ -65,6 +65,10 @@ public class GameController implements Serializable {
     @Current
     private ParticipationGroup selectedParticipationGroup;
 
+    @Produces
+    @Named
+    private SportsEventDetails newEventDay;
+
     @PostConstruct
     public void load() {
         newGame = new Game();
@@ -90,6 +94,7 @@ public class GameController implements Serializable {
 
         newGame.setEventDate(nextDate);
         newGame.setTeams(listOfTeamsForTheGame);
+        newGame.setSportsEventDetail(newEventDay);
 
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Spiel konnte nicht gespeichert werden !");
@@ -147,6 +152,20 @@ public class GameController implements Serializable {
             listOfTeamsForTheGame.add(teamForGame);
             log.fine("GameController.createParticipationsForNextDate() * ...to new Team = " + teamForGame.toString());
         }
+    }
+
+    /**
+     * @return the newEventDay
+     */
+    public SportsEventDetails getNewEventDay() {
+        return newEventDay;
+    }
+
+    /**
+     * @param newEventDay the newEventDay to set
+     */
+    public void setNewEventDay(SportsEventDetails newEventDay) {
+        this.newEventDay = newEventDay;
     }
 
 }

@@ -78,7 +78,7 @@
                     <f:selectItems value="#{trainingController.trDayList}" 
                                    var="selectedTrainingDay" 
                                    itemValue="#{selectedTrainingDay.id}"
-                                   itemLabel="#{selectedTrainingDay.timeFromTemplate}-#{selectedTrainingDay.timeToTemplate}, #{selectedTrainingDay.comment}" />
+                                   itemLabel="#{selectedTrainingDay.timeFrom}-#{selectedTrainingDay.timeTo}, #{selectedTrainingDay.comment}" />
                     <a4j:ajax event="change" render="member_table" />
                 </h:selectOneListbox>
 

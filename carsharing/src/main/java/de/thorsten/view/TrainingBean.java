@@ -227,27 +227,27 @@ public class TrainingBean implements Serializable
       CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
       List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-      String timeFrom = this.example.getTimeFrom();
+      String timeFrom = this.example.getSportsEventDetail().getTimeFrom();
       if (timeFrom != null && !"".equals(timeFrom))
       {
          predicatesList.add(builder.like(root.<String> get("timeFrom"), '%' + timeFrom + '%'));
       }
-      String timeTo = this.example.getTimeTo();
+      String timeTo = this.example.getSportsEventDetail().getTimeTo();
       if (timeTo != null && !"".equals(timeTo))
       {
          predicatesList.add(builder.like(root.<String> get("timeTo"), '%' + timeTo + '%'));
       }
-      String pickUpTimeSource = this.example.getPickUpTimeSource();
+      String pickUpTimeSource = this.example.getSportsEventDetail().getPickUpTimeSource();
       if (pickUpTimeSource != null && !"".equals(pickUpTimeSource))
       {
          predicatesList.add(builder.like(root.<String> get("pickUpTimeSource"), '%' + pickUpTimeSource + '%'));
       }
-      String pickUpTimeTarget = this.example.getPickUpTimeTarget();
+      String pickUpTimeTarget = this.example.getSportsEventDetail().getPickUpTimeTarget();
       if (pickUpTimeTarget != null && !"".equals(pickUpTimeTarget))
       {
          predicatesList.add(builder.like(root.<String> get("pickUpTimeTarget"), '%' + pickUpTimeTarget + '%'));
       }
-      String location = this.example.getLocation();
+      String location = this.example.getSportsEventDetail().getLocation();
       if (location != null && !"".equals(location))
       {
          predicatesList.add(builder.like(root.<String> get("location"), '%' + location + '%'));

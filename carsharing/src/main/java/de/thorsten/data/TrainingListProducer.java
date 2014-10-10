@@ -3,7 +3,7 @@ package de.thorsten.data;
 import de.thorsten.controller.Current;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Produces;
@@ -32,7 +32,7 @@ public class TrainingListProducer {
     // todo ungenutzt, nur wieder wenn TrainingWizard fortgeführt wird.
     //@Inject
     //@Current
-    private TrainingDay selectedTrainingDay;
+    private SportsEventDetails selectedTrainingDay;
     
     private List<Training> trainings;
 
@@ -90,7 +90,7 @@ public class TrainingListProducer {
     }
 
 
-        public void onSelectedTrainingDayChanged(@Observes TrainingDay trainingDay) {
+        public void onSelectedTrainingDayChanged(@Observes SportsEventDetails trainingDay) {
         log.fine("onSelectedTrainingDayChanged() called, TrainingDay old=" + selectedTrainingDay + " , TrainingDay new=" + trainingDay.toString());
         if (trainingDay != null) {
             log.fine(" , TrainingDay new=" + trainingDay.toString());

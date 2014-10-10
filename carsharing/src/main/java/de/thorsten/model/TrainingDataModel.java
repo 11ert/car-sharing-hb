@@ -71,7 +71,7 @@ public class TrainingDataModel extends TrainingCalendarModel {
         Integer[] trainingDays = new Integer[this.trainingDayListProducer.getTrainingDays().size()];
         int i = 0;
         for (final Iterator it = trainingDayListProducer.getTrainingDays().iterator(); it.hasNext();) {
-            trainingDays[i] = ((TrainingDay) it.next()).getWeekday();
+            trainingDays[i] = ((SportsEventDetails) it.next()).getWeekday();
             i++;
         };
         return trainingDays;

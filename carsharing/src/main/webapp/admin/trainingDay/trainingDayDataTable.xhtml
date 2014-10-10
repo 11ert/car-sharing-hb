@@ -22,7 +22,7 @@
             </f:facet>
             <h:link outcome="/admin/trainingDay/view">
                 <f:param name="id" value="#{_item.id}"/>
-                <h:outputText id="itemTimeFromTemplate" value="#{_item.timeFromTemplate}"/>
+                <h:outputText id="itemTimeFromTemplate" value="#{_item.timeFrom}"/>
             </h:link>
         </h:column>
         <h:column>
@@ -31,7 +31,7 @@
             </f:facet>
             <h:link outcome="/admin/trainingDay/view">
                 <f:param name="id" value="#{_item.id}"/>
-                <h:outputText id="itemTimeToTemplate" value="#{_item.timeToTemplate}"/>
+                <h:outputText id="itemTimeToTemplate" value="#{_item.timeTo}"/>
             </h:link>
         </h:column>
         <h:column>
@@ -40,7 +40,7 @@
             </f:facet>
             <h:link outcome="/admin/trainingDay/view">
                 <f:param name="id" value="#{_item.id}"/>
-                <h:outputText id="itemPickUpTimeSourceTemplate" value="#{_item.pickUpTimeSourceTemplate}"/>
+                <h:outputText id="itemPickUpTimeSourceTemplate" value="#{_item.pickUpTimeSource}"/>
             </h:link>
         </h:column>
         <h:column>
@@ -49,7 +49,7 @@
             </f:facet>
             <h:link outcome="/admin/trainingDay/view">
                 <f:param name="id" value="#{_item.id}"/>
-                <h:outputText id="itemPickUpTimeTargetTemplate" value="#{_item.pickUpTimeTargetTemplate}"/>
+                <h:outputText id="itemPickUpTimeTargetTemplate" value="#{_item.pickUpTimeTarget}"/>
             </h:link>
         </h:column>
         <h:column>
@@ -58,7 +58,7 @@
             </f:facet>
             <h:link outcome="/admin/trainingDay/view">
                 <f:param name="id" value="#{_item.id}"/>
-                <h:outputText id="itemLocationTemplate" value="#{_item.locationTemplate}"/>
+                <h:outputText id="itemLocationTemplate" value="#{_item.location}"/>
             </h:link>
         </h:column>
         <h:column>

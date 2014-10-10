@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.container.test.api.Deployment;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.MemberRegistration;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
@@ -79,7 +79,7 @@ public class TeamTest {
     @Inject
     Logger log;
 
-    private TrainingDay trainingDay;
+    private SportsEventDetails trainingDay;
 
     @Deployment
     public static Archive<?> createTestArchive() {
@@ -89,10 +89,10 @@ public class TeamTest {
                         Team.class,
                         Training.class,
                         TrainingRepository.class,
-                        de.thorsten.model.TrainingDay.class,
+                        de.thorsten.model.SportsEventDetails.class,
                         SportsEvent.class,
                         TeamService.class,
-                        TrainingDay.class,
+                        SportsEventDetails.class,
                         MemberRegistration.class,
                         TrainingService.class,
                         MemberRepository.class,

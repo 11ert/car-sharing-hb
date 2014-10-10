@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import org.jboss.arquillian.container.test.api.Deployment;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.MemberRegistration;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
@@ -79,7 +79,11 @@ public class TrainingTest {
     @Inject
     Logger log;
 
-    private TrainingDay trainingDay;
+    private SportsEventDetails trainingDay;
+
+    private SportsEventDetails trainingDayEins;
+
+    private SportsEventDetails trainingDayZwei;
 
     @Deployment
     public static Archive<?> createTestArchive() {
@@ -89,10 +93,10 @@ public class TrainingTest {
                         Team.class,
                         Training.class,
                         TrainingRepository.class,
-                        de.thorsten.model.TrainingDay.class,
+                        de.thorsten.model.SportsEventDetails.class,
                         SportsEvent.class,
                         TeamService.class,
-                        TrainingDay.class,
+                        SportsEventDetails.class,
                         MemberRegistration.class,
                         TrainingService.class,
                         MemberRepository.class,
@@ -160,7 +164,6 @@ public class TrainingTest {
         utx.commit();
     }
 
-
     private void generateTeams() throws Exception {
         // clear database  
         utx.begin();
@@ -221,29 +224,15 @@ public class TrainingTest {
         teams.add(teamZwei);
         Training trainingEins = new Training();
         trainingEins.setTeams(teams);
-        trainingEins.setLocation("Entenhausen");
-        trainingEins.setPickUpLocationSource("PickUpLocationSource");
-        trainingEins.setPickUpLocationTarget("PickUpLocationTarget");
-        trainingEins.setPickUpTimeSource("10:00");
-        trainingEins.setPickUpTimeTarget("12:00");
         trainingEins.setEventDate(new Date());
-        trainingEins.setTrainingDay(trainingDay);
-        trainingEins.setTimeFrom("10:30");
-        trainingEins.setTimeTo("10:35");
+        trainingEins.setSportsEventDetail(trainingDayEins);
 
         Training trainingZwei = new Training();
         teams = new ArrayList();
         teams.add(teamZwei);
         trainingZwei.setTeams(teams);
-        trainingZwei.setLocation("Entenhausen Zwei");
-        trainingZwei.setPickUpLocationSource("PickUpLocationSource Zwei");
-        trainingZwei.setPickUpLocationTarget("PickUpLocationTarget Zwei");
-        trainingZwei.setPickUpTimeSource("10:02");
-        trainingZwei.setPickUpTimeTarget("12:02");
         trainingZwei.setEventDate(new Date());
-        trainingZwei.setTimeFrom("10:30");
-        trainingZwei.setTimeTo("10:35");
-        trainingZwei.setTrainingDay(trainingDay);
+        trainingZwei.setSportsEventDetail(trainingDayZwei);
 
         try {
             trainingService.update(trainingEins);
@@ -255,7 +244,27 @@ public class TrainingTest {
     }
 
     private void generateTrainingDays() {
-        TrainingDay trainingDay = new TrainingDay();
+        SportsEventDetails trainingDay = new SportsEventDetails();
         trainingDay.setWeekday(1);
+
+        trainingDayEins = new SportsEventDetails();
+        trainingDayEins.setLocation("Entenhausen");
+        trainingDayEins.setPickUpLocationSource("PickUpLocationSource");
+        trainingDayEins.setPickUpLocationTarget("PickUpLocationTarget");
+        trainingDayEins.setPickUpTimeSource("10:00");
+        trainingDayEins.setPickUpTimeTarget("12:00");
+        trainingDayEins.setWeekday(1);
+        trainingDayEins.setTimeFrom("10:30");
+        trainingDayEins.setTimeTo("10:35");
+
+        trainingDayZwei = new SportsEventDetails();
+        trainingDayZwei.setLocation("Entenhausen Zwei");
+        trainingDayZwei.setPickUpLocationSource("PickUpLocationSource Zwei");
+        trainingDayZwei.setPickUpLocationTarget("PickUpLocationTarget Zwei");
+        trainingDayZwei.setPickUpTimeSource("10:02");
+        trainingDayZwei.setPickUpTimeTarget("12:02");
+        trainingDayZwei.setTimeFrom("10:30");
+        trainingDayZwei.setTimeTo("10:35");
+
     }
 }

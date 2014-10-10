@@ -17,57 +17,33 @@ public class Training extends SportsEvent implements Serializable {
     public Training() {
     }
 
-   //    public Training(Date date, List<Member> players, TrainingDay trainingDay) {
-    //        this.eventDate = date;
-    //        this.trainingDay = trainingDay;
-    //    }
-    //@OneToOne(cascade = CascadeType.ALL)
-    private transient TrainingDay trainingDay;
 
     @Override
     public String toString() {
-        return super.toString() + "Training{" + "trainingDay=" + trainingDay + '}';
+        return super.toString() + "Training{" + "trainingDay=" + sportsEventDetail + '}';
     }
 
-    /**
-     * @return the calendarWeek
-     */
-    /*
-     public int getCalendarWeek() {
-     return eventDate.get(Calendar.WEEK_OF_YEAR);
-     }*/
-    /**
-     * @return the trainingDay (Mo. - Fr.)
-     */
-//    public TrainingDay getTrainingDay() {
-//        return trainingDay;
+
+//    public void initializeTrainingWithTrainingDayTemplateData() {
+//        this.location = sportsEventDetail.getLocationTemplate();
+//        this.pickUpLocationSource = sportsEventDetail.getPickUpLocationSourceTemplate();
+//        this.pickUpLocationTarget = sportsEventDetail.getPickUpLocationTargetTemplate();
+//        this.pickUpTimeSource = sportsEventDetail.getPickUpTimeSourceTemplate();
+//        this.pickUpTimeTarget = sportsEventDetail.getPickUpTimeTargetTemplate();
+//        this.timeFrom = sportsEventDetail.getTimeFromTemplate();
+//        this.timeTo = sportsEventDetail.getTimeToTemplate();
+//
 //    }
-
-    /**
-     * @param trainingDay the trainingDay to set (Mo. - Fr.)
-     */
-    public void setTrainingDay(TrainingDay trainingDay) {
-        this.trainingDay = trainingDay;
-    }
-
-    public void initializeTrainingWithTrainingDayTemplateData() {
-        this.location = trainingDay.getLocationTemplate();
-        this.pickUpLocationSource = trainingDay.getPickUpLocationSourceTemplate();
-        this.pickUpLocationTarget = trainingDay.getPickUpLocationTargetTemplate();
-        this.pickUpTimeSource = trainingDay.getPickUpTimeSourceTemplate();
-        this.pickUpTimeTarget = trainingDay.getPickUpTimeTargetTemplate();
-        this.timeFrom = trainingDay.getTimeFromTemplate();
-        this.timeTo = trainingDay.getTimeToTemplate();
-
-    }
-
-    public void newTrainingDay() {
-        this.trainingDay = new TrainingDay();
-    }
+//
+//    public void newTrainingDay() {
+//        this.sportsEventDetail = new SportsEventDetails();
+//    }
 
     public String getWeekdayOfTrainingDay() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(this.eventDate);
         return DateUtil.getWeekdayAsString(cal.get(Calendar.DAY_OF_WEEK));
     }
+
 }
+

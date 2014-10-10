@@ -25,7 +25,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import javax.persistence.Query;
 
 @ApplicationScoped
@@ -34,27 +34,27 @@ public class TrainingDayRepository {
     @Inject
     private EntityManager em;
 
-    public TrainingDay findById(Long id) {
-        return em.find(TrainingDay.class, id);
+    public SportsEventDetails findById(Long id) {
+        return em.find(SportsEventDetails.class, id);
     }
 
 
-    public List<TrainingDay> findAll() {
+    public List<SportsEventDetails> findAll() {
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<TrainingDay> criteria = cb.createQuery(TrainingDay.class);
-        Root<TrainingDay> trainingDay = criteria.from(TrainingDay.class);
+        CriteriaQuery<SportsEventDetails> criteria = cb.createQuery(SportsEventDetails.class);
+        Root<SportsEventDetails> trainingDay = criteria.from(SportsEventDetails.class);
         criteria.select(trainingDay);
         return em.createQuery(criteria).getResultList();
     }
     
-    public List<TrainingDay> findByWeekday(int weekday) {
-        Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE t.weekday = :weekday");
+    public List<SportsEventDetails> findByWeekday(int weekday) {
+        Query q = em.createQuery("SELECT t FROM SportsEventDetails t WHERE t.weekday = :weekday");
         q.setParameter("weekday", weekday);
         return q.getResultList();
     }
     
-    public List<TrainingDay> findAllForTeam(Team team) {
-        Query q = em.createQuery("SELECT t FROM TrainingDay t WHERE WHERE :team MEMBER OF t.teams");
+    public List<SportsEventDetails> findAllForTeam(Team team) {
+        Query q = em.createQuery("SELECT t FROM SportsEventDetailss t WHERE WHERE :team MEMBER OF t.teams");
         q.setParameter("team", team);
         return q.getResultList();
     }

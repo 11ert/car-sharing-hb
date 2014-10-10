@@ -8,7 +8,7 @@ import de.thorsten.model.Participation;
 import de.thorsten.model.ParticipationGroup;
 import de.thorsten.model.Team;
 import de.thorsten.model.Training;
-import de.thorsten.model.TrainingDay;
+import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TrainingService;
 import de.thorsten.util.DateUtil;
@@ -63,16 +63,21 @@ public class TrainingController implements Serializable {
 
     private List<Team> selectedTeams;
     
-    private List<TrainingDay> allTrainingDays;
+    private List<SportsEventDetails> allTrainingDays;
+    
+    private Date nextTrainingDateFromTemp;
+    
+    private Date nextTrainingDateToTemp;
+    
 
     @Inject
     @Current
     private ParticipationGroup selectedParticipationGroup;
 
-    // TrainingDay Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
-    private List<TrainingDay> trDayList;
+    // SportsEventDetails Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
+    private List<SportsEventDetails> trDayList;
 
-    private TrainingDay selectedTrainingDay;
+    private SportsEventDetails selectedTrainingDay;
 
     @Inject
     private List<ParticipationGroup> participationGroups;
@@ -88,6 +93,22 @@ public class TrainingController implements Serializable {
         allTrainingDays = trainingDayRepository.findAll();
     }
 
+    public void trainingDateFromTempChanged(ValueChangeEvent event) {
+        log.fine("TrainingController.trainingDateFromTempChanged() ");
+        if (event.getNewValue() != null) {
+            this.nextTrainingDateFromTemp = ((Date) event.getNewValue());
+            log.fine("TrainingController.nextTrainingDateFromTemp * ...to " + nextTrainingDateFromTemp);
+        }
+    }
+    
+    public void trainingDateToTempChanged(ValueChangeEvent event) {
+        log.fine("TrainingController.trainingDateToTempChanged() ");
+        if (event.getNewValue() != null) {
+            this.nextTrainingDateToTemp = ((Date) event.getNewValue());
+            log.fine("TrainingController.nextTrainingDateToTemp * ...to " + nextTrainingDateToTemp);
+        }
+    }
+
     public void trainingDateChanged(ValueChangeEvent event) {
         log.fine("TrainingController.trainingDateChanged() ");
         int weekday = -1;
@@ -97,7 +118,9 @@ public class TrainingController implements Serializable {
             log.fine("TrainingController.trainingDateChanged() * ...to " + nextTrainingDate);
             cal.setTime(nextTrainingDate);
             weekday = cal.get(Calendar.DAY_OF_WEEK);
+            log.fine("Weekday = " + weekday);
             trDayList = trainingDayRepository.findByWeekday(weekday);
+            log.fine(trDayList.size() + " Einträge gefunden");
         }
 
     }
@@ -129,8 +152,8 @@ public class TrainingController implements Serializable {
 
         // todo: Achtung: Hier das richtige übergeben!!!!!!!
         newTraining.setEventDate(nextTrainingDate);
-        newTraining.setTrainingDay(selectedTrainingDay);
-        newTraining.initializeTrainingWithTrainingDayTemplateData();
+        newTraining.setSportsEventDetail(selectedTrainingDay);
+        //newTraining.initializeTrainingWithTrainingDayTemplateData();
 
         newTraining.setTeams(selectedTeams);
 
@@ -139,10 +162,10 @@ public class TrainingController implements Serializable {
             specificErrorMsg = "Mindestens ein Team muß ausgewählt sein";
         }
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
-                + ", "
-                + ", " + newTraining.getLocation()
-                + ", " + newTraining.getTimeFrom()
-                + " - " + newTraining.getTimeTo());
+                + ", " 
+                + ", " + newTraining.getSportsEventDetail().getLocation()
+                + ", " + newTraining.getSportsEventDetail().getTimeFrom()
+                + " - " + newTraining.getSportsEventDetail().getTimeTo());
 
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
@@ -224,29 +247,57 @@ public class TrainingController implements Serializable {
     /**
      * @return the trDayList
      */
-    public List<TrainingDay> getTrDayList() {
+    public List<SportsEventDetails> getTrDayList() {
         return trDayList;
     }
 
     /**
      * @return the selectedTrainingDay
      */
-    public TrainingDay getSelectedTrainingDay() {
+    public SportsEventDetails getSelectedTrainingDay() {
         return selectedTrainingDay;
     }
 
     /**
      * @return the allTrainingDays
      */
-    public List<TrainingDay> getAllTrainingDays() {
+    public List<SportsEventDetails> getAllTrainingDays() {
         return allTrainingDays;
     }
 
     /**
      * @param allTrainingDays the allTrainingDays to set
      */
-    public void setAllTrainingDays(List<TrainingDay> allTrainingDays) {
+    public void setAllTrainingDays(List<SportsEventDetails> allTrainingDays) {
         this.allTrainingDays = allTrainingDays;
+    }
+
+    /**
+     * @return the nextTrainingDateFromTemp
+     */
+    public Date getNextTrainingDateFromTemp() {
+        return nextTrainingDateFromTemp;
+    }
+
+    /**
+     * @param nextTrainingDateFromTemp the nextTrainingDateFromTemp to set
+     */
+    public void setNextTrainingDateFromTemp(Date nextTrainingDateFromTemp) {
+        this.nextTrainingDateFromTemp = nextTrainingDateFromTemp;
+    }
+
+    /**
+     * @return the nextTrainingDateToTemp
+     */
+    public Date getNextTrainingDateToTemp() {
+        return nextTrainingDateToTemp;
+    }
+
+    /**
+     * @param nextTrainingDateToTemp the nextTrainingDateToTemp to set
+     */
+    public void setNextTrainingDateToTemp(Date nextTrainingDateToTemp) {
+        this.nextTrainingDateToTemp = nextTrainingDateToTemp;
     }
 
 }
