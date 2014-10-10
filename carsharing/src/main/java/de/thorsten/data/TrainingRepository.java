@@ -57,9 +57,21 @@ public class TrainingRepository {
     }
     
     // todo ungetestet und nicht im Einsatz
-    public List<Training> findAllOfTrainingDay(SportsEventDetails trainingDay) {
-        Query q = em.createQuery("SELECT t FROM Training t WHERE t.trainingDay = :trainingDay");
-        q.setParameter("trainingDay", trainingDay);
+    public List<Training> findAllOfTrainingDay(SportsEventDetails sportsEventDetails) {
+        Query q = em.createQuery("SELECT t FROM Training t WHERE t.sportsEventDetails = :sportsEventDetails");
+        q.setParameter("sportsEventDetails", sportsEventDetails);
         return q.getResultList();
     }
+    
+    // todo ungetestet und nicht im Einsatz
+    public List<Training> findAllOfTrainingDayBetweenTimeRange(SportsEventDetails sportsEventDetails, Date from, Date to) {
+        String query = "SELECT t FROM Training t WHERE t.sportsEventDetails = :sportsEventDetails"
+                + " AND (t.eventDate BETWEEN  :from AND :to)";
+        Query q = em.createQuery(query);
+        q.setParameter("sportsEventDetails", sportsEventDetails);
+        q.setParameter("from", from);
+        q.setParameter("to", to);
+        return q.getResultList();
+    }
+    
 }

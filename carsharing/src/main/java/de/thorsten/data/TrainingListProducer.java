@@ -147,7 +147,7 @@ public class TrainingListProducer {
                 trainingDates.add(t.getEventDate());
             }
         } else {
-            log.warning("TrainingListProducer.retrieveAllTrainings() * selectedTeam is null");
+            log.warning("TrainingListProducer.retrieveTrainingsOfSelectedTrainingDay() * selectedTrainingDay is null");
         }        
     }
 }
