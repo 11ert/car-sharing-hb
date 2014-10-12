@@ -31,31 +31,27 @@ public class SportsEventDetails implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
     @NotEmpty
     @Column(name = "timeFrom")
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "{time.format}")
     private String timeFrom;
 
-    @NotNull
     @NotEmpty
     @Column(name = "timeTo")
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "{time.format}")
     private String timeTo;
 
-    @NotNull
     @NotEmpty
     @Column(name = "pickUpTimeSource")
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "{time.format}")
     private String pickUpTimeSource;
 
-    @NotNull
     @NotEmpty
     @Column(name = "pickUpTimeTarget")
-    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]")
+    @Pattern(regexp = "([01]?[0-9]|2[0-3]):[0-5][0-9]", message = "{time.format}")
     private String pickUpTimeTarget;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "location")
     private String location;
 

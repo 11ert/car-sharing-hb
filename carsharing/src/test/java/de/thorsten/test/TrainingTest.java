@@ -35,6 +35,7 @@ import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -79,8 +80,6 @@ public class TrainingTest {
     @Inject
     Logger log;
 
-    private SportsEventDetails trainingDay;
-
     private SportsEventDetails trainingDayEins;
 
     private SportsEventDetails trainingDayZwei;
@@ -110,13 +109,13 @@ public class TrainingTest {
 
     @Test
     public void test() throws Exception {
+        utx.begin();
+        em.joinTransaction();
+
         generateTeams();
         generateMembers();
         generateTrainingDays();
         generateTrainings();
-
-        utx.begin();
-        em.joinTransaction();
 
         List<Team> teams = teamRepository.findAll();
         Assert.assertEquals(2, teams.size());
@@ -138,7 +137,7 @@ public class TrainingTest {
         }
 
         List<Training> trainings = trainingRepository.findAll();
-        Assert.assertEquals(2, trainings.size());
+        Assert.assertEquals(3, trainings.size());
 
         log.fine("**TEST** Alle Trainings:");
         for (Training t : trainings) {
@@ -146,7 +145,7 @@ public class TrainingTest {
         }
 
         List<Training> trainingsForTeamEins = trainingRepository.findAllOfTeam(teamEins);
-        Assert.assertEquals(1, trainingsForTeamEins.size());
+        Assert.assertEquals(2, trainingsForTeamEins.size());
 
         log.fine("**TEST** Alle Trainings für Team " + teamEins.getLongName());
         for (Training t : trainingsForTeamEins) {
@@ -154,21 +153,27 @@ public class TrainingTest {
         }
 
         List<Training> trainingsForTeamZwei = trainingRepository.findAllOfTeam(teamZwei);
-        Assert.assertEquals(2, trainingsForTeamZwei.size());
+        Assert.assertEquals(3, trainingsForTeamZwei.size());
 
         log.fine("**TEST** Alle Trainings für Team " + teamEins.getLongName());
         for (Training t : trainingsForTeamZwei) {
             log.fine("**TEST** Training = " + t.toString());
         }
 
+        Calendar cal = Calendar.getInstance();
+        cal.set(2010, Calendar.JANUARY, 1); //Year, month and day of month
+        Date von = cal.getTime();
+
+        cal.set(2015, Calendar.JANUARY, 1); //Year, month and day of month
+        Date bis = cal.getTime();
+
+        List<Training> trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
+        Assert.assertEquals(2, trainingsFromTo.size());
+
         utx.commit();
     }
 
     private void generateTeams() throws Exception {
-        // clear database  
-        utx.begin();
-        em.joinTransaction();
-
         Team teamEins = new Team();
         teamEins = new Team();
         teamEins.setShortName("*1*");
@@ -193,10 +198,10 @@ public class TrainingTest {
             e.printStackTrace();
             Assert.fail("Konnte Team " + teamZwei + " nicht persistieren");
         }
-        utx.commit();
     }
 
-    private void generateMembers() {
+    private void generateMembers() throws Exception {
+
         Member memberEins = new Member();
         memberEins.setFirstname("Eins Firstname");
         memberEins.setName("Eins Name");
@@ -214,36 +219,59 @@ public class TrainingTest {
         }
     }
 
-    private void generateTrainings() {
+    private void generateTrainings() throws Exception {
 
         Team teamEins = teamRepository.findById(new Long(1));
         Team teamZwei = teamRepository.findById(new Long(2));
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2001, Calendar.JANUARY, 3); //Year, month and day of month
+        Date moritz = cal.getTime();
+
+        cal.set(1972, Calendar.MARCH, 18);
+        Date andrea = cal.getTime();
+
+        cal.set(1971, Calendar.DECEMBER, 25);
+        Date thorsten = cal.getTime();
 
         List teams = new ArrayList();
         teams.add(teamEins);
         teams.add(teamZwei);
         Training trainingEins = new Training();
         trainingEins.setTeams(teams);
-        trainingEins.setEventDate(new Date());
+        trainingEins.setEventDate(moritz);
         trainingEins.setSportsEventDetail(trainingDayEins);
 
         Training trainingZwei = new Training();
         teams = new ArrayList();
         teams.add(teamZwei);
         trainingZwei.setTeams(teams);
-        trainingZwei.setEventDate(new Date());
+        trainingZwei.setEventDate(andrea);
         trainingZwei.setSportsEventDetail(trainingDayZwei);
+
+        Training trainingDrei = new Training();
+        teams = new ArrayList();
+        teams.add(teamEins);
+        teams.add(teamZwei);
+        trainingDrei.setTeams(teams);
+
+        // todo
+        // evtl.ManyToOne bei der Relation in SportsEvent ????
+        trainingDrei.setSportsEventDetail(trainingDayEins);
+        trainingDrei.setEventDate(thorsten);
 
         try {
             trainingService.update(trainingEins);
             trainingService.update(trainingZwei);
+            trainingService.update(trainingDrei);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Konnte Trainings nicht persistieren");
         }
     }
 
-    private void generateTrainingDays() {
+    private void generateTrainingDays() throws Exception {
+
         SportsEventDetails trainingDay = new SportsEventDetails();
         trainingDay.setWeekday(1);
 
@@ -263,6 +291,7 @@ public class TrainingTest {
         trainingDayZwei.setPickUpLocationTarget("PickUpLocationTarget Zwei");
         trainingDayZwei.setPickUpTimeSource("10:02");
         trainingDayZwei.setPickUpTimeTarget("12:02");
+        trainingDayZwei.setWeekday(2);
         trainingDayZwei.setTimeFrom("10:30");
         trainingDayZwei.setTimeTo("10:35");
 

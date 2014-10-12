@@ -20,12 +20,8 @@ import de.thorsten.model.Team;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
 import javax.persistence.Query;
-import javax.persistence.TemporalType;
 
 @ApplicationScoped
 public class TeamRepository {
@@ -38,18 +34,12 @@ public class TeamRepository {
     }
 
     public List<Team> findAll() {
-        Query q = em.createQuery("SELECT t FROM Team t order by shortName");
+        Query q = em.createQuery("SELECT t FROM Team t order by t.shortName");
         return q.getResultList();
-
-//        CriteriaBuilder cb = em.getCriteriaBuilder();
-//        CriteriaQuery<Team> criteria = cb.createQuery(Team.class);
-//        Root<Team> team = criteria.from(Team.class);
-//        criteria.select(team);
-//        return em.createQuery(criteria).getResultList();
     }
     
     public Team findByShortName(String shortName) {
-        Query q = em.createQuery("SELECT t FROM Team t where t.shortName = :shortName order by shortName");
+        Query q = em.createQuery("SELECT t FROM Team t where t.shortName = :shortName order by t.shortName");
         q.setParameter("shortName", shortName);
         return (Team)q.getSingleResult();
     }

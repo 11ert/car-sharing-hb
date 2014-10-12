@@ -34,8 +34,6 @@ import de.thorsten.service.MemberRegistration;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -89,7 +87,6 @@ public class TeamTest {
                         Team.class,
                         Training.class,
                         TrainingRepository.class,
-                        de.thorsten.model.SportsEventDetails.class,
                         SportsEvent.class,
                         TeamService.class,
                         SportsEventDetails.class,

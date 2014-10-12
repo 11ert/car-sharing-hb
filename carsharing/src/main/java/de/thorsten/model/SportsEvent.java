@@ -18,7 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -66,7 +66,7 @@ public abstract class SportsEvent implements Serializable {
     //        this.sportsEventDetail = sportsEventDetail;
     //    }
     // (cascade = CascadeType.ALL)
-    @OneToOne (cascade = CascadeType.MERGE )
+    @ManyToOne (cascade = CascadeType.MERGE )
     protected SportsEventDetails sportsEventDetail;
 
 //    /**

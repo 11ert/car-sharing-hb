@@ -69,8 +69,8 @@ public class TrainingRepository {
                 + " AND (t.eventDate BETWEEN  :from AND :to)";
         Query q = em.createQuery(query);
         q.setParameter("sportsEventDetails", sportsEventDetails);
-        q.setParameter("from", from);
-        q.setParameter("to", to);
+        q.setParameter("from", from, TemporalType.DATE);
+        q.setParameter("to", to, TemporalType.DATE);
         return q.getResultList();
     }
     
