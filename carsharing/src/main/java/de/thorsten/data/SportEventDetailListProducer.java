@@ -28,10 +28,10 @@ import javax.enterprise.context.ApplicationScoped;
 
 //@RequestScoped
 @ApplicationScoped
-public class TrainingDayListProducer {
+public class SportEventDetailListProducer {
 
     @Inject
-    private TrainingDayRepository trainingDayRepository;
+    private SportEventDetailRepository trainingDayRepository;
 
     private List<SportsEventDetails> trainingDays;
 

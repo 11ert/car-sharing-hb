@@ -83,7 +83,7 @@ public class TrainingTest {
     private SportsEventDetails trainingDayEins;
 
     private SportsEventDetails trainingDayZwei;
-
+    
     @Deployment
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test-carsharing.war")
@@ -137,7 +137,7 @@ public class TrainingTest {
         }
 
         List<Training> trainings = trainingRepository.findAll();
-        Assert.assertEquals(3, trainings.size());
+        Assert.assertEquals(4, trainings.size());
 
         log.fine("**TEST** Alle Trainings:");
         for (Training t : trainings) {
@@ -145,7 +145,7 @@ public class TrainingTest {
         }
 
         List<Training> trainingsForTeamEins = trainingRepository.findAllOfTeam(teamEins);
-        Assert.assertEquals(2, trainingsForTeamEins.size());
+        Assert.assertEquals(3, trainingsForTeamEins.size());
 
         log.fine("**TEST** Alle Trainings für Team " + teamEins.getLongName());
         for (Training t : trainingsForTeamEins) {
@@ -153,7 +153,7 @@ public class TrainingTest {
         }
 
         List<Training> trainingsForTeamZwei = trainingRepository.findAllOfTeam(teamZwei);
-        Assert.assertEquals(3, trainingsForTeamZwei.size());
+        Assert.assertEquals(4, trainingsForTeamZwei.size());
 
         log.fine("**TEST** Alle Trainings für Team " + teamEins.getLongName());
         for (Training t : trainingsForTeamZwei) {
@@ -167,7 +167,7 @@ public class TrainingTest {
         cal.set(2015, Calendar.JANUARY, 1); //Year, month and day of month
         Date bis = cal.getTime();
 
-        List<Training> trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
+        List < Training > trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
         Assert.assertEquals(2, trainingsFromTo.size());
 
         utx.commit();
@@ -225,28 +225,31 @@ public class TrainingTest {
         Team teamZwei = teamRepository.findById(new Long(2));
 
         Calendar cal = Calendar.getInstance();
-        cal.set(2001, Calendar.JANUARY, 3); //Year, month and day of month
-        Date moritz = cal.getTime();
+        cal.set(2014, Calendar.JANUARY, 1); //Year, month and day of month
+        Date januar = cal.getTime();
 
-        cal.set(1972, Calendar.MARCH, 18);
-        Date andrea = cal.getTime();
+        cal.set(2014, Calendar.MARCH, 1);
+        Date maerz = cal.getTime();
 
-        cal.set(1971, Calendar.DECEMBER, 25);
-        Date thorsten = cal.getTime();
+        cal.set(2014, Calendar.DECEMBER, 1);
+        Date dezember = cal.getTime();
+
+        cal.set(2020, Calendar.DECEMBER, 1);
+        Date dezember_2020 = cal.getTime();
 
         List teams = new ArrayList();
         teams.add(teamEins);
         teams.add(teamZwei);
         Training trainingEins = new Training();
         trainingEins.setTeams(teams);
-        trainingEins.setEventDate(moritz);
+        trainingEins.setEventDate(januar);
         trainingEins.setSportsEventDetail(trainingDayEins);
 
         Training trainingZwei = new Training();
         teams = new ArrayList();
         teams.add(teamZwei);
         trainingZwei.setTeams(teams);
-        trainingZwei.setEventDate(andrea);
+        trainingZwei.setEventDate(maerz);
         trainingZwei.setSportsEventDetail(trainingDayZwei);
 
         Training trainingDrei = new Training();
@@ -254,16 +257,23 @@ public class TrainingTest {
         teams.add(teamEins);
         teams.add(teamZwei);
         trainingDrei.setTeams(teams);
-
-        // todo
-        // evtl.ManyToOne bei der Relation in SportsEvent ????
         trainingDrei.setSportsEventDetail(trainingDayEins);
-        trainingDrei.setEventDate(thorsten);
+        trainingDrei.setEventDate(dezember);
+
+        teams = new ArrayList();
+        teams.add(teamEins);
+        teams.add(teamZwei);
+        Training trainingVier = new Training();
+        trainingVier.setTeams(teams);
+        trainingVier.setEventDate(dezember_2020);
+        trainingVier.setSportsEventDetail(trainingDayEins);
+
 
         try {
             trainingService.update(trainingEins);
             trainingService.update(trainingZwei);
             trainingService.update(trainingDrei);
+            trainingService.update(trainingVier);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Konnte Trainings nicht persistieren");
@@ -272,28 +282,38 @@ public class TrainingTest {
 
     private void generateTrainingDays() throws Exception {
 
-        SportsEventDetails trainingDay = new SportsEventDetails();
-        trainingDay.setWeekday(1);
+        SportsEventDetails tmpTrainingDay = new SportsEventDetails();
 
-        trainingDayEins = new SportsEventDetails();
-        trainingDayEins.setLocation("Entenhausen");
-        trainingDayEins.setPickUpLocationSource("PickUpLocationSource");
-        trainingDayEins.setPickUpLocationTarget("PickUpLocationTarget");
-        trainingDayEins.setPickUpTimeSource("10:00");
-        trainingDayEins.setPickUpTimeTarget("12:00");
-        trainingDayEins.setWeekday(1);
-        trainingDayEins.setTimeFrom("10:30");
-        trainingDayEins.setTimeTo("10:35");
+        tmpTrainingDay = new SportsEventDetails();
+        tmpTrainingDay.setLocation("Entenhausen");
+        tmpTrainingDay.setPickUpLocationSource("PickUpLocationSource");
+        tmpTrainingDay.setPickUpLocationTarget("PickUpLocationTarget");
+        tmpTrainingDay.setPickUpTimeSource("10:00");
+        tmpTrainingDay.setPickUpTimeTarget("12:00");
+        tmpTrainingDay.setWeekday(1);
+        tmpTrainingDay.setTimeFrom("10:30");
+        tmpTrainingDay.setTimeTo("10:35");
 
-        trainingDayZwei = new SportsEventDetails();
-        trainingDayZwei.setLocation("Entenhausen Zwei");
-        trainingDayZwei.setPickUpLocationSource("PickUpLocationSource Zwei");
-        trainingDayZwei.setPickUpLocationTarget("PickUpLocationTarget Zwei");
-        trainingDayZwei.setPickUpTimeSource("10:02");
-        trainingDayZwei.setPickUpTimeTarget("12:02");
-        trainingDayZwei.setWeekday(2);
-        trainingDayZwei.setTimeFrom("10:30");
-        trainingDayZwei.setTimeTo("10:35");
+        trainingDayEins = (SportsEventDetails) em.merge(tmpTrainingDay);
+
+        Assert.assertNotNull(trainingDayEins);
+        Assert.assertNotNull(trainingDayEins.getId());
+
+        tmpTrainingDay = new SportsEventDetails();
+
+        tmpTrainingDay.setLocation("Entenhausen Zwei");
+        tmpTrainingDay.setPickUpLocationSource("PickUpLocationSource Zwei");
+        tmpTrainingDay.setPickUpLocationTarget("PickUpLocationTarget Zwei");
+        tmpTrainingDay.setPickUpTimeSource("10:02");
+        tmpTrainingDay.setPickUpTimeTarget("12:02");
+        tmpTrainingDay.setWeekday(2);
+        tmpTrainingDay.setTimeFrom("10:30");
+        tmpTrainingDay.setTimeTo("10:35");
+
+        trainingDayZwei = (SportsEventDetails) em.merge(tmpTrainingDay);
+
+        Assert.assertNotNull(trainingDayZwei);
+        Assert.assertNotNull(trainingDayZwei.getId());
 
     }
 }

@@ -5,7 +5,7 @@
  */
 package de.thorsten.model;
 
-import de.thorsten.data.TrainingDayListProducer;
+import de.thorsten.data.SportEventDetailListProducer;
 import de.thorsten.util.DateUtil;
 import java.util.Date;
 import java.util.Iterator;
@@ -25,7 +25,7 @@ public class TrainingDataModel extends TrainingCalendarModel {
     private static final String POTENTIAL_TRAINING_DAY_CLASS = "ptdc";
 
     @Inject
-    private TrainingDayListProducer trainingDayListProducer;
+    private SportEventDetailListProducer trainingDayListProducer;
 
     public void TrainingDataModel() {
         super.setDefaultModeEditable(true);

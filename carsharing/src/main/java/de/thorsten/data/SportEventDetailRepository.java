@@ -29,7 +29,7 @@ import de.thorsten.model.SportsEventDetails;
 import javax.persistence.Query;
 
 @ApplicationScoped
-public class TrainingDayRepository {
+public class SportEventDetailRepository {
 
     @Inject
     private EntityManager em;

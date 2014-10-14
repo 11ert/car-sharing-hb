@@ -64,11 +64,11 @@ public class TrainingRepository {
     }
     
     // todo ungetestet und nicht im Einsatz
-    public List<Training> findAllOfTrainingDayBetweenTimeRange(SportsEventDetails sportsEventDetails, Date from, Date to) {
-        String query = "SELECT t FROM Training t WHERE t.sportsEventDetails = :sportsEventDetails"
+    public List<Training> findAllOfTrainingDayBetweenTimeRange(SportsEventDetails sportsEventDetail, Date from, Date to) {
+        String query = "SELECT t FROM Training t WHERE t.sportsEventDetail = :sportsEventDetail"
                 + " AND (t.eventDate BETWEEN  :from AND :to)";
         Query q = em.createQuery(query);
-        q.setParameter("sportsEventDetails", sportsEventDetails);
+        q.setParameter("sportsEventDetail", sportsEventDetail);
         q.setParameter("from", from, TemporalType.DATE);
         q.setParameter("to", to, TemporalType.DATE);
         return q.getResultList();

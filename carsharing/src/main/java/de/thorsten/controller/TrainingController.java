@@ -2,7 +2,7 @@ package de.thorsten.controller;
 
 import de.thorsten.data.ParticipationGroupListProducer;
 import de.thorsten.data.TeamRepository;
-import de.thorsten.data.TrainingDayRepository;
+import de.thorsten.data.SportEventDetailRepository;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
 import de.thorsten.model.ParticipationGroup;
@@ -43,7 +43,7 @@ public class TrainingController implements Serializable {
     private Event<Team> teamChangedEvent;
     
     @Inject
-    private TrainingDayRepository trainingDayRepository;
+    private SportEventDetailRepository trainingDayRepository;
     
     @Inject
     private FacesContext facesContext;
