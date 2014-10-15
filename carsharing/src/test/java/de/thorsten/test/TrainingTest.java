@@ -17,9 +17,11 @@
 package de.thorsten.test;
 
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.ParticipationRepository;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingRepository;
 import de.thorsten.model.Member;
+import de.thorsten.model.Participation;
 import de.thorsten.model.SportsEvent;
 
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.MemberRegistration;
+import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
@@ -78,12 +81,30 @@ public class TrainingTest {
     MemberRegistration memberRegistration;
 
     @Inject
+    ParticipationService participationService;
+
+    @Inject
+    ParticipationRepository participationRepository;
+
+    @Inject
     Logger log;
 
-    private SportsEventDetails trainingDayEins;
+    private Member memberEins;
+    private Member memberZwei;
 
+    private Training trainingEins;
+    private Training trainingZwei;
+    private Training trainingDrei;
+    private Training trainingVier;
+
+    private SportsEventDetails trainingDayEins;
     private SportsEventDetails trainingDayZwei;
-    
+
+    private Participation participation1;
+    private Participation participation2;
+    private Participation participation3;
+    private Participation participation4;
+
     @Deployment
     public static Archive<?> createTestArchive() {
         return ShrinkWrap.create(WebArchive.class, "test-carsharing.war")
@@ -100,6 +121,9 @@ public class TrainingTest {
                         TrainingService.class,
                         MemberRepository.class,
                         Member.class,
+                        Participation.class,
+                        ParticipationService.class,
+                        ParticipationRepository.class,
                         TeamRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -167,8 +191,28 @@ public class TrainingTest {
         cal.set(2015, Calendar.JANUARY, 1); //Year, month and day of month
         Date bis = cal.getTime();
 
-        List < Training > trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
+        List< Training> trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
         Assert.assertEquals(2, trainingsFromTo.size());
+
+        participation1 = new Participation();
+
+        participation1.setPlayer(memberEins);
+        participation1.setPlayer(memberZwei);
+        participation1.setTraining(trainingEins);
+        log.fine("**TEST** Participation1 = " + participation1.toString());
+
+        participationService.update(participation1);
+
+        List<Participation> listOfParticipations = participationRepository.getAll();
+        Assert.assertEquals(1, listOfParticipations.size());
+
+        Participation tmpParticipation = listOfParticipations.get(0);
+        Assert.assertNotNull(tmpParticipation);
+
+        participationService.remove(tmpParticipation);
+
+        listOfParticipations = participationRepository.getAll();
+        Assert.assertEquals(0, listOfParticipations.size());
 
         utx.commit();
     }
@@ -202,11 +246,11 @@ public class TrainingTest {
 
     private void generateMembers() throws Exception {
 
-        Member memberEins = new Member();
+        memberEins = new Member();
         memberEins.setFirstname("Eins Firstname");
         memberEins.setName("Eins Name");
 
-        Member memberZwei = new Member();
+        memberZwei = new Member();
         memberZwei.setFirstname("Zwei Firstname");
         memberZwei.setName("Zwei Name");
 
@@ -240,19 +284,19 @@ public class TrainingTest {
         List teams = new ArrayList();
         teams.add(teamEins);
         teams.add(teamZwei);
-        Training trainingEins = new Training();
+        trainingEins = new Training();
         trainingEins.setTeams(teams);
         trainingEins.setEventDate(januar);
         trainingEins.setSportsEventDetail(trainingDayEins);
 
-        Training trainingZwei = new Training();
+        trainingZwei = new Training();
         teams = new ArrayList();
         teams.add(teamZwei);
         trainingZwei.setTeams(teams);
         trainingZwei.setEventDate(maerz);
         trainingZwei.setSportsEventDetail(trainingDayZwei);
 
-        Training trainingDrei = new Training();
+        trainingDrei = new Training();
         teams = new ArrayList();
         teams.add(teamEins);
         teams.add(teamZwei);
@@ -263,11 +307,10 @@ public class TrainingTest {
         teams = new ArrayList();
         teams.add(teamEins);
         teams.add(teamZwei);
-        Training trainingVier = new Training();
+        trainingVier = new Training();
         trainingVier.setTeams(teams);
         trainingVier.setEventDate(dezember_2020);
         trainingVier.setSportsEventDetail(trainingDayEins);
-
 
         try {
             trainingService.update(trainingEins);
@@ -314,6 +357,5 @@ public class TrainingTest {
 
         Assert.assertNotNull(trainingDayZwei);
         Assert.assertNotNull(trainingDayZwei.getId());
-
     }
 }

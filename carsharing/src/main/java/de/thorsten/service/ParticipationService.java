@@ -36,5 +36,8 @@ public class ParticipationService implements Serializable {
  //       em.flush(); // TE
     }
     
+    public void remove(Participation participation) throws Exception {
+        em.remove(participation);
+    }
     
 }
