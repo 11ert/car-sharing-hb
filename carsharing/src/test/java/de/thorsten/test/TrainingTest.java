@@ -194,6 +194,7 @@ public class TrainingTest {
         List< Training> trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
         Assert.assertEquals(2, trainingsFromTo.size());
 
+       
         participation1 = new Participation();
 
         participation1.setPlayer(memberEins);
@@ -214,6 +215,8 @@ public class TrainingTest {
         listOfParticipations = participationRepository.getAll();
         Assert.assertEquals(0, listOfParticipations.size());
 
+        // todo - Remove Training
+        
         utx.commit();
     }
 
@@ -255,8 +258,8 @@ public class TrainingTest {
         memberZwei.setName("Zwei Name");
 
         try {
-            memberRegistration.register(memberEins);
-            memberRegistration.register(memberZwei);
+            memberEins = memberRegistration.register(memberEins);
+            memberZwei = memberRegistration.register(memberZwei);
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Konnte Member nicht persistieren");
@@ -313,10 +316,18 @@ public class TrainingTest {
         trainingVier.setSportsEventDetail(trainingDayEins);
 
         try {
-            trainingService.update(trainingEins);
-            trainingService.update(trainingZwei);
-            trainingService.update(trainingDrei);
-            trainingService.update(trainingVier);
+            trainingEins = trainingService.update(trainingEins);
+            log.fine("**TEST** TrainindEins erstellt " + trainingEins.toString());
+            Assert.assertNotNull(trainingEins.getId());
+            trainingZwei = trainingService.update(trainingZwei);
+            log.fine("**TEST** TrainindZwei erstellt " + trainingZwei.toString());
+            Assert.assertNotNull(trainingZwei.getId());
+            trainingDrei = trainingService.update(trainingDrei);
+            log.fine("**TEST** TrainindDrei erstellt " + trainingDrei.toString());
+            Assert.assertNotNull(trainingDrei.getId());
+            trainingVier = trainingService.update(trainingVier);
+            log.fine("**TEST** TrainindVier erstellt " + trainingVier.toString());
+            Assert.assertNotNull(trainingVier.getId());
         } catch (Exception e) {
             e.printStackTrace();
             Assert.fail("Konnte Trainings nicht persistieren");
