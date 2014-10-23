@@ -12,6 +12,7 @@ import java.util.List;
 
 import de.thorsten.model.Participation;
 import de.thorsten.model.Team;
+import de.thorsten.model.Training;
 import java.util.Date;
 import java.util.logging.Logger;
 import javax.persistence.Query;
@@ -68,4 +69,10 @@ public class ParticipationRepository {
         return q.getResultList();
     }
 
+    public List<Participation> getAllOfTraining(Training training) {
+        log.info("Getting all participations for Training = " + training.toString());
+        Query q = em.createQuery("SELECT p FROM Participation p WHERE p.trainingItem = :training");
+        q.setParameter("training", training);
+        return q.getResultList();
+    }
 }

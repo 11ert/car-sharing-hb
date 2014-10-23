@@ -26,6 +26,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import de.thorsten.model.Training;
+import de.thorsten.service.TrainingService;
 import javax.annotation.PostConstruct;
 
 /**
@@ -43,6 +44,9 @@ import javax.annotation.PostConstruct;
 public class TrainingBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Inject
+    private FacesContext facesContext;
 
     /*
      * Support creating and retrieving Training entities
@@ -62,6 +66,9 @@ public class TrainingBean implements Serializable {
     public Training getTraining() {
         return this.training;
     }
+
+    @Inject
+    private TrainingService trainingService;
 
     @Inject
     private Conversation conversation;
@@ -112,11 +119,11 @@ public class TrainingBean implements Serializable {
                 return "viewTraining?faces-redirect=true&id=" + this.training.getId();
             }
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            facesContext.addMessage(null, new FacesMessage(e.getMessage()));
             return null;
         }
     }
-    
+
     @PostConstruct
     public void init() {
         this.training = new Training();
@@ -130,12 +137,11 @@ public class TrainingBean implements Serializable {
 
         try {
             Training deletableEntity = findById(getId());
+            trainingService.delete(deletableEntity);
 
-            this.entityManager.remove(deletableEntity);
-            this.entityManager.flush();
             return "searchTraining?faces-redirect=true";
         } catch (Exception e) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
+            facesContext.addMessage(null, new FacesMessage(e.getMessage()));
             return null;
         }
     }
@@ -177,7 +183,7 @@ public class TrainingBean implements Serializable {
 
         CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
-      // Populate this.count
+        // Populate this.count
         CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
         Root<Training> root = countCriteria.from(Training.class);
         countCriteria = countCriteria.select(builder.count(root)).where(
@@ -185,7 +191,7 @@ public class TrainingBean implements Serializable {
         this.count = this.entityManager.createQuery(countCriteria)
                 .getSingleResult();
 
-      // Populate this.pageItems
+        // Populate this.pageItems
         CriteriaQuery<Training> criteria = builder.createQuery(Training.class);
         root = criteria.from(Training.class);
         TypedQuery<Training> query = this.entityManager.createQuery(criteria

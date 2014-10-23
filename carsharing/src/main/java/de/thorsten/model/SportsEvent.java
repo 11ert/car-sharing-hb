@@ -55,7 +55,6 @@ public abstract class SportsEvent implements Serializable {
 //    protected String pickUpLocationSource;
 //
 //    protected String pickUpLocationTarget;
-
     @NotNull
     protected Date eventDate;
 
@@ -66,7 +65,7 @@ public abstract class SportsEvent implements Serializable {
     //        this.sportsEventDetail = sportsEventDetail;
     //    }
     // (cascade = CascadeType.ALL)
-    @ManyToOne (cascade = CascadeType.MERGE )
+    @ManyToOne(cascade = CascadeType.MERGE)
     protected SportsEventDetails sportsEventDetail;
 
 //    /**
@@ -166,7 +165,6 @@ public abstract class SportsEvent implements Serializable {
 //    public void setPickUpLocationTarget(String pickUpLocationTarget) {
 //        this.pickUpLocationTarget = pickUpLocationTarget;
 //    }
-
     /**
      * @return the id
      */
@@ -209,8 +207,6 @@ public abstract class SportsEvent implements Serializable {
         return "SportsEvent{" + "id=" + id + ", eventDate=" + eventDate + ", teams=" + teams + ", trainingDay=" + sportsEventDetail + '}';
     }
 
-    
-
     /**
      * @return the teams
      */
@@ -241,25 +237,12 @@ public abstract class SportsEvent implements Serializable {
     }
 
     /**
-     * @return the calendarWeek
-     */
-    /*
-    public int getCalendarWeek() {
-    return eventDate.get(Calendar.WEEK_OF_YEAR);
-    }*/
-    /**
-     * @return the trainingDay (Mo. - Fr.)
-     */
-    //    public SportsEventDetails getSportsEventDetail() {
-    //        return sportsEventDetail;
-    //    }
-    /**
      * @param sportsEventDetail the sportsEventDetail to set (Mo. - Fr.)
      */
     public void setSportsEventDetail(SportsEventDetails sportsEventDetail) {
         this.sportsEventDetail = sportsEventDetail;
     }
-    
+
     public SportsEventDetails getSportsEventDetail() {
         return this.sportsEventDetail;
     }

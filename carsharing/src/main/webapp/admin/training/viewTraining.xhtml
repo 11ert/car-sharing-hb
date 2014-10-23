@@ -4,6 +4,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:rich="http://richfaces.org/rich"
                 template="/WEB-INF/templates/admin_template.xhtml">
 
     <f:metadata>
@@ -24,9 +25,11 @@
     <ui:define name="footer"/>
 
     <ui:define name="main">
+        <h:form id="training_form">
+<rich:messages ajaxRendered="true" />
         <h:panelGrid columnClasses="label,component,required" columns="3">
             <h:outputLabel for="trainingBeanTrainingTrainingDayWeekday" value="Trainingstag:"/>
-            <h:outputText id="trainingBeanTrainingTimeFrom" value="#{trainingBean.training.weekdayOfTrainingDay}"/>
+            <h:outputText id="weekdayOfTrainingDay" value="#{trainingBean.training.weekdayOfTrainingDay}"/>
             <h:outputText/>
             <h:outputLabel for="trainingBeanTrainingTimeFrom" value="Von:"/>
             <h:outputText id="trainingBeanTrainingTimeFrom" value="#{trainingBean.training.sportsEventDetail.timeFrom}"/>
@@ -87,11 +90,14 @@
             <h:outputText/>
         </h:panelGrid>
 
-        <div class="buttons">
-            <h:link value="Alle ansehen" outcome="searchTraining" styleClass="btn btn-primary"/> 
-            <!--<h:link value="Ändern" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>-->
-            <h:link value="Neu" outcome="createTraining" styleClass="btn btn-primary"/>
-        </div>
+            <div class="buttons">
+                <h:link value="Alle ansehen" outcome="searchTraining" styleClass="btn btn-primary"/> 
+                <h:commandLink value="Löschen" action="#{trainingBean.delete()}" styleClass="btn btn-primary"/>
+                <h:link value="Neu" outcome="createTraining" styleClass="btn btn-primary"/>
+            </div>
+            <rich:notifyMessages stayTime="2000" nonblocking="true" />
+        </h:form>
+
     </ui:define>
 
 </ui:composition>

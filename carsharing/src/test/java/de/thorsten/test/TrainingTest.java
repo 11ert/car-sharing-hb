@@ -1,4 +1,6 @@
-/*
+/* Drainage ?? Jura Maschine
+ * 100 EUR bei Jura, 160 bei Kämmerer
+ *
  * JBoss, Home of Professional Open Source
  * Copyright 2013, Red Hat, Inc. and/or its affiliates, and individual
  * contributors by the @authors tag. See the copyright.txt in the
@@ -36,9 +38,13 @@ import de.thorsten.service.MemberRegistration;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
+import de.thorsten.util.DateComparator;
+import de.thorsten.util.DateUtil;
 import de.thorsten.util.Resources;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -124,6 +130,8 @@ public class TrainingTest {
                         Participation.class,
                         ParticipationService.class,
                         ParticipationRepository.class,
+                        DateUtil.class,
+                        DateComparator.class,
                         TeamRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
@@ -140,6 +148,8 @@ public class TrainingTest {
         generateMembers();
         generateTrainingDays();
         generateTrainings();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         List<Team> teams = teamRepository.findAll();
         Assert.assertEquals(2, teams.size());
@@ -184,19 +194,63 @@ public class TrainingTest {
             log.fine("**TEST** Training = " + t.toString());
         }
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(2010, Calendar.JANUARY, 1); //Year, month and day of month
-        Date von = cal.getTime();
+        // Test DateRange und fehlende Trainingseinträge für einen Zeitraum
+        Calendar calVon = Calendar.getInstance();
+        calVon.set(2010, Calendar.JANUARY, 1); //Year, month and day of month
+        Date von = calVon.getTime();
 
-        cal.set(2015, Calendar.JANUARY, 1); //Year, month and day of month
-        Date bis = cal.getTime();
+        Calendar calBis = Calendar.getInstance();
+        calBis.set(2015, Calendar.JANUARY, 1); //Year, month and day of month
 
-        List< Training> trainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(trainingDayEins, von, bis);
-        Assert.assertEquals(2, trainingsFromTo.size());
+        Date bis = calBis.getTime();
 
-       
+        SportsEventDetails referenzTrainingseinheit = trainingDayEins;
+
+        List< Training> availableTrainingsFromTo = trainingRepository.findAllOfTrainingDayBetweenTimeRange(referenzTrainingseinheit, von, bis);
+        List<Date> availableTrainingsDates = new ArrayList<Date>();
+        for (Training t : availableTrainingsFromTo) {
+            log.fine("**TEST** AvailableTraining = " + t.toString());
+            availableTrainingsDates.add(t.getEventDate());
+            log.fine("EventDate = " + t.getEventDate());
+        }
+
+        Assert.assertEquals(2, availableTrainingsFromTo.size());
+
+        List<Date> missingTrainingDatesInTimePeriod = new ArrayList<Date>();
+        String dateString;
+
+        int existingWeekdayCounter = 0;
+        int missingWeekdayCounter = 0;
+        int existingTrainingsCounter = 0;
+        
+        for (Calendar x = calVon; x.before(calBis); x.add(Calendar.DATE, 1)) {
+
+            dateString = sdf.format(x.getTime());
+            //log.fine("date iterator = " + dateString);
+
+            if (x.get(Calendar.DAY_OF_WEEK) == referenzTrainingseinheit.getWeekday()) {
+                log.fine(dateString + " ist vom Wochentag " + x.get(Calendar.DAY_OF_WEEK));
+                // gleicher Wochentag
+                existingWeekdayCounter++;
+                log.fine(" => " + DateUtil.getWeekdayAsString(referenzTrainingseinheit.getWeekday()));
+
+                Collections.sort(availableTrainingsDates);
+                int index = Collections.binarySearch(availableTrainingsDates, x.getTime(), new DateComparator());
+                if (index >= 0) {
+                    log.fine(" ... aber bereits vorhanden");
+                    existingTrainingsCounter++;
+                } else {
+                    missingTrainingDatesInTimePeriod.add(x.getTime());
+                    log.fine("...hinzugefügt");
+                    missingWeekdayCounter++;
+                }
+            }
+        }
+
+        log.fine("existingWeekdayCounter " + existingWeekdayCounter);
+        log.fine("missingWeekdayCounter " + missingWeekdayCounter);
+        
         participation1 = new Participation();
-
         participation1.setPlayer(memberEins);
         participation1.setPlayer(memberZwei);
         participation1.setTraining(trainingEins);
@@ -210,13 +264,18 @@ public class TrainingTest {
         Participation tmpParticipation = listOfParticipations.get(0);
         Assert.assertNotNull(tmpParticipation);
 
-        participationService.remove(tmpParticipation);
+        listOfParticipations = participationRepository.getAll();
+        Assert.assertEquals(1, listOfParticipations.size());
+
+        // Remove Training
+        Long trainingId = trainingEins.getId();
+        trainingService.delete(trainingEins);
+
+        Assert.assertNull(trainingRepository.findById(trainingId));
 
         listOfParticipations = participationRepository.getAll();
         Assert.assertEquals(0, listOfParticipations.size());
 
-        // todo - Remove Training
-        
         utx.commit();
     }
 
@@ -272,13 +331,13 @@ public class TrainingTest {
         Team teamZwei = teamRepository.findById(new Long(2));
 
         Calendar cal = Calendar.getInstance();
-        cal.set(2014, Calendar.JANUARY, 1); //Year, month and day of month
+        cal.set(2014, Calendar.JANUARY, 5); //Year, month and day of month
         Date januar = cal.getTime();
 
         cal.set(2014, Calendar.MARCH, 1);
         Date maerz = cal.getTime();
 
-        cal.set(2014, Calendar.DECEMBER, 1);
+        cal.set(2014, Calendar.DECEMBER, 7);
         Date dezember = cal.getTime();
 
         cal.set(2020, Calendar.DECEMBER, 1);

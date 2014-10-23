@@ -37,6 +37,7 @@ public class ParticipationService implements Serializable {
     }
     
     public void remove(Participation participation) throws Exception {
+        log.fine("Deleting " + participation.toString());
         em.remove(participation);
     }
     

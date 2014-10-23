@@ -18,11 +18,21 @@
             </tr>
         </table>
         
-        <h:outputText value="todo."></h:outputText>
-   
-        <h:panelGrid columns="2" styleClass="panelColumns">
-            <h:outputText value="todo" />
-        </h:panelGrid>
+        <h:panelGroup>
+                <h:outputLabel value="Gruppe:"/>
+                <te:participationgroup_selector listOfParticipationGroups="#{participationGroups}"
+                                                valueChangeListener="#{participationGroupView.participationGroupChanged}">
+                </te:participationgroup_selector>
+
+                <h:outputLabel value=""/>
+                <h:link outcome="/admin/participationGroup/view" >
+                    <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
+                    <h:outputText id="itemName"  value="Ändern"/>
+                </h:link>
+
+                <h:outputLabel value="Teilnehmer: "></h:outputLabel>
+                <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
+        </h:panelGroup>
 
         <div class="navPanel" style="width: 100%;">
             <a4j:commandButton value="&lt;&lt;Zurück" style="float:left">

@@ -19,7 +19,8 @@
 
         <h:outputText value="Bitte die Trainingsdaten auswählen, welche hinzugefügt werden sollen."></h:outputText>
 
-        <h:panelGrid columns="2" styleClass="panelColumns">
+        <h:panelGrid columns="3" styleClass="panelColumns">
+
             <h:panelGroup>
                 <h:outputText value="Von:"/>
                 <rich:calendar id="fromTrainingsdate"
@@ -51,6 +52,48 @@
                     <a4j:ajax event="change" render="trainingDatesSelectParams_output"/>
                 </rich:calendar>
             </h:panelGroup>
+            <a4j:commandButton value="Los" action="#{trainingController.calculateMissingTrainings()}" render="availableTrainingsDT, missingTrainingsDT, missingTrainingsPL" />
+
+            <!-- nächste Zeile -->
+<!--            <h:dataTable id="availableTrainingsDT" styleClass="data-table" value="#{trainingController.allExistingTrainings}" var="_item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Existierend"/>
+                    </f:facet>
+                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
+                </h:column>
+            </h:dataTable>
+
+            <h:dataTable id="missingTrainingsDT" styleClass="data-table" value="#{trainingController.allMissingTrainings}" var="_item">
+                <h:column>
+                    <f:facet name="header">
+                        <h:outputText value="Fehlend"/>
+                    </f:facet>
+                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
+                </h:column>
+            </h:dataTable>-->
+
+            <rich:dataTable id="availableTrainingsDT" styleClass="data-table" value="#{trainingController.allExistingTrainings}" var="_item" rows="10">
+                <rich:column>
+                    <f:facet name="header">
+                        <h:outputText value="Existierend"/>
+                    </f:facet>
+                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
+                </rich:column>
+            </rich:dataTable>
+
+            <rich:pickList id = "missingTrainingsPL" 
+                           value="#{trainingController.listOfNewTrainings}"  
+                           converter="#{trainingBean.converter}"
+                           sourceCaption="Nicht zugeordnet" 
+                           targetCaption="Neu hinzufügen" 
+
+                           listWidth="165px" 
+                           listHeight="100px" 
+                           orderable="true">                 
+                <f:selectItems value="#{trainingController.allMissingTrainings}" 
+                               var="training" itemValue="#{training}" itemLabel="#{training.dateAsString}" />
+            </rich:pickList>     
         </h:panelGrid>
 
         <div class="navPanel" style="width: 100%;">

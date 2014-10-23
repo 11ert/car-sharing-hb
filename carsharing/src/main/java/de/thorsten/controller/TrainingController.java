@@ -3,6 +3,7 @@ package de.thorsten.controller;
 import de.thorsten.data.ParticipationGroupListProducer;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.SportEventDetailRepository;
+import de.thorsten.data.TrainingRepository;
 import de.thorsten.model.Member;
 import de.thorsten.model.Participation;
 import de.thorsten.model.ParticipationGroup;
@@ -11,10 +12,12 @@ import de.thorsten.model.Training;
 import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TrainingService;
+import de.thorsten.util.DateComparator;
 import de.thorsten.util.DateUtil;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -35,78 +38,85 @@ import org.omnifaces.cdi.ViewScoped;
 @Named("trainingController")
 @ViewScoped
 public class TrainingController implements Serializable {
-    
+
     @Inject
     private Logger log;
-    
+
+    @Inject
+    private TrainingRepository trainingRepository;
+
     @Inject
     private Event<Team> teamChangedEvent;
-    
+
     @Inject
-    private SportEventDetailRepository trainingDayRepository;
-    
+    private SportEventDetailRepository sportEventDetailRepository;
+
     @Inject
     private FacesContext facesContext;
-    
+
     @Inject
     private ParticipationService participationService;
-    
+
     @Inject
     private TeamRepository teamRepository;
-    
+
     @Inject
     TrainingService trainingService;
-    
+
     private Date nextTrainingDate;
-    
+
     private Long[] selectedTeamIds;
-    
+
     private List<Team> selectedTeams;
-    
-    private List<SportsEventDetails> allExistingTrainingDays;
-    
-    private List<SportsEventDetails> allMissingTrainingDays;
-    
+
+    private List<Training> allExistingTrainings;
+
+    private List<Training> allMissingTrainings = new ArrayList();
+
+    private List<Training> listOfNewTrainings = new ArrayList();
+
+    private List<SportsEventDetails> allTrainingDays;
+
     private Date nextTrainingDateFromTemp;
-    
+
     private Date nextTrainingDateToTemp;
-    
+
     @Inject
     @Current
     private ParticipationGroup selectedParticipationGroup;
 
     // SportsEventDetails Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
     private List<SportsEventDetails> trDayList;
-    
+
     private SportsEventDetails selectedTrainingDay;
-    
+
     @Inject
     private List<ParticipationGroup> participationGroups;
-    
+
     @Inject
     private ParticipationGroupListProducer participationGroupListProducer;
-    
+
     @PostConstruct
     public void init() {
         log.fine("TrainingController.init() * @PostConstruct");
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
-        allExistingTrainingDays = trainingDayRepository.findAll();
+        allTrainingDays = sportEventDetailRepository.findAll();
     }
-    
+
     public void determineMissingTrainingDays() {
-        
+
         Date currentDate = this.nextTrainingDateFromTemp;
-        
+
         Calendar currentCal = Calendar.getInstance();
         while (currentDate.before(this.nextTrainingDateToTemp)) {
             //check
-            
+
             currentCal.roll(Calendar.DATE, true);
         }
-        
+
     }
-    
+
     public void trainingDateFromTempChanged(ValueChangeEvent event) {
         log.fine("TrainingController.trainingDateFromTempChanged() ");
         if (event.getNewValue() != null) {
@@ -114,7 +124,7 @@ public class TrainingController implements Serializable {
             log.fine("TrainingController.nextTrainingDateFromTemp * ...to " + nextTrainingDateFromTemp);
         }
     }
-    
+
     public void trainingDateToTempChanged(ValueChangeEvent event) {
         log.fine("TrainingController.trainingDateToTempChanged() ");
         if (event.getNewValue() != null) {
@@ -122,7 +132,7 @@ public class TrainingController implements Serializable {
             log.fine("TrainingController.nextTrainingDateToTemp * ...to " + nextTrainingDateToTemp);
         }
     }
-    
+
     public void trainingDateChanged(ValueChangeEvent event) {
         log.fine("TrainingController.trainingDateChanged() ");
         int weekday = -1;
@@ -133,10 +143,10 @@ public class TrainingController implements Serializable {
             cal.setTime(nextTrainingDate);
             weekday = cal.get(Calendar.DAY_OF_WEEK);
             log.fine("Weekday = " + weekday);
-            trDayList = trainingDayRepository.findByWeekday(weekday);
+            trDayList = sportEventDetailRepository.findByWeekday(weekday);
             log.fine(trDayList.size() + " Einträge gefunden");
         }
-        
+
     }
 
     /**
@@ -145,7 +155,7 @@ public class TrainingController implements Serializable {
     public Date getNextTrainingDate() {
         return nextTrainingDate;
     }
-    
+
     public String getNextTrainingDateAsFormattedString() {
         return DateUtil.getSelectedDateAsFormattedString(nextTrainingDate);
     }
@@ -156,21 +166,20 @@ public class TrainingController implements Serializable {
     public void setNextTrainingDate(Date nextTrainingDate) {
         this.nextTrainingDate = nextTrainingDate;
     }
-    
+
     public void createParticipationsForNextTrainingDate() {
         if (selectedTrainingDay == null) {
             this.createErrorMessage("Kein gültiges Trainingsdatum (Wochentag?)");
         }
-        
+
         Training newTraining = new Training();
 
-        // todo: Achtung: Hier das richtige übergeben!!!!!!!
         newTraining.setEventDate(nextTrainingDate);
         newTraining.setSportsEventDetail(selectedTrainingDay);
         //newTraining.initializeTrainingWithTrainingDayTemplateData();
 
         newTraining.setTeams(selectedTeams);
-        
+
         String specificErrorMsg = new String();
         if (selectedTeams.size() == 0) {
             specificErrorMsg = "Mindestens ein Team muß ausgewählt sein";
@@ -180,12 +189,12 @@ public class TrainingController implements Serializable {
                 + ", " + newTraining.getSportsEventDetail().getLocation()
                 + ", " + newTraining.getSportsEventDetail().getTimeFrom()
                 + " - " + newTraining.getSportsEventDetail().getTimeTo());
-        
+
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
         FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
                 "Neues Training hinzugefügt!", "Neues Training gespeichert!");
-        
+
         try {
             Training tr = trainingService.update(newTraining);
             List<Member> members = null;
@@ -207,21 +216,21 @@ public class TrainingController implements Serializable {
             log.warning("TrainingController.createParticipationsForNextTrainingDate() * Training konnte nicht persistiert werden");
             e.printStackTrace();
         }
-        
+
         facesContext.addMessage(null, successMsg);
         init();
-        
+
     }
-    
+
     public void trainingDayChanged(ValueChangeEvent event) {
-        log.fine("TrainingController.trainingDayChanged()");
+        log.fine("TrainingController.trainingDayChanged() * event.value = " + event.getNewValue().toString());
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
-            selectedTrainingDay = trainingDayRepository.findById(tmpId);
+            selectedTrainingDay = sportEventDetailRepository.findById(tmpId);
             log.fine("TrainingController.trainingDayChanged() * ...to new trainingDay = " + selectedTrainingDay.toString());
         }
     }
-    
+
     public void teamChanged(ValueChangeEvent event) {
         log.fine("TrainingController.teamChanged() * teamChanged");
         selectedTeamIds = (Long[]) event.getNewValue();
@@ -232,18 +241,17 @@ public class TrainingController implements Serializable {
             log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
         }
     }
-    
+
     public void createErrorMessage(String msg) {
         FacesMessage m = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!",
                 msg);
         facesContext.addMessage(null, m);
     }
-    
+
 //    public void removeMemberFromList(Member member) {
 //        log.info("removeMemberFromList called");
 //    }
-
     /**
      * @return the selectedTeams
      */
@@ -273,19 +281,18 @@ public class TrainingController implements Serializable {
     }
 
     /**
-     * @return the allExistingTrainingDays
+     * @return the allExistingTrainingDates
      */
     public List<SportsEventDetails> getAllTrainingDays() {
-        return allExistingTrainingDays;
+        return this.allTrainingDays;
     }
 
-    /**
-     * @param allTrainingDays the allExistingTrainingDays to set
-     */
-    public void setAllTrainingDays(List<SportsEventDetails> allTrainingDays) {
-        this.allExistingTrainingDays = allTrainingDays;
-    }
-
+//    /**
+//     * @param allTrainingDays the allExistingTrainingDates to set
+//     */
+//    public void setAllTrainingDays(List<Training> allTrainingDays) {
+//        this.allExistingTrainings = allTrainingDays;
+//    }
     /**
      * @return the nextTrainingDateFromTemp
      */
@@ -315,17 +322,93 @@ public class TrainingController implements Serializable {
     }
 
     /**
-     * @return the allMissingTrainingDays
+     * @return the allMissingTrainings
      */
-    public List<SportsEventDetails> getAllMissingTrainingDays() {
-        return allMissingTrainingDays;
+    public List<Training> getAllMissingTrainings() {
+        return allMissingTrainings;
+    }
+
+    public void calculateMissingTrainings() {
+
+        this.allExistingTrainings = new ArrayList();
+        this.setAllExistingTrainings(trainingRepository.findAllOfTrainingDayBetweenTimeRange(this.selectedTrainingDay, this.nextTrainingDateFromTemp, this.nextTrainingDateToTemp));
+        log.fine("TrainingController.calculateMissingTrainings * allExistingTrainings.size() = " + getAllExistingTrainings().size());
+
+        Training newTraining;
+
+        List<Date> allExistingTrainingDates = new ArrayList<Date>();
+        for (Training t : getAllExistingTrainings()) {
+            allExistingTrainingDates.add(t.getEventDate());
+        }
+
+        Calendar calFrom = Calendar.getInstance();
+        Calendar calTo = Calendar.getInstance();
+        calFrom.setTime(nextTrainingDateFromTemp);
+        calTo.setTime(nextTrainingDateToTemp);
+
+        for (Calendar nextFreeTrainingDate = calFrom; nextFreeTrainingDate.before(calTo); nextFreeTrainingDate.add(Calendar.DATE, 1)) {
+            log.fine("--> Nächstes Datum " + DateUtil.getSelectedDateAsFormattedString(nextFreeTrainingDate.getTime()));
+            if (nextFreeTrainingDate.get(Calendar.DAY_OF_WEEK) == selectedTrainingDay.getWeekday()) {
+                if (containsEventDate(allExistingTrainingDates, nextFreeTrainingDate.getTime()) == false) {
+                    log.fine("--> Training hinzu ");
+                    newTraining = new Training();
+                    newTraining.setTeams(selectedTeams);
+                    newTraining.setSportsEventDetail(selectedTrainingDay);
+                    newTraining.setEventDate(nextFreeTrainingDate.getTime());
+                    log.fine(newTraining.toString());
+                    this.getAllMissingTrainings().add(newTraining);
+                }
+            }
+        }
+        log.fine("TrainingController.calculateMissingTrainings * allMissingTrainingDates.size() = " + getAllMissingTrainings().size());
+
+    }
+
+    public boolean containsEventDate(List<Date> dates, Date eventDate) {
+
+        int index = Collections.binarySearch(dates, eventDate, new DateComparator());
+        if (index >= 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
-     * @param allMissingTrainingDays the allMissingTrainingDays to set
+     * @return the allExistingTrainings
      */
-    public void setAllMissingTrainingDays(List<SportsEventDetails> allMissingTrainingDays) {
-        this.allMissingTrainingDays = allMissingTrainingDays;
+    public List<Training> getAllExistingTrainings() {
+        return allExistingTrainings;
     }
-    
+
+    /**
+     * @param allExistingTrainings the allExistingTrainings to set
+     */
+    public void setAllExistingTrainings(List<Training> allExistingTrainings) {
+        this.allExistingTrainings = allExistingTrainings;
+    }
+
+    /**
+     * @param allMissingTrainings the allMissingTrainings to set
+     */
+    public void setAllMissingTrainings(List<Training> allMissingTrainings) {
+        this.allMissingTrainings = allMissingTrainings;
+    }
+
+    /**
+     * F
+     *
+     * @return the listOfNewTrainings
+     */
+    public List<Training> getListOfNewTrainings() {
+        return listOfNewTrainings;
+    }
+
+    /**
+     * @param listOfNewTrainings the listOfNewTrainings to set
+     */
+    public void setListOfNewTrainings(List<Training> listOfNewTrainings) {
+        this.listOfNewTrainings = listOfNewTrainings;
+    }
+
 }

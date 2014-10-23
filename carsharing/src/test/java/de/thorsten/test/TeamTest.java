@@ -17,9 +17,11 @@
 package de.thorsten.test;
 
 import de.thorsten.data.MemberRepository;
+import de.thorsten.data.ParticipationRepository;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.TrainingRepository;
 import de.thorsten.model.Member;
+import de.thorsten.model.Participation;
 import de.thorsten.model.SportsEvent;
 
 import java.util.logging.Logger;
@@ -31,6 +33,7 @@ import de.thorsten.model.Team;
 import de.thorsten.model.Training;
 import de.thorsten.model.SportsEventDetails;
 import de.thorsten.service.MemberRegistration;
+import de.thorsten.service.ParticipationService;
 import de.thorsten.service.TeamService;
 import de.thorsten.service.TrainingService;
 import de.thorsten.util.Resources;
@@ -94,6 +97,9 @@ public class TeamTest {
                         TrainingService.class,
                         MemberRepository.class,
                         Member.class,
+                        ParticipationService.class,
+                        Participation.class,
+                        ParticipationRepository.class,
                         TeamRepository.class)
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")

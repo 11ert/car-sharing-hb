@@ -53,10 +53,10 @@ public class SportEventDetailRepository {
         return q.getResultList();
     }
     
-    public List<SportsEventDetails> findAllForTeam(Team team) {
-        Query q = em.createQuery("SELECT t FROM SportsEventDetailss t WHERE :team MEMBER OF t.teams");
-        q.setParameter("team", team);
-        return q.getResultList();
-    }
+//    public List<SportsEventDetails> findAllForTeam(Team team) {
+//        Query q = em.createQuery("SELECT t FROM SportsEventDetailss t WHERE :team MEMBER OF t.teams");
+//        q.setParameter("team", team);
+//        return q.getResultList();
+//    }
     
 }
