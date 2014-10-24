@@ -265,7 +265,12 @@ public class TrainingBean implements Serializable {
             public Object getAsObject(FacesContext context,
                     UIComponent component, String value) {
 
-                return ejbProxy.findById(Long.valueOf(value));
+                try {
+                    return ejbProxy.findById(Long.valueOf(value));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
 
             @Override
@@ -275,8 +280,12 @@ public class TrainingBean implements Serializable {
                 if (value == null) {
                     return "";
                 }
-
-                return String.valueOf(((Training) value).getId());
+                try {
+                    String.valueOf(((Training) value).getId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "";
             }
         };
     }

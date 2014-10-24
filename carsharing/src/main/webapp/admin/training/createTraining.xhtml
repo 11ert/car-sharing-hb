@@ -62,6 +62,7 @@
             <h:panelGrid width="100%" columns="2" columnClasses="col1,col2">
                 <rich:panel styleClass="wizard" style="background-color: transparent">
                     <h:form>
+                        <!-- switchType geändert von ajax auf client,da pickUpList bei einem Click fälschlicherweise geleert wurde. >-->
                         <rich:togglePanel switchType="ajax">
                             <rich:togglePanelItem>
                                 <ui:include src="/admin/training/wizard/selectTeamWizardStep.xhtml" />

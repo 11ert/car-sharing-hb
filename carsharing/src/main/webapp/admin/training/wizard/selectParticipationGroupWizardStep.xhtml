@@ -6,7 +6,7 @@
                 xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
                 xmlns:rich="http://richfaces.org/rich">
 
-   
+
     <div style="position: relative; height: auto">
         <table border="0" width="100%" cellpadding="5">
             <tr>
@@ -17,29 +17,35 @@
                 <td width="20%" class="colHeader">Zusammenfassung</td>
             </tr>
         </table>
-        
-        <h:panelGroup>
-                <h:outputLabel value="Gruppe:"/>
+
+        <h:outputText value="Bitte die Teilnehmer für diese Trainingseinheiten hinzufügen."></h:outputText>
+
+        <h:panelGrid columns="2" styleClass="panelColumns">
+            <h:panelGroup>
+                <h:outputLabel value="Gruppe:" />
+                <br/>
                 <te:participationgroup_selector listOfParticipationGroups="#{participationGroups}"
                                                 valueChangeListener="#{participationGroupView.participationGroupChanged}">
                 </te:participationgroup_selector>
 
-                <h:outputLabel value=""/>
-                <h:link outcome="/admin/participationGroup/view" >
-                    <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
-                    <h:outputText id="itemName"  value="Ändern"/>
-                </h:link>
-
+            </h:panelGroup>
+            <h:panelGroup>
                 <h:outputLabel value="Teilnehmer: "></h:outputLabel>
                 <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
-        </h:panelGroup>
+            </h:panelGroup>
 
+            <h:link outcome="/admin/participationGroup/view" >
+                <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
+                <h:outputText id="itemName"  value="Ändern"/>
+            </h:link>
+
+        </h:panelGrid>
         <div class="navPanel" style="width: 100%;">
             <a4j:commandButton value="&lt;&lt;Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
             <a4j:commandButton value="Next &gt;&gt;" style="float:right">
-                <rich:toggleControl targetItem="@next" event="click" />
+                <rich:toggleControl targetItem="@next" event="click"/>
             </a4j:commandButton>
         </div>
     </div>

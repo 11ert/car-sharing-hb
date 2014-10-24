@@ -71,9 +71,9 @@ public class TrainingController implements Serializable {
 
     private List<Training> allExistingTrainings;
 
-    private List<Training> allMissingTrainings = new ArrayList();
+    private List<Training> allMissingTrainings;
 
-    private List<Training> listOfNewTrainings = new ArrayList();
+    private List<Training> listOfNewTrainings;
 
     private List<SportsEventDetails> allTrainingDays;
 
@@ -102,6 +102,7 @@ public class TrainingController implements Serializable {
         selectedTeams = new ArrayList();
         selectedTeamIds = null;
         allTrainingDays = sportEventDetailRepository.findAll();
+        listOfNewTrainings = new ArrayList();
     }
 
     public void determineMissingTrainingDays() {
@@ -122,6 +123,7 @@ public class TrainingController implements Serializable {
         if (event.getNewValue() != null) {
             this.nextTrainingDateFromTemp = ((Date) event.getNewValue());
             log.fine("TrainingController.nextTrainingDateFromTemp * ...to " + nextTrainingDateFromTemp);
+             calculateMissingTrainings();
         }
     }
 
@@ -130,6 +132,22 @@ public class TrainingController implements Serializable {
         if (event.getNewValue() != null) {
             this.nextTrainingDateToTemp = ((Date) event.getNewValue());
             log.fine("TrainingController.nextTrainingDateToTemp * ...to " + nextTrainingDateToTemp);
+            calculateMissingTrainings();
+        }
+    }
+
+    public void registerNewTrainingDates(ValueChangeEvent event) {
+        log.fine("TrainingController.registerNewTrainingDates() ");
+        if (event.getNewValue() != null) {
+            this.listOfNewTrainings = ((List) event.getNewValue());
+            log.fine("TrainingController.registerNewTrainingDates * Added " + listOfNewTrainings.size() + " new TrainingsDates");
+        }
+    }
+
+    public void printNewTrainingDates() {
+        log.fine("TrainingController.printNewTrainingDates() " + listOfNewTrainings.size() + " Elemente");
+        for (Training t : listOfNewTrainings) {
+            log.fine("Neues Training = " + t.toString());
         }
     }
 
@@ -178,10 +196,10 @@ public class TrainingController implements Serializable {
         newTraining.setSportsEventDetail(selectedTrainingDay);
         //newTraining.initializeTrainingWithTrainingDayTemplateData();
 
-        newTraining.setTeams(selectedTeams);
+        newTraining.setTeams(getSelectedTeams());
 
         String specificErrorMsg = new String();
-        if (selectedTeams.size() == 0) {
+        if (getSelectedTeams().size() == 0) {
             specificErrorMsg = "Mindestens ein Team muß ausgewählt sein";
         }
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
@@ -237,8 +255,8 @@ public class TrainingController implements Serializable {
         for (int x = 0; x < selectedTeamIds.length; x++) {
             Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
             log.fine("log.fine(\"TrainingController.teamChanged() * CurrentTeam = " + currentTeam.toString());
-            selectedTeams.add(currentTeam);
-            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefügt, selectedTeams.size() jetzt " + selectedTeams.size());
+            getSelectedTeams().add(currentTeam);
+            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefügt, selectedTeams.size() jetzt " + getSelectedTeams().size());
         }
     }
 
@@ -329,39 +347,41 @@ public class TrainingController implements Serializable {
     }
 
     public void calculateMissingTrainings() {
+        log.fine("Datümer...: + " + nextTrainingDateFromTemp + ", " + nextTrainingDateToTemp);
+        if ((nextTrainingDateFromTemp != null) && (nextTrainingDateToTemp != null)) {
+            this.allExistingTrainings = new ArrayList();
+            this.allMissingTrainings = new ArrayList();
+            this.allExistingTrainings = trainingRepository.findAllOfTrainingDayBetweenTimeRange(this.selectedTrainingDay, this.nextTrainingDateFromTemp, this.nextTrainingDateToTemp);
+            log.fine("TrainingController.calculateMissingTrainings * allExistingTrainings.size() = " + allExistingTrainings.size());
 
-        this.allExistingTrainings = new ArrayList();
-        this.setAllExistingTrainings(trainingRepository.findAllOfTrainingDayBetweenTimeRange(this.selectedTrainingDay, this.nextTrainingDateFromTemp, this.nextTrainingDateToTemp));
-        log.fine("TrainingController.calculateMissingTrainings * allExistingTrainings.size() = " + getAllExistingTrainings().size());
+            Training newTraining;
 
-        Training newTraining;
+            List<Date> allExistingTrainingDates = new ArrayList<Date>();
+            for (Training t : getAllExistingTrainings()) {
+                allExistingTrainingDates.add(t.getEventDate());
+            }
 
-        List<Date> allExistingTrainingDates = new ArrayList<Date>();
-        for (Training t : getAllExistingTrainings()) {
-            allExistingTrainingDates.add(t.getEventDate());
-        }
+            Calendar calFrom = Calendar.getInstance();
+            Calendar calTo = Calendar.getInstance();
+            calFrom.setTime(nextTrainingDateFromTemp);
+            calTo.setTime(nextTrainingDateToTemp);
 
-        Calendar calFrom = Calendar.getInstance();
-        Calendar calTo = Calendar.getInstance();
-        calFrom.setTime(nextTrainingDateFromTemp);
-        calTo.setTime(nextTrainingDateToTemp);
-
-        for (Calendar nextFreeTrainingDate = calFrom; nextFreeTrainingDate.before(calTo); nextFreeTrainingDate.add(Calendar.DATE, 1)) {
-            log.fine("--> Nächstes Datum " + DateUtil.getSelectedDateAsFormattedString(nextFreeTrainingDate.getTime()));
-            if (nextFreeTrainingDate.get(Calendar.DAY_OF_WEEK) == selectedTrainingDay.getWeekday()) {
-                if (containsEventDate(allExistingTrainingDates, nextFreeTrainingDate.getTime()) == false) {
-                    log.fine("--> Training hinzu ");
-                    newTraining = new Training();
-                    newTraining.setTeams(selectedTeams);
-                    newTraining.setSportsEventDetail(selectedTrainingDay);
-                    newTraining.setEventDate(nextFreeTrainingDate.getTime());
-                    log.fine(newTraining.toString());
-                    this.getAllMissingTrainings().add(newTraining);
+            for (Calendar nextFreeTrainingDate = calFrom; nextFreeTrainingDate.before(calTo); nextFreeTrainingDate.add(Calendar.DATE, 1)) {
+                log.fine("--> Nächstes Datum " + DateUtil.getSelectedDateAsFormattedString(nextFreeTrainingDate.getTime()));
+                if (nextFreeTrainingDate.get(Calendar.DAY_OF_WEEK) == selectedTrainingDay.getWeekday()) {
+                    if (containsEventDate(allExistingTrainingDates, nextFreeTrainingDate.getTime()) == false) {
+                        log.fine("--> Training hinzu ");
+                        newTraining = new Training();
+                        newTraining.setTeams(getSelectedTeams());
+                        newTraining.setSportsEventDetail(selectedTrainingDay);
+                        newTraining.setEventDate(nextFreeTrainingDate.getTime());
+                        log.fine(newTraining.toString());
+                        allMissingTrainings.add(newTraining);
+                    }
                 }
             }
+            log.fine("TrainingController.calculateMissingTrainings * allMissingTrainingDates.size() = " + allMissingTrainings.size());
         }
-        log.fine("TrainingController.calculateMissingTrainings * allMissingTrainingDates.size() = " + getAllMissingTrainings().size());
-
     }
 
     public boolean containsEventDate(List<Date> dates, Date eventDate) {
@@ -407,8 +427,16 @@ public class TrainingController implements Serializable {
     /**
      * @param listOfNewTrainings the listOfNewTrainings to set
      */
-    public void setListOfNewTrainings(List<Training> listOfNewTrainings) {
-        this.listOfNewTrainings = listOfNewTrainings;
+    public void setListOfNewTrainings(List<Training> pListOfNewTrainings) {
+        log.fine(" setListOfNewTrainings " + pListOfNewTrainings.size() + " Elements");
+        this.listOfNewTrainings = pListOfNewTrainings;
+    }
+
+    /**
+     * @return the selectedTeams
+     */
+    public List<Team> getSelectedTeams() {
+        return selectedTeams;
     }
 
 }

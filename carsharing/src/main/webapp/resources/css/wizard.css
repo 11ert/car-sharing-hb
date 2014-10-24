@@ -12,6 +12,7 @@ and open the template in the editor.
     background-color: darkgray; 
     text-shadow: none;
     font-size: 14px;
+    font-weight: bold;
 }
 .colHeader {
     background-color: lightgray; 

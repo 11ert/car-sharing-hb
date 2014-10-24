@@ -17,90 +17,95 @@
             </tr>
         </table>
 
-        <h:outputText value="Bitte die Trainingsdaten auswählen, welche hinzugefügt werden sollen."></h:outputText>
+        <h:outputText value="Bitte den Zeitraum auswählen, für welcher das Training hinzugefügt werden sollen."></h:outputText>
 
-        <h:panelGrid columns="3" styleClass="panelColumns">
+        <!--        <h:panelGrid columns="3" styleClass="panelColumns"> -->
 
-            <h:panelGroup>
-                <h:outputText value="Von:"/>
-                <rich:calendar id="fromTrainingsdate"
-                               style="background-color: #F2F2F2"
-                               mode="ajax" 
-                               locale="de"
-                               popup="true"
-                               boundaryDatesMode="scroll" 
-                               datePattern="dd.MM.yyyy"  
-                               value="#{trainingController.nextTrainingDateFromTemp}"
-                               valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
-                               >
-                    <a4j:ajax event="change" render="trainingDatesSelectParams_output"/>
-                </rich:calendar>
-            </h:panelGroup>
+        <h:panelGroup>
+            <h:outputText value="Von:"/>
+            <rich:calendar id="fromTrainingsdate"
+                           style="background-color: #F2F2F2"
+                           mode="ajax" 
+                           locale="de"
+                           popup="true"
+                           boundaryDatesMode="scroll" 
+                           datePattern="dd.MM.yyyy"  
+                           value="#{trainingController.nextTrainingDateFromTemp}"
+                           valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
+                           >
+                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL,listOfNewTrainingsL"/>
+            </rich:calendar>
+        </h:panelGroup>
 
-            <h:panelGroup>
-                <h:outputText value="Bis:"/>
-                <rich:calendar id="toTrainingsdate"
-                               style="background-color: #F2F2F2"
-                               mode="ajax" 
-                               locale="de"
-                               popup="true"
-                               boundaryDatesMode="scroll" 
-                               datePattern="dd.MM.yyyy"  
-                               value="#{trainingController.nextTrainingDateToTemp}"
-                               valueChangeListener="#{trainingController.trainingDate}"
-                               >
-                    <a4j:ajax event="change" render="trainingDatesSelectParams_output"/>
-                </rich:calendar>
-            </h:panelGroup>
-            <a4j:commandButton value="Los" action="#{trainingController.calculateMissingTrainings()}" render="availableTrainingsDT, missingTrainingsDT, missingTrainingsPL" />
+        <h:panelGroup>
+            <h:outputText value="Bis:"/>
+            <rich:calendar id="toTrainingsdate"
+                           style="background-color: #F2F2F2"
+                           mode="ajax" 
+                           locale="de"
+                           popup="true"
+                           boundaryDatesMode="scroll" 
+                           datePattern="dd.MM.yyyy"  
+                           value="#{trainingController.nextTrainingDateToTemp}"
+                           valueChangeListener="#{trainingController.trainingDateToTempChanged}"
+                           >
+                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL,listOfNewTrainingsL"/>
+            </rich:calendar>
+        </h:panelGroup>
 
-            <!-- nächste Zeile -->
-<!--            <h:dataTable id="availableTrainingsDT" styleClass="data-table" value="#{trainingController.allExistingTrainings}" var="_item">
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Existierend"/>
-                    </f:facet>
-                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
-                </h:column>
-            </h:dataTable>
 
-            <h:dataTable id="missingTrainingsDT" styleClass="data-table" value="#{trainingController.allMissingTrainings}" var="_item">
-                <h:column>
-                    <f:facet name="header">
-                        <h:outputText value="Fehlend"/>
-                    </f:facet>
-                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
-                </h:column>
-            </h:dataTable>-->
+        <!-- nächste Zeile -->
 
-            <rich:dataTable id="availableTrainingsDT" styleClass="data-table" value="#{trainingController.allExistingTrainings}" var="_item" rows="10">
-                <rich:column>
-                    <f:facet name="header">
-                        <h:outputText value="Existierend"/>
-                    </f:facet>
-                    <h:outputText id="itemName" value="#{_item.dateAsString}"/>
-                </rich:column>
-            </rich:dataTable>
+        <rich:dataTable id="availableTrainingsDT" styleClass="data-table" 
+                        value="#{trainingController.allExistingTrainings}" var="_item" 
+                        rows="10" noDataLabel="Für diesen Zeitraum bislang keine Trainings eingetragen"
+                        style="width: 250px">
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText value="Bereits eingetragene Trainings"/>
+                </f:facet>
+                <h:outputText id="itemName" value="#{_item.dateAsString}"/>
+            </rich:column>
+        </rich:dataTable>
 
-            <rich:pickList id = "missingTrainingsPL" 
-                           value="#{trainingController.listOfNewTrainings}"  
-                           converter="#{trainingBean.converter}"
-                           sourceCaption="Nicht zugeordnet" 
-                           targetCaption="Neu hinzufügen" 
+        <rich:pickList id = "missingTrainingsPL" 
+                       value="#{trainingController.listOfNewTrainings}"  
+                       converter="#{trainingBean.converter}"
+                       sourceCaption="Nicht zugeordnet" 
+                       targetCaption="Neu hinzufügen" 
+                       addAllText="Alle hinzu"
+                       addText="Hinzu"
+                       removeAllText="Alle entfernen"
+                       removeText="Entfernen"
+                       downBottomText="Nach unten "
+                       downText="Runter"
+                       upText="Hoch"
+                       upTopText="Nach oben"
+                       listWidth="165px" 
+                       listHeight="100px" 
+                       orderable="true"
+                       valueChangeListener="#{trainingController.registerNewTrainingDates}"
+                       >
 
-                           listWidth="165px" 
-                           listHeight="100px" 
-                           orderable="true">                 
-                <f:selectItems value="#{trainingController.allMissingTrainings}" 
-                               var="training" itemValue="#{training}" itemLabel="#{training.dateAsString}" />
-            </rich:pickList>     
-        </h:panelGrid>
+            <f:selectItems value="#{trainingController.allMissingTrainings}" 
+                           var="training" itemValue="#{training}" itemLabel="#{training.dateAsString}" />
+            <a4j:ajax event="change" render="listOfNewTrainingsL"/>
+
+        </rich:pickList>     
+
+        <h:outputLabel value="Trainingstage:"/>
+        <rich:list  id="listOfNewTrainingsL" value="#{trainingController.listOfNewTrainings}" var="_training">
+            <h:outputText value="#{_training.dateAsString}"/>
+        </rich:list>
+
+        <a4j:commandButton value="Print" action="#{trainingController.printNewTrainingDates()}" 
+                           render="listOfNewTrainingsL"/>
 
         <div class="navPanel" style="width: 100%;">
-            <a4j:commandButton value="&lt;&lt;Previous" style="float:left">
+            <a4j:commandButton value="&lt;&lt;Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
-            <a4j:commandButton value="Next &gt;&gt;" style="float:right">
+            <a4j:commandButton value="Vor &gt;&gt;" style="float:right">
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
         </div>
