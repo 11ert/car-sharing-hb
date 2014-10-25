@@ -13,8 +13,8 @@
             </rich:list>
             
             <h:outputLabel value="Trainingstage:"/>
-            <rich:list value="#{trainingController.listOfNewTrainings}" var="_training">
-                <h:outputText value="#{_training.dateAsString}"/>
+            <rich:list value="#{trainingController.listOfNewTrainingDates}" var="_training">
+                <h:outputText value="#{_training}"/>
             </rich:list>
 
         </h:panelGrid>

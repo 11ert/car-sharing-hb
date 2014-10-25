@@ -111,7 +111,7 @@
             </rich:dataTable>
 
             <rich:pickList id = "missingTrainingsPL" 
-                           value="#{trainingController.listOfNewTrainings}"  
+                           value="#{trainingController.listOfNewTrainingDates}"  
                               sourceCaption="Nicht zugeordnet" 
                            targetCaption="Neu hinzufügen" 
                            addAllText="Alle hinzu"
@@ -125,27 +125,22 @@
                            listWidth="165px" 
                            listHeight="100px" 
                            orderable="true"
-                           valueChangeListener="#{trainingController.registerNewTrainingDates}"
                            >
 
-                <f:selectItems value="#{trainingController.allMissingTrainings}" 
-                               var="training" itemValue="#{training}" itemLabel="#{training.dateAsString}" />
+                <f:selectItems value="#{trainingController.allMissingTrainingDates}" 
+                               var="training" itemValue="#{training}" itemLabel="#{training}" />
                 <a4j:ajax event="change" render="listOfNewTrainingsL"/>
 
             </rich:pickList>     
 
             <h:outputLabel value="Trainingstage:"/>
-            <rich:list  id="listOfNewTrainingsL" value="#{trainingController.listOfNewTrainings}" var="_training">
-                <h:outputText value="#{_training.dateAsString}"/>
+            <rich:list  id="listOfNewTrainingsL" value="#{trainingController.listOfNewTrainingDates}" var="_trainingDate">
+                <h:outputText value="#{_trainingDate}"/>
             </rich:list>
 
             <a4j:commandButton value="Print" action="#{trainingController.printNewTrainingDates()}" 
                                render="listOfNewTrainingsL"/>
-
-
-
             <rich:notifyMessages stayTime="20000" nonblocking="true" />
         </h:form>
-        <a href="/carsharing/overview.jsf" style="alignment-baseline: central">Zurück zur Übersicht</a>
     </ui:define>
 </ui:composition>

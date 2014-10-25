@@ -72,9 +72,11 @@ public class TrainingController implements Serializable {
     private List<Training> allExistingTrainings;
 
     private List<Training> allMissingTrainings;
+    private List<Date> allMissingTrainingDates;
 
     private List<Training> listOfNewTrainings;
-
+    private List<Date> listOfNewTrainingDates;
+    
     private List<SportsEventDetails> allTrainingDays;
 
     private Date nextTrainingDateFromTemp;
@@ -103,6 +105,7 @@ public class TrainingController implements Serializable {
         selectedTeamIds = null;
         allTrainingDays = sportEventDetailRepository.findAll();
         listOfNewTrainings = new ArrayList();
+        setListOfNewTrainingDates(new ArrayList<Date>());
     }
 
     public void determineMissingTrainingDays() {
@@ -145,9 +148,11 @@ public class TrainingController implements Serializable {
     }
 
     public void printNewTrainingDates() {
-        log.fine("TrainingController.printNewTrainingDates() " + listOfNewTrainings.size() + " Elemente");
-        for (Training t : listOfNewTrainings) {
-            log.fine("Neues Training = " + t.toString());
+        log.fine("TrainingController.printNewTrainingDates() ");
+        log.fine(listOfNewTrainingDates.size() + " Elemente");
+        for (Iterator<Date> it = listOfNewTrainingDates.iterator(); it.hasNext();) {
+            Date d = (Date)it.next();
+            log.fine("Neues Datum = " + d.toString());
         }
     }
 
@@ -345,12 +350,21 @@ public class TrainingController implements Serializable {
     public List<Training> getAllMissingTrainings() {
         return allMissingTrainings;
     }
+    
+    /**
+     * @return the allMissingTrainings
+     */
+    public List<Date> getAllMissingTrainingDates() {
+        return allMissingTrainingDates;
+    }
+    
 
     public void calculateMissingTrainings() {
         log.fine("Datümer...: + " + nextTrainingDateFromTemp + ", " + nextTrainingDateToTemp);
         if ((nextTrainingDateFromTemp != null) && (nextTrainingDateToTemp != null)) {
             this.allExistingTrainings = new ArrayList();
             this.allMissingTrainings = new ArrayList();
+            this.allMissingTrainingDates = new ArrayList();
             this.allExistingTrainings = trainingRepository.findAllOfTrainingDayBetweenTimeRange(this.selectedTrainingDay, this.nextTrainingDateFromTemp, this.nextTrainingDateToTemp);
             log.fine("TrainingController.calculateMissingTrainings * allExistingTrainings.size() = " + allExistingTrainings.size());
 
@@ -377,10 +391,12 @@ public class TrainingController implements Serializable {
                         newTraining.setEventDate(nextFreeTrainingDate.getTime());
                         log.fine(newTraining.toString());
                         allMissingTrainings.add(newTraining);
+                        allMissingTrainingDates.add(nextFreeTrainingDate.getTime());
                     }
                 }
             }
-            log.fine("TrainingController.calculateMissingTrainings * allMissingTrainingDates.size() = " + allMissingTrainings.size());
+            log.fine("TrainingController.calculateMissingTrainings * allMissingTrainings.size() = " + allMissingTrainings.size());
+            log.fine("TrainingController.calculateMissingTrainings * allMissingTrainingDates.size() = " + allMissingTrainingDates.size());
         }
     }
 
@@ -416,7 +432,6 @@ public class TrainingController implements Serializable {
     }
 
     /**
-     * F
      *
      * @return the listOfNewTrainings
      */
@@ -437,6 +452,20 @@ public class TrainingController implements Serializable {
      */
     public List<Team> getSelectedTeams() {
         return selectedTeams;
+    }
+
+    /**
+     * @return the listOfNewTrainingDates
+     */
+    public List<Date> getListOfNewTrainingDates() {
+        return listOfNewTrainingDates;
+    }
+
+    /**
+     * @param listOfNewTrainingDates the listOfNewTrainingDates to set
+     */
+    public void setListOfNewTrainingDates(List<Date> listOfNewTrainingDates) {
+        this.listOfNewTrainingDates = listOfNewTrainingDates;
     }
 
 }
