@@ -26,35 +26,49 @@
             </tr>
         </table>
 
-        <h:outputText value="Bitte die Trainingszeit auswählen, die für dieses Training angedacht ist."></h:outputText>
+        <rich:panel>
+            <p>
+                <h:outputText value="Bitte die Trainingszeit auswählen, die für dieses Training angedacht ist."></h:outputText>
+            </p>
+        </rich:panel>
 
-        <h:panelGrid columns="2" styleClass="panelColumns">
+
+        <h:panelGrid columns="3" styleClass="panelColumns" width="100%">
             <h:panelGroup>
                 <h:selectOneListbox id="trainingDayListbox" 
                                     valueChangeListener="#{trainingController.trainingDayChanged}" 
-                                    size="10"
+                                    size="4"
                                     >
                     <f:selectItems value="#{trainingController.allTrainingDays}" 
                                    var="currentTrainingDay" 
                                    itemValue="#{currentTrainingDay.id}"
                                    itemLabel="#{currentTrainingDay.weekdayAsString}: #{currentTrainingDay.timeFrom}-#{currentTrainingDay.timeTo}, #{currentTrainingDay.comment}" />
-                    <a4j:ajax event="change" render="trainingDayDetails" />
+                    <a4j:ajax event="change" render="trainingDayDetailsP, trainingDayPickUpDetailsP" />
                 </h:selectOneListbox>
             </h:panelGroup>
-            <h:panelGroup id="trainingDayDetails"  styleClass="detailsContent, detailsLabel" >
-                <te:trainingDayDetails trainingDay="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
+            <h:panelGroup id="trainingDayDetailsP"  styleClass="detailsContent, detailsLabel" >
+                <rich:panel header="Trainingsdaten" rendered="#{not empty trainingController.selectedTrainingDay}">
+                    <te:trainingDayDetails  trainingDayDetails="#{trainingController.selectedTrainingDay}" />
+                </rich:panel>
+            </h:panelGroup>
+            <h:panelGroup id="trainingDayPickUpDetailsP"  >
+                <rich:panel header="Bring- / Abholdaten" rendered="#{not empty trainingController.selectedTrainingDay}" styleClass="detailsContent, detailsLabel">
+                    <te:trainingDayPickUpDetails trainingDayPickUpDetails="#{trainingController.selectedTrainingDay}"  />
+                </rich:panel>
             </h:panelGroup>
         </h:panelGrid>
 
+        <rich:notifyMessages stayTime="2000" nonblocking="true" />
+
         <div class="navPanel" style="width: 100%;">
-            <a4j:commandButton value="&lt;&lt;Previous" style="float:left">
+            <a4j:commandButton value="Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
 
-            <a4j:commandButton style="float:right" styleClass="btn btn-primary" value="Weiter">
+            <a4j:commandButton style="float:right"  value="Weiter">
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
-  
+
         </div>
     </div>
 </ui:composition>

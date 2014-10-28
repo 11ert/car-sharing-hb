@@ -18,8 +18,11 @@
             </tr>
         </table>
 
-        <h:outputText value="Bitte die Teilnehmer für diese Trainingseinheiten hinzufügen."></h:outputText>
-
+        <rich:panel>
+            <p>
+                <h:outputText value="Bitte die Teilnehmer für diese Trainingseinheiten hinzufügen."></h:outputText>
+            </p>
+        </rich:panel>
         <h:panelGrid columns="2" styleClass="panelColumns">
             <h:panelGroup>
                 <h:outputLabel value="Gruppe:" />
@@ -41,10 +44,10 @@
 
         </h:panelGrid>
         <div class="navPanel" style="width: 100%;">
-            <a4j:commandButton value="&lt;&lt;Zurück" style="float:left">
+            <a4j:commandButton value="Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
-            <a4j:commandButton value="Next &gt;&gt;" style="float:right">
+            <a4j:commandButton value="Weiter" style="float:right">
                 <rich:toggleControl targetItem="@next" event="click"/>
             </a4j:commandButton>
         </div>

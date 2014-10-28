@@ -1,26 +1,48 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
+                xmlns:of="http://omnifaces.org/functions"
                 xmlns:rich="http://richfaces.org/rich">
 
     <div style="position: relative; height: auto">
-        <h:panelGrid columns="2" >
-            <h:outputLabel value="Trainingstag:"/>
-            <h:outputText value="#{trainingController.selectedTrainingDay.comment}"/>
-            
-            <h:outputLabel value="Teams:"/>
+
+        <rich:panel>
+            <p>
+                <h3>Zusammenfassung</h3>
+            </p>
+        </rich:panel>
+
+
+        <rich:panel header="Trainingsdaten">
+            <te:trainingDayDetails trainingDayDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
+        </rich:panel>
+        <rich:panel header="Bring- / Abholdaten">
+            <te:trainingDayPickUpDetails trainingDayPickUpDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
+        </rich:panel>
+        <rich:panel header="Teams">
             <rich:list value="#{trainingController.selectedTeams}" var="_team">
                 <h:outputText value="#{_team.longName}"/>
             </rich:list>
-            
-            <h:outputLabel value="Trainingstage:"/>
-            <rich:list value="#{trainingController.listOfNewTrainingDates}" var="_training">
-                <h:outputText value="#{_training}"/>
-            </rich:list>
+        </rich:panel>
 
-        </h:panelGrid>
+        <rich:dataTable id="listOfNewTrainingsDT" styleClass="data-table" 
+                        value="#{trainingController.listOfNewTrainingDates}" var="_training" 
+                        rows="10" noDataLabel="Für diesen Zeitraum bislang keine Trainings eingetragen"
+                        style="width: 250px">
+            <rich:column>
+                <f:facet name="header">
+                    <h:outputText value="Ausgewählte Trainingstage"/>
+                </f:facet>
+                <h:outputText value="#{ _training}" />
+            </rich:column>
+        </rich:dataTable>
+
+        <rich:panel header="Teilnehmer">
+            <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
+        </rich:panel>
 
         <div class="navPanel">
-            <a4j:commandButton value="&lt;&lt;Previous" style="float:left">
+            <a4j:commandButton value="Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
         </div>   

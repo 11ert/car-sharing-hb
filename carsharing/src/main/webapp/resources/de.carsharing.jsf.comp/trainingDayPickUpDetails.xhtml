@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:composite="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+    <composite:interface>
+        <composite:attribute name="trainingDayPickUpDetails" required="true"/>
+    </composite:interface>
+
+    <composite:implementation>
+        <h:panelGrid columns="2">
+            <h:outputLabel value="Abholzeit Heimatort:"/>
+            <h:outputText value="#{cc.attrs.trainingDayPickUpDetails.pickUpTimeSource}"/>
+            <h:outputLabel value="Abholzeit Trainingsort:"/>
+            <h:outputText value="#{cc.attrs.trainingDayPickUpDetails.pickUpTimeTarget}"/>
+            <h:outputLabel value="Abfahrtsort Heimatort:"/>
+            <h:outputText value="#{cc.attrs.trainingDayPickUpDetails.pickUpLocationSource}"/>
+            <h:outputLabel value="Abfahrtsort Trainingsort:"/>
+            <h:outputText value="#{cc.attrs.trainingDayPickUpDetails.pickUpLocationTarget}"/>
+        </h:panelGrid>
+    </composite:implementation>
+
+</html>
+

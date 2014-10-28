@@ -5,30 +5,21 @@
       xmlns:h="http://java.sun.com/jsf/html">
 
     <composite:interface>
-        <composite:attribute name="trainingDay" required="true"/>
+        <composite:attribute name="trainingDayDetails" required="true"/>
     </composite:interface>
 
     <composite:implementation>
-        <!-- Formatierung mit css classes funktioniert hier irgendwie nicht... -->
         <h:panelGrid columns="2">
-            <h:outputLabel value="Wochentag:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.weekdayAsString}"/>
-            <h:outputLabel value="Trainingszeit von:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.timeFrom}"/>
-            <h:outputLabel value="Trainingszeit bis:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.timeTo}"/>
-            <h:outputLabel value="Abholzeit Heimatort:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.pickUpTimeSource}"/>
-            <h:outputLabel value="Abholzeit Trainingsort:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.pickUpTimeTarget}"/>
-            <h:outputLabel value="Trainingsort:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.location}"/>
-            <h:outputLabel value="Abfahrtsort Heimatort:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.pickUpLocationSource}"/>
-            <h:outputLabel value="Abfahrtsort Trainingsort:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.pickUpLocationTarget}"/>
             <h:outputLabel value="Trainingsbezeichnung:"/>
-            <h:outputText value="#{cc.attrs.trainingDay.comment}"/>
+            <h:outputText value="#{cc.attrs.trainingDayDetails.comment}"/>
+            <h:outputLabel value="Wochentag:"/>
+            <h:outputText value="#{cc.attrs.trainingDayDetails.weekdayAsString}"/>
+            <h:outputLabel value="Trainingsort:"/>
+            <h:outputText value="#{cc.attrs.trainingDayDetails.location}"/>
+            <h:outputLabel value="Trainingszeit von:"/>
+            <h:outputText value="#{cc.attrs.trainingDayDetails.timeFrom}"/>
+            <h:outputLabel value="Trainingszeit bis:"/>
+            <h:outputText value="#{cc.attrs.trainingDayDetails.timeTo}"/>
         </h:panelGrid>
     </composite:implementation>
 

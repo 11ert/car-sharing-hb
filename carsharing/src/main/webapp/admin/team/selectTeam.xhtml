@@ -10,10 +10,12 @@
                           layout="pageDirection"
                           styleClass="checkbox"
                           style="font-size: 8pt"
+                          required="true"
+                          requiredMessage="Eintrag notwendig!"
                           >
         <f:selectItems value="#{teams}" 
                        var="theTeam" 
-                       itemLabel="#{theTeam.shortName}"
+                       itemLabel="#{theTeam.longName}"
                        itemValue="#{theTeam.id}"
                        />
     </h:selectManyCheckbox>

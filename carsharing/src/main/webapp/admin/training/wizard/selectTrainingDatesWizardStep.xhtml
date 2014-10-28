@@ -4,6 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core" 
                 xmlns:a4j="http://richfaces.org/a4j"
                 xmlns:te="http://java.sun.com/jsf/composite/de.carsharing.jsf.comp"
+                xmlns:of="http://omnifaces.org/functions"
                 xmlns:rich="http://richfaces.org/rich">
 
     <div style="position: relative; height: auto">
@@ -17,8 +18,11 @@
             </tr>
         </table>
 
-        <h:outputText value="Bitte den Zeitraum auswählen, für welcher das Training hinzugefügt werden sollen."></h:outputText>
-
+        <rich:panel>
+            <p>
+                <h:outputText value="Bitte den Zeitraum auswählen, für welcher das Training hinzugefügt werden sollen."></h:outputText>
+            </p>
+        </rich:panel>
         <!--        <h:panelGrid columns="3" styleClass="panelColumns"> -->
 
         <h:panelGroup>
@@ -33,7 +37,7 @@
                            value="#{trainingController.nextTrainingDateFromTemp}"
                            valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
                            >
-                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL,listOfNewTrainingsL"/>
+                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL"/>
             </rich:calendar>
         </h:panelGroup>
 
@@ -49,10 +53,9 @@
                            value="#{trainingController.nextTrainingDateToTemp}"
                            valueChangeListener="#{trainingController.trainingDateToTempChanged}"
                            >
-                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL,listOfNewTrainingsL"/>
+                <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL"/>
             </rich:calendar>
         </h:panelGroup>
-
 
         <!-- nächste Zeile -->
 
@@ -84,26 +87,16 @@
                        listHeight="100px" 
                        orderable="true"
                        >
-
             <f:selectItems value="#{trainingController.allMissingTrainingDates}" 
-                           var="training" itemValue="#{training}" itemLabel="#{training}" />
-            <a4j:ajax event="change" render="listOfNewTrainingsL"/>
+                           var="training" itemValue="#{training}" itemLabel="#{of:formatDate(training, 'dd.MM.yyyy')}" />
 
         </rich:pickList>     
 
-        <h:outputLabel value="Trainingstage:"/>
-        <rich:list  id="listOfNewTrainingsL" value="#{trainingController.listOfNewTrainingDates}" var="_training">
-            <h:outputText value="#{_training}"/>
-        </rich:list>
-
-        <a4j:commandButton value="Print" action="#{trainingController.printNewTrainingDates()}" 
-                           render="listOfNewTrainingsL"/>
-
         <div class="navPanel" style="width: 100%;">
-            <a4j:commandButton value="&lt;&lt;Zurück" style="float:left">
+            <a4j:commandButton value="Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
-            <a4j:commandButton value="Vor &gt;&gt;" style="float:right">
+            <a4j:commandButton value="Weiter" style="float:right">
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
         </div>

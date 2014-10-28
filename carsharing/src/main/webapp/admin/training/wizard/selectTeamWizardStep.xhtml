@@ -16,13 +16,17 @@
             </tr>
         </table>
 
-        <h:outputText value="Bitte die Mannschaften auswählen, für die dieses Training gedacht sind."></h:outputText>
-        <h:panelGrid rowClasses="s1row" columns="3" columnClasses="wfcol1,wfcol2,wfcol3">
-            <ui:include src="/admin/team/selectTeam.xhtml"/>
-        </h:panelGrid>
+        <rich:panel>
+            <p>
+                <h:outputText value="Bitte die Mannschaften auswählen, für die dieses Training gedacht sind."></h:outputText>
+            </p>
+        </rich:panel>
 
+        <ui:include src="/admin/team/selectTeam.xhtml"/>
+        
+        <p/>
         <div class="navPanel" style="width: 100%;">
-            <a4j:commandButton style="float:right" styleClass="btn btn-primary" value="Weiter">
+            <a4j:commandButton style="float:right" value="Weiter">
                 <rich:toggleControl targetItem="@next" event="click" />
             </a4j:commandButton>
         </div>
