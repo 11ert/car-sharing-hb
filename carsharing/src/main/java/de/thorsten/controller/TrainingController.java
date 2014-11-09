@@ -76,7 +76,7 @@ public class TrainingController implements Serializable {
 
     private List<Training> listOfNewTrainings;
     private List<Date> listOfNewTrainingDates;
-    
+
     private List<SportsEventDetails> allTrainingDays;
 
     private Date nextTrainingDateFromTemp;
@@ -87,7 +87,7 @@ public class TrainingController implements Serializable {
     @Current
     private ParticipationGroup selectedParticipationGroup;
 
-    // SportsEventDetails Einträge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
+    // SportsEventDetails EintrÃ¤ge pro Weekday, potentiell mehr wenn mehrmals am Tag trainiert wird.
     private List<SportsEventDetails> trDayList;
 
     private SportsEventDetails selectedTrainingDay;
@@ -126,7 +126,7 @@ public class TrainingController implements Serializable {
         if (event.getNewValue() != null) {
             this.nextTrainingDateFromTemp = ((Date) event.getNewValue());
             log.fine("TrainingController.nextTrainingDateFromTemp * ...to " + nextTrainingDateFromTemp);
-             calculateMissingTrainings();
+            calculateMissingTrainings();
         }
     }
 
@@ -151,7 +151,7 @@ public class TrainingController implements Serializable {
         log.fine("TrainingController.printNewTrainingDates() ");
         log.fine(listOfNewTrainingDates.size() + " Elemente");
         for (Iterator<Date> it = listOfNewTrainingDates.iterator(); it.hasNext();) {
-            Date d = (Date)it.next();
+            Date d = (Date) it.next();
             log.fine("Neues Datum = " + d.toString());
         }
     }
@@ -167,7 +167,7 @@ public class TrainingController implements Serializable {
             weekday = cal.get(Calendar.DAY_OF_WEEK);
             log.fine("Weekday = " + weekday);
             trDayList = sportEventDetailRepository.findByWeekday(weekday);
-            log.fine(trDayList.size() + " Einträge gefunden");
+            log.fine(trDayList.size() + " EintrÃ¤ge gefunden");
         }
 
     }
@@ -192,7 +192,7 @@ public class TrainingController implements Serializable {
 
     public void createParticipationsForNextTrainingDate() {
         if (selectedTrainingDay == null) {
-            this.createErrorMessage("Kein gültiges Trainingsdatum (Wochentag?)");
+            this.createErrorMessage("Kein gÃ¼ltiges Trainingsdatum (Wochentag?)");
         }
 
         Training newTraining = new Training();
@@ -205,7 +205,7 @@ public class TrainingController implements Serializable {
 
         String specificErrorMsg = new String();
         if (getSelectedTeams().size() == 0) {
-            specificErrorMsg = "Mindestens ein Team muß ausgewählt sein";
+            specificErrorMsg = "Mindestens ein Team muÃŸ ausgewÃ¤hlt sein";
         }
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
@@ -216,7 +216,7 @@ public class TrainingController implements Serializable {
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
         FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Neues Training hinzugefügt!", "Neues Training gespeichert!");
+                "Neues Training hinzugefÃ¼gt!", "Neues Training gespeichert!");
 
         try {
             Training tr = trainingService.update(newTraining);
@@ -245,6 +245,67 @@ public class TrainingController implements Serializable {
 
     }
 
+    public void createParticipationsForListOfNextTrainingDates() {
+        if (selectedTrainingDay == null) {
+            this.createErrorMessage("Kein gÃ¼ltiges Trainingsdatum (Wochentag?)");
+        }
+
+        Training newTraining = new Training();
+
+        newTraining.setSportsEventDetail(selectedTrainingDay);
+        //newTraining.initializeTrainingWithTrainingDayTemplateData();
+
+        newTraining.setTeams(getSelectedTeams());
+
+        String specificErrorMsg = new String();
+        if (getSelectedTeams().size() == 0) {
+            specificErrorMsg = "Mindestens ein Team muÃŸ ausgewÃ¤hlt sein";
+        }
+        log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
+                + ", "
+                + ", " + newTraining.getSportsEventDetail().getLocation()
+                + ", " + newTraining.getSportsEventDetail().getTimeFrom()
+                + " - " + newTraining.getSportsEventDetail().getTimeTo());
+
+        FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
+        FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
+                "Neues Training hinzugefÃ¼gt!", "Neues Training gespeichert!");
+
+        List<Member> members = null;
+        Training tr = new Training();
+        members = selectedParticipationGroup.getMembers();
+
+        try {
+            for (Date d : this.listOfNewTrainingDates) {
+                newTraining.setEventDate(d);
+
+                tr = trainingService.update(newTraining);
+                for (final Iterator it = members.iterator(); it.hasNext();) {
+                    Participation newParticipation = new Participation();
+                    newParticipation.setPlayer((Member) it.next());
+                    newParticipation.setTraining(tr);
+                    try {
+                        participationService.update(newParticipation);
+                    } catch (Exception e) {
+                        facesContext.addMessage(null, errorMsg);
+                        log.warning("TrainingController.createParticipationsForNextTrainingDate() * Participation could not be stored");
+                        e.printStackTrace();
+                    }
+                };
+            };
+        } catch (Exception e) {
+            facesContext.addMessage(null, errorMsg);
+            log.warning("TrainingController.createParticipationsForListOfNextTrainingDate() * Training(s) konnte(n) nicht persistiert werden");
+            e.printStackTrace();
+        }
+
+        facesContext.addMessage(
+                null, successMsg);
+        init();
+
+    }
+
     public void trainingDayChanged(ValueChangeEvent event) {
         log.fine("TrainingController.trainingDayChanged() * event.value = " + event.getNewValue().toString());
         if (event.getNewValue() != null) {
@@ -261,7 +322,7 @@ public class TrainingController implements Serializable {
             Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
             log.fine("log.fine(\"TrainingController.teamChanged() * CurrentTeam = " + currentTeam.toString());
             getSelectedTeams().add(currentTeam);
-            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefügt, selectedTeams.size() jetzt " + getSelectedTeams().size());
+            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefÃ¼gt, selectedTeams.size() jetzt " + getSelectedTeams().size());
         }
     }
 
@@ -350,14 +411,13 @@ public class TrainingController implements Serializable {
     public List<Training> getAllMissingTrainings() {
         return allMissingTrainings;
     }
-    
+
     /**
      * @return the allMissingTrainings
      */
     public List<Date> getAllMissingTrainingDates() {
         return allMissingTrainingDates;
     }
-    
 
     public void calculateMissingTrainings() {
         log.fine("Datümer...: + " + nextTrainingDateFromTemp + ", " + nextTrainingDateToTemp);
@@ -381,7 +441,7 @@ public class TrainingController implements Serializable {
             calTo.setTime(nextTrainingDateToTemp);
 
             for (Calendar nextFreeTrainingDate = calFrom; nextFreeTrainingDate.before(calTo); nextFreeTrainingDate.add(Calendar.DATE, 1)) {
-                log.fine("--> Nächstes Datum " + DateUtil.getSelectedDateAsFormattedString(nextFreeTrainingDate.getTime()));
+                log.fine("--> NÃ¤chstes Datum " + DateUtil.getSelectedDateAsFormattedString(nextFreeTrainingDate.getTime()));
                 if (nextFreeTrainingDate.get(Calendar.DAY_OF_WEEK) == selectedTrainingDay.getWeekday()) {
                     if (containsEventDate(allExistingTrainingDates, nextFreeTrainingDate.getTime()) == false) {
                         log.fine("--> Training hinzu ");

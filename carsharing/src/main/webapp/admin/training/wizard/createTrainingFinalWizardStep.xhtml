@@ -33,18 +33,21 @@
                 <f:facet name="header">
                     <h:outputText value="Ausgewählte Trainingstage"/>
                 </f:facet>
-                <h:outputText value="#{ _training}" />
+                <h:outputText value="#{ _training}" converter="#{javax.faces.convert.DateTimeConverter}"/>
             </rich:column>
         </rich:dataTable>
 
         <rich:panel header="Teilnehmer">
             <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
         </rich:panel>
+        
+        <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
         <div class="navPanel">
             <a4j:commandButton value="Zurück" style="float:left">
                 <rich:toggleControl targetItem="@prev" event="click" />
             </a4j:commandButton>
+            <a4j:commandButton value="Speichern" style="float:right" action="#{trainingController.createParticipationsForListOfNextTrainingDates()}"/>
         </div>   
     </div>
 </ui:composition>

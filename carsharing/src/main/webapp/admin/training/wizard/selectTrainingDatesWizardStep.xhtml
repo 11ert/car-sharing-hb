@@ -85,11 +85,11 @@
                        upTopText="Nach oben"
                        listWidth="165px" 
                        listHeight="100px" 
-                       orderable="true"
-                       >
-            <f:selectItems value="#{trainingController.allMissingTrainingDates}" 
-                           var="training" itemValue="#{training}" itemLabel="#{of:formatDate(training, 'dd.MM.yyyy')}" />
+                       orderable="true">
+            <f:convertDateTime pattern="yyyyMMddHHmmssSSS"/>
 
+            <f:selectItems value="#{trainingController.allMissingTrainingDates}"
+                           var="trainingDate" itemValue="#{trainingDate}" itemLabel="#{of:formatDate(trainingDate, 'dd.MM.yyyy')}" />
         </rich:pickList>     
 
         <div class="navPanel" style="width: 100%;">
