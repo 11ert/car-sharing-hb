@@ -216,7 +216,7 @@ public class TrainingController implements Serializable {
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
         FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Neues Training hinzugefÃ¼gt!", "Neues Training gespeichert!");
+                "Neue Trainingszeiten hinzugefügt!", "Neues Training gespeichert!");
 
         try {
             Training tr = trainingService.update(newTraining);

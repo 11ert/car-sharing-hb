@@ -20,21 +20,20 @@ and open the template in the editor.
     text-shadow: none;
     font-size: 14px;
 }
-.detailsLabel label{
-    line-height:12px;
+.detailsLabel label {
     font-weight: bold;
-    font-style: italic;
-    font-size: 13px;
+    /*    font-style: italic;*/
+    font-size: 11px;
     color: black;
 }
 
 .detailsContent {
-    line-height:12px;
-    font-size:  13px;
+    /*    line-height:12px;*/
+    font-size:  11px;
     color: black;
 }
 
 .panelColumns td {
     vertical-align: top; 
-    font-size: 13px;
+    /*    font-size: 13px;*/
 }

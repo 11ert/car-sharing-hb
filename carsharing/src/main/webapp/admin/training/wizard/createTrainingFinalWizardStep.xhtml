@@ -13,8 +13,8 @@
         </rich:panel>
 
 
-        <rich:panel header="Trainingsdaten">
-            <te:trainingDayDetails trainingDayDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
+        <rich:panel header="Trainingsdaten" >
+            <te:trainingDayDetails trainingDayDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}" />
         </rich:panel>
         <rich:panel header="Bring- / Abholdaten">
             <te:trainingDayPickUpDetails trainingDayPickUpDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
