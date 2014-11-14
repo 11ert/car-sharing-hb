@@ -32,7 +32,7 @@
         <version.surefire.plugin>2.4.3</version.surefire.plugin>
         <maven.compiler.source>1.6</maven.compiler.source>
         <org.richfaces.bom.version>4.3.7.Final</org.richfaces.bom.version>
-        <user.name>Thorsten.Elfert@gmail.com</user.name>
+        <user.name>thorsten.elfert@gmail.com</user.name>
     </properties>
     <dependencyManagement>
         <dependencies>
