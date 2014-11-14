@@ -45,8 +45,8 @@ public class TrainingController implements Serializable {
     @Inject
     private TrainingRepository trainingRepository;
 
-    @Inject
-    private Event<Team> teamChangedEvent;
+//    @Inject
+//    private Event<Team> teamChangedEvent;
 
     @Inject
     private SportEventDetailRepository sportEventDetailRepository;
@@ -66,7 +66,6 @@ public class TrainingController implements Serializable {
     private Date nextTrainingDate;
 
     private Long[] selectedTeamIds;
-
     private List<Team> selectedTeams;
 
     private List<Training> allExistingTrainings;
@@ -80,7 +79,6 @@ public class TrainingController implements Serializable {
     private List<SportsEventDetails> allTrainingDays;
 
     private Date nextTrainingDateFromTemp;
-
     private Date nextTrainingDateToTemp;
 
     @Inject
@@ -92,11 +90,11 @@ public class TrainingController implements Serializable {
 
     private SportsEventDetails selectedTrainingDay;
 
-    @Inject
-    private List<ParticipationGroup> participationGroups;
-
-    @Inject
-    private ParticipationGroupListProducer participationGroupListProducer;
+//    @Inject
+//    private List<ParticipationGroup> participationGroups;
+//
+//    @Inject
+//    private ParticipationGroupListProducer participationGroupListProducer;
 
     @PostConstruct
     public void init() {
@@ -114,8 +112,6 @@ public class TrainingController implements Serializable {
 
         Calendar currentCal = Calendar.getInstance();
         while (currentDate.before(this.nextTrainingDateToTemp)) {
-            //check
-
             currentCal.roll(Calendar.DATE, true);
         }
 
@@ -131,7 +127,6 @@ public class TrainingController implements Serializable {
     }
 
     public void trainingDateToTempChanged(ValueChangeEvent event) {
-        log.fine("TrainingController.trainingDateToTempChanged() ");
         if (event.getNewValue() != null) {
             this.nextTrainingDateToTemp = ((Date) event.getNewValue());
             log.fine("TrainingController.nextTrainingDateToTemp * ...to " + nextTrainingDateToTemp);
@@ -140,7 +135,6 @@ public class TrainingController implements Serializable {
     }
 
     public void registerNewTrainingDates(ValueChangeEvent event) {
-        log.fine("TrainingController.registerNewTrainingDates() ");
         if (event.getNewValue() != null) {
             this.listOfNewTrainings = ((List) event.getNewValue());
             log.fine("TrainingController.registerNewTrainingDates * Added " + listOfNewTrainings.size() + " new TrainingsDates");
@@ -148,7 +142,6 @@ public class TrainingController implements Serializable {
     }
 
     public void printNewTrainingDates() {
-        log.fine("TrainingController.printNewTrainingDates() ");
         log.fine(listOfNewTrainingDates.size() + " Elemente");
         for (Iterator<Date> it = listOfNewTrainingDates.iterator(); it.hasNext();) {
             Date d = (Date) it.next();
@@ -157,7 +150,6 @@ public class TrainingController implements Serializable {
     }
 
     public void trainingDateChanged(ValueChangeEvent event) {
-        log.fine("TrainingController.trainingDateChanged() ");
         int weekday = -1;
         Calendar cal = Calendar.getInstance();
         if (event.getNewValue() != null) {
@@ -247,7 +239,7 @@ public class TrainingController implements Serializable {
 
     public void createParticipationsForListOfNextTrainingDates() {
         if (selectedTrainingDay == null) {
-            this.createErrorMessage("Kein gÃ¼ltiges Trainingsdatum (Wochentag?)");
+            this.createErrorMessage("Kein gueltiges Trainingsdatum (Wochentag?)");
         }
 
         Training newTraining = new Training();
@@ -259,7 +251,7 @@ public class TrainingController implements Serializable {
 
         String specificErrorMsg = new String();
         if (getSelectedTeams().size() == 0) {
-            specificErrorMsg = "Mindestens ein Team muÃŸ ausgewÃ¤hlt sein";
+            specificErrorMsg = "Mindestens ein Team muss ausgewÃ¤hlt sein";
         }
         log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
                 + ", "
@@ -270,7 +262,7 @@ public class TrainingController implements Serializable {
         FacesMessage errorMsg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                 "Fehler!", "Neues Training konnte nicht gespeichert werden !" + specificErrorMsg);
         FacesMessage successMsg = new FacesMessage(FacesMessage.SEVERITY_INFO,
-                "Neues Training hinzugefÃ¼gt!", "Neues Training gespeichert!");
+                "Neues Training hinzugefuegt!", "Neues Training gespeichert!");
 
         List<Member> members = null;
         Training tr = new Training();
@@ -307,7 +299,6 @@ public class TrainingController implements Serializable {
     }
 
     public void trainingDayChanged(ValueChangeEvent event) {
-        log.fine("TrainingController.trainingDayChanged() * event.value = " + event.getNewValue().toString());
         if (event.getNewValue() != null) {
             Long tmpId = Long.valueOf((String) event.getNewValue());
             selectedTrainingDay = sportEventDetailRepository.findById(tmpId);
@@ -322,7 +313,7 @@ public class TrainingController implements Serializable {
             Team currentTeam = teamRepository.findById(Long.valueOf(selectedTeamIds[x]));
             log.fine("log.fine(\"TrainingController.teamChanged() * CurrentTeam = " + currentTeam.toString());
             getSelectedTeams().add(currentTeam);
-            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefÃ¼gt, selectedTeams.size() jetzt " + getSelectedTeams().size());
+            log.fine("log.fine(\"TrainingController.teamChanged() * ..hinzugefuegt, selectedTeams.size() jetzt " + getSelectedTeams().size());
         }
     }
 
@@ -371,12 +362,6 @@ public class TrainingController implements Serializable {
         return this.allTrainingDays;
     }
 
-//    /**
-//     * @param allTrainingDays the allExistingTrainingDates to set
-//     */
-//    public void setAllTrainingDays(List<Training> allTrainingDays) {
-//        this.allExistingTrainings = allTrainingDays;
-//    }
     /**
      * @return the nextTrainingDateFromTemp
      */

@@ -36,6 +36,8 @@
                            datePattern="dd.MM.yyyy"  
                            value="#{trainingController.nextTrainingDateFromTemp}"
                            valueChangeListener="#{trainingController.trainingDateFromTempChanged}"
+                           required="true"
+                           requiredMessage="Bitte 'Von' Datum auswählen!"
                            >
                 <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL"/>
             </rich:calendar>
@@ -52,6 +54,8 @@
                            datePattern="dd.MM.yyyy"  
                            value="#{trainingController.nextTrainingDateToTemp}"
                            valueChangeListener="#{trainingController.trainingDateToTempChanged}"
+                           required="true"
+                           requiredMessage="Bitte 'Bis' Datum auswählen!"
                            >
                 <a4j:ajax event="change" render="availableTrainingsDT,missingTrainingsPL"/>
             </rich:calendar>
@@ -85,12 +89,17 @@
                        upTopText="Nach oben"
                        listWidth="165px" 
                        listHeight="100px" 
-                       orderable="true">
+                       orderable="true"
+                       required="true"
+                       requiredMessage="Min. ein neues Trainingsdatum muß ausgewählt sein!"
+                       >
             <f:convertDateTime pattern="yyyyMMddHHmmssSSS"/>
 
             <f:selectItems value="#{trainingController.allMissingTrainingDates}"
                            var="trainingDate" itemValue="#{trainingDate}" itemLabel="#{of:formatDate(trainingDate, 'dd.MM.yyyy')}" />
         </rich:pickList>     
+        
+        <rich:notifyMessages stayTime="3000" nonblocking="true" />
 
         <div class="navPanel" style="width: 100%;">
             <a4j:commandButton value="Zurück" style="float:left">

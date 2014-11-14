@@ -12,35 +12,35 @@
             </p>
         </rich:panel>
 
-
-        <rich:panel header="Trainingsdaten" >
+        <rich:panel header="Trainingsdaten" styleClass="detailsContent, detailsLabel">
             <te:trainingDayDetails trainingDayDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}" />
         </rich:panel>
-        <rich:panel header="Bring- / Abholdaten">
+
+        <rich:panel header="Bring- / Abholdaten" styleClass="detailsContent, detailsLabel">
             <te:trainingDayPickUpDetails trainingDayPickUpDetails="#{trainingController.selectedTrainingDay}" rendered="#{not empty trainingController.selectedTrainingDay}"  />
         </rich:panel>
+
         <rich:panel header="Teams">
             <rich:list value="#{trainingController.selectedTeams}" var="_team">
                 <h:outputText value="#{_team.longName}"/>
             </rich:list>
         </rich:panel>
 
-        <rich:dataTable id="listOfNewTrainingsDT" styleClass="data-table" 
-                        value="#{trainingController.listOfNewTrainingDates}" var="_training" 
-                        rows="10" noDataLabel="Für diesen Zeitraum bislang keine Trainings eingetragen"
-                        style="width: 250px">
-            <rich:column>
-                <f:facet name="header">
-                    <h:outputText value="Ausgewählte Trainingstage"/>
-                </f:facet>
-                <h:outputText value="#{ _training}" converter="#{javax.faces.convert.DateTimeConverter}"/>
-            </rich:column>
-        </rich:dataTable>
-
+        <rich:panel header="Ausgewählte Trainingstage">
+            <rich:dataTable id="listOfNewTrainingsDT" styleClass="data-table" 
+                            value="#{trainingController.listOfNewTrainingDates}" var="_training" 
+                            rows="10" noDataLabel="Für diesen Zeitraum bislang keine Trainings eingetragen"
+                            style="width: 250px">
+                <rich:column>
+                    <h:outputText value="#{of:formatDate(_training,'dd.MM.yyyy')}" converter="#{javax.faces.convert.DateTimeConverter}"/>
+                </rich:column>
+            </rich:dataTable>
+        </rich:panel>
+        
         <rich:panel header="Teilnehmer">
             <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
         </rich:panel>
-        
+
         <rich:notifyMessages stayTime="2000" nonblocking="true" />
 
         <div class="navPanel">

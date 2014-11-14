@@ -38,6 +38,8 @@
                 <h:selectOneListbox id="trainingDayListbox" 
                                     valueChangeListener="#{trainingController.trainingDayChanged}" 
                                     size="4"
+                                    required="true"
+                                    requiredMessage="Bitte Trainingszeit auswählen!"
                                     >
                     <f:selectItems value="#{trainingController.allTrainingDays}" 
                                    var="currentTrainingDay" 
