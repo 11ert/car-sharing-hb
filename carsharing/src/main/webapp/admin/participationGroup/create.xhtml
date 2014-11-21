@@ -38,6 +38,13 @@
             <h:messages globalOnly="true" styleClass="error"/>
 
             <h:panelGrid columnClasses="label,component,required" columns="3">
+                <h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Beschreibung:"/>
+                <h:panelGroup>
+                    <h:inputText id="participationGroupBeanParticipationGroupDescription" value="#{participationGroupBean.participationGroup.description}"/>
+                    <h:message for="participationGroupBeanParticipationGroupDescription" styleClass="error"/>
+                </h:panelGroup>
+                <h:outputText value="*"/>
+
                 <h:outputLabel for="participationGroupBeanParticipationGroupMembers" value="Teilnehmer:"/>
                 <h:panelGroup>
                     <ui:param name="_collection" value="#{participationGroupBean.participationGroup.members}"/>
@@ -52,12 +59,6 @@
                                        var="member" itemValue="#{member}" itemLabel="#{member.name}, #{member.firstname}" />
                     </rich:pickList>     
 
-                </h:panelGroup>
-                <h:outputText/>
-                <h:outputLabel for="participationGroupBeanParticipationGroupDescription" value="Beschreibung:"/>
-                <h:panelGroup>
-                    <h:inputText id="participationGroupBeanParticipationGroupDescription" value="#{participationGroupBean.participationGroup.description}"/>
-                    <h:message for="participationGroupBeanParticipationGroupDescription" styleClass="error"/>
                 </h:panelGroup>
                 <h:outputText/>
             </h:panelGrid>

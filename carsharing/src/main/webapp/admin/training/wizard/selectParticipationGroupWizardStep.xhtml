@@ -37,10 +37,12 @@
                 <te:memberlist members="#{participationGroupView.selectedParticipationGroup.members}" />
             </h:panelGroup>
 
+            <p/>
             <h:link outcome="/admin/participationGroup/view" >
                 <f:param name="id" value="#{participationGroupView.selectedParticipationGroup.id}"/>
-                <h:outputText id="itemName"  value="Ändern"/>
+                <h:outputText id="itemName"  value="Teilnehmergruppe ändern/neu"/>
             </h:link>
+            <p/>
 
         </h:panelGrid>
         <div class="navPanel" style="width: 100%;">

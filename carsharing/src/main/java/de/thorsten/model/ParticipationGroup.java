@@ -13,7 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -26,6 +26,7 @@ public class ParticipationGroup {
     @GeneratedValue( strategy = GenerationType.AUTO )
     private Long id;
     
+    @NotNull
     private String description;
     
     @ElementCollection(fetch=FetchType.EAGER)
