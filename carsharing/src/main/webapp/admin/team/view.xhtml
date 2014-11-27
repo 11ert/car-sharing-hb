@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/WEB-INF/templates/admin_template.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{teamBean.id}"/>
+		<f:event type="preRenderView" listener="#{teamBean.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Team ansehen"/>
+
+	<ui:define name="header">
+		Team
+	</ui:define>
+
+	<ui:define name="subheader">
+		Team ansehen
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="teamBeanTeamLongName" value="Bezeichnung:"/>
+			<h:outputText id="teamBeanTeamLongName" value="#{teamBean.team.longName}"/>
+			<h:outputText/>
+			<h:outputLabel for="teamBeanTeamShortName" value="Kurzbezeichnung:"/>
+			<h:outputText id="teamBeanTeamShortName" value="#{teamBean.team.shortName}"/>
+			<h:outputText/>
+			<h:outputLabel for="teamBeanTeamAlias" value="Alias:"/>
+			<h:outputText id="teamBeanTeamAlias" value="#{teamBean.team.alias}"/>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="Alle ansehen" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="Ändern" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="Neu" outcome="create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>
