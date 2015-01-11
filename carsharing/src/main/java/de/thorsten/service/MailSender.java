@@ -7,7 +7,6 @@ package de.thorsten.service;
 
 import java.util.logging.Logger;
 import javax.annotation.Resource;
-import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.mail.Address;
@@ -20,7 +19,7 @@ import javax.mail.internet.MimeMessage;
 
 /**
  *
- * @author Thorsten Elfert
+ * @author thorsten.elfert@gmail.com
  */
 @Stateless
 public class MailSender {

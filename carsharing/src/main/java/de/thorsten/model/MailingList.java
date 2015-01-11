@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author qtk100
+ * @author thorsten.elfert@gmail.com
  */
 @Entity
 @Table(name="mailinglist", 

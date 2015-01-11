@@ -20,7 +20,7 @@ import org.apache.deltaspike.core.api.provider.BeanProvider;
 /**
  * Wird derzeit doch nicht mehr verwendet - dient noch als Beispiel
  *
- * @author Thorsten Elfert
+ * @author thorsten.elfert@gmail.com
  */
 @FacesConverter("TeamConverter")
 public class TeamConverter implements Converter {

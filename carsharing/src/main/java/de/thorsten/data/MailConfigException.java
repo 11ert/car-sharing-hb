@@ -8,7 +8,7 @@ package de.thorsten.data;
 
 /**
  *
- * @author qtk100
+ * @author thorsten.elfert@gmail.com
  */
 public class MailConfigException extends Exception {
     

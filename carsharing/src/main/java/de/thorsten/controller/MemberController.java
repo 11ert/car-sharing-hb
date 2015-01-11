@@ -1,6 +1,5 @@
 package de.thorsten.controller;
 
-import de.thorsten.data.TeamListProducer;
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
 import javax.enterprise.inject.Produces;
@@ -12,10 +11,6 @@ import javax.inject.Named;
 import de.thorsten.model.Member;
 import de.thorsten.service.MemberRegistration;
 
-// The @Model stereotype is a convenience mechanism to make this a request-scoped bean that has an
-// EL name
-// Read more about the @Model stereotype in this FAQ:
-// http://sfwk.org/Documentation/WhatIsThePurposeOfTheModelAnnotation
 @Model
 public class MemberController {
 

@@ -25,23 +25,17 @@ public class GameListProducer {
 
     private SortedSet<Date> gameDates;
     
-    
-    // @Named provides access the return value via the EL variable name "games" in the UI (e.g.
-    // Facelets or JSP view)
     @Produces
     @Named
     public List<Game> getGames() {
         return games;
     }
-
-    
     
     @Produces
     @Named
     public SortedSet<Date> getGameDates() {
         return gameDates;
     }
-
     
     @PostConstruct
     public void retrieveAllGames() {
@@ -49,8 +43,6 @@ public class GameListProducer {
 
         gameDates = new TreeSet<Date>();
         for (Game t : games) {
-            //calWeeks.add(t.getCalendarWeek());
-            //gameDates.add(t.getEventDate().getTime());
             gameDates.add(t.getEventDate());
         }
     }

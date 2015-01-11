@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 
 /**
  *
- * @author Thorsten Elfert
+ * @author thorsten.elfert@gmail.com
  */
 @Entity
 public class News {

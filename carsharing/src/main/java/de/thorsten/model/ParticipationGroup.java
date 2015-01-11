@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author QTK100
+ * @author thorsten.elfert@gmail.com
  */
 @Entity
 public class ParticipationGroup {

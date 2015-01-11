@@ -63,7 +63,6 @@ public class TrainingRepository {
         return q.getResultList();
     }
     
-    // todo ungetestet und nicht im Einsatz
     public List<Training> findAllOfTrainingDayBetweenTimeRange(SportsEventDetails sportsEventDetail, Date from, Date to) {
         String query = "SELECT t FROM Training t WHERE t.sportsEventDetail = :sportsEventDetail"
                 + " AND (t.eventDate BETWEEN  :from AND :to) ORDER BY t.eventDate";

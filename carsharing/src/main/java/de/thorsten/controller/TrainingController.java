@@ -1,6 +1,5 @@
 package de.thorsten.controller;
 
-import de.thorsten.data.ParticipationGroupListProducer;
 import de.thorsten.data.TeamRepository;
 import de.thorsten.data.SportEventDetailRepository;
 import de.thorsten.data.TrainingRepository;
@@ -23,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.enterprise.event.Event;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
@@ -253,8 +251,7 @@ public class TrainingController implements Serializable {
         if (getSelectedTeams().size() == 0) {
             specificErrorMsg = "Mindestens ein Team muss ausgewÃ¤hlt sein";
         }
-        log.info("Neuer Trainingseintrag " + newTraining.getDateAsString()
-                + ", "
+        log.info("Neuer Trainingseintrag " + newTraining.getEventDate()
                 + ", " + newTraining.getSportsEventDetail().getLocation()
                 + ", " + newTraining.getSportsEventDetail().getTimeFrom()
                 + " - " + newTraining.getSportsEventDetail().getTimeTo());

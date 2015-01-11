@@ -8,7 +8,6 @@ package de.thorsten.controller;
 import de.thorsten.data.MailingListRepository;
 import de.thorsten.model.MailingList;
 import java.util.ResourceBundle;
-import java.util.logging.Logger;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -16,12 +15,11 @@ import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
-import javax.inject.Inject;
 import org.apache.deltaspike.core.api.provider.BeanProvider;
 
 /**
  * Wird derzeit doch nicht mehr verwendet - dient noch als Beispiel
- * @author Thorsten Elfert
+ * @author thorsten.elfert@gmail.com
  */
 @FacesConverter("MailingListConverter")
 public class MailingListConverter implements Converter {

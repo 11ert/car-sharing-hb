@@ -1,7 +1,6 @@
 package de.thorsten.data;
 
 import de.thorsten.model.Game;
-import de.thorsten.model.Game;
 import java.util.Date;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
